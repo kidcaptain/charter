@@ -221,7 +221,7 @@ export default function Page() {
                 <section className="bg-black/50 w-full h-full top-0 left-0 fixed z-20">
                     <div className=" mx-auto my-auto mt-8 w-full h-full">
                         <div className="bg-white max-w-7xl mx-auto rounded-sm shadow-2xl ">
-                            <h2 className="p-4 border-b uppercase">Resultat de nom = "{searchValue}"</h2>
+                            <h2 className="p-4 border-b uppercase">Resultat de nom = {searchValue}</h2>
                             <div className="p-4">
                                 <table className="w-full  text-left text-xs rtl:text-right text-gray-500 ">
                                     <thead className=" text-gray-900 uppercase ">
