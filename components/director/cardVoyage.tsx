@@ -31,7 +31,7 @@ const CardVoyage = () => {
             <div className='bg-white w-14 h-14 items-center justify-center flex rounded-2xl shadow-2xl'>
                 <Image src={svg} width={45} height={45} alt='User Image' />
             </div>
-            <h1 className=" pt-5 text-sm text-white font-bold uppercase">Voyage effectué aujourd'hui ({total})</h1>
+            <h1 className=" pt-5 text-sm text-white font-bold uppercase">Voyage effectué aujourd&apos;hui ({total})</h1>
         </div >
     )
 }
