@@ -1,6 +1,6 @@
 
 import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { authOptions } from "@/app/lib/authOptions"
 import CardLineChart from "@/components/cardLineChart";
 import CardDoughnut from "@/components/cardDoughnut";
 import CardEmploye from "@/components/director/cardEmploye";

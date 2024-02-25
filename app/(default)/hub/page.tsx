@@ -1,6 +1,6 @@
 
 import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { authOptions } from "@/app/lib/authOptions"
 import RouterUser from "@/components/ui/routerUser";
 import LoaderComponent from "@/components/ui/loader";
 
