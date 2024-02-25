@@ -6,15 +6,14 @@ import UserLogout from "./userLogout";
 const UserAccountNav = () => {
 
 
-    const signOutUser = (val: boolean) => {
-        if (val) {
-            signOut({
+    const signOutUser = async (val: boolean) => {
+            const signInData = await signOut({
                 redirect: true,
                 callbackUrl: `${window.location.origin}/signin`,
-            })
+              });
         }
-    }
-    return (<SessionProvider><UserLogout children={signOutUser} /></SessionProvider>
+
+    return (<SessionProvider><UserLogout /></SessionProvider>
     )
 };
 
