@@ -112,7 +112,7 @@ export default function CardLineChart(props: { moisDepense: number[], moisRecett
         var doc: any = document.getElementById("line-chart");
         if (doc) {
             var ctx = doc.getContext("2d");
-            window.myLine = new Chart(ctx, config);
+            let charts = new Chart(ctx, config);
 
         }
 

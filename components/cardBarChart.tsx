@@ -99,7 +99,8 @@ export default function CardBarChart(props: {title? : string}) {
     };
     let ctx : any = document.getElementById("bar-chart");
     if (ctx) {
-        let ctxContext : any= ctx.getContext("2d")
+        let ctxContext : any= ctx.getContext("2d");
+        // @ts-ignore 
         window.myBar = new Chart(ctxContext, config);
     }
    

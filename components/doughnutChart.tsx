@@ -77,8 +77,8 @@ export default function DoughnutChart(props: { val: number,back1: string, back2:
         };
         let ctx : any = document.getElementById(`line-chart-${props.id}`);
         if (ctx) {
-            let ctxContext : any= ctx.getContext("2d")
-            window.myLine = new Chart(ctxContext, config);
+            let ctxContext : any= ctx.getContext("2d");
+            let charter = new Chart(ctxContext, config);
         }
       
     }, []);
