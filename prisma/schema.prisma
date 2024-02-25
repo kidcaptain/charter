@@ -1,0 +1,244 @@
+generator client {
+  provider = "prisma-client-js"
+}
+ 
+datasource db {
+  provider = "postgresql"
+  // Uses connection pooling
+  url = env("POSTGRES_PRISMA_URL")
+  // Uses direct connection, ⚠️ make sure to keep this to `POSTGRES_URL_NON_POOLING`
+  // or you'll have dangling databases from migrations
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+ 
+
+ 
+model Passager {
+  id            Int      @id @default(autoincrement())
+  nom           String
+  prenom        String
+  adresse       String
+  dateNaissance DateTime @default(now())
+  telephone     String   
+  email         String
+  genre         String
+  numCNI        String   @unique
+  agenceId        Int
+}
+
+model Employe {
+  id            Int      @id @default(autoincrement())
+  nom           String
+  prenom        String
+  adresse       String
+  dateNaissance DateTime @default(now())
+  telephone     String
+  email         String   @default("nothing")
+  genre         String
+  numCNI        String   @unique
+  dateEmbauche  DateTime
+  posteId       Int
+  agenceId      Int
+  matricule     String   @default("")
+  natureContrat String   @default("")
+  anciennete    Int      @default(0)
+  imageCNIRecto      String   @default("")
+  imageCNIVerso      String   @default("")
+}
+
+model Voyage {
+  id              Int      @id @default(autoincrement())
+  dateDepart      DateTime
+  dateArrivee     DateTime
+  placeDisponible Int
+  typeVoyage      String
+  prixVoyage      Decimal
+  busId           String
+  trajetId        Int
+  agenceId        Int
+}
+
+model Trajet {
+  id           Int    @id @default(autoincrement())
+  lieuDepart   String
+  lieuArrivee  String
+  heureDepart  String
+  heureArrivee String
+  distance     Int
+}
+
+model Reservation {
+  Id                Int      @id @default(autoincrement())
+  passagerId        Int
+  voyageId          Int
+  dateReservation   DateTime @default(now())
+  statutReservation String
+  agenceId          Int
+}
+
+model Bus {
+  id               Int    @id @default(autoincrement())
+  employeId        Int
+  marque           String
+  modele           String
+  typeBus          String
+  anneeFabrication String
+  capacite         Int
+  placesDisponible Int
+  placesTotal      Int
+  panneVehicule    String
+  horsService      String @default("non")
+}
+
+model Agence {
+  id              Int    @id @default(autoincrement())
+  nom             String
+  adresse         String
+  numeroTelephone String
+}
+
+model Poste {
+  id           Int      @id @default(autoincrement())
+  titre        String
+  salaire      Int
+  datePaiement DateTime
+}
+
+model Salaire {
+  id           Int      @id @default(autoincrement())
+  posteId      Int
+  montant      Int
+  datePaiement DateTime
+}
+
+model Ticket {
+  id           Int    @id @default(autoincrement())
+  voyageId     Int    
+  numeroSiege  Int
+  prixTicket   Int
+  typeTicket   String
+  statusTicket String
+  dateCreation DateTime
+  passagerId   Int
+  employeId    Int
+}
+
+model TrackingVehicule {
+  id             Int      @id @default(autoincrement())
+  vehiculeId     Int
+  lattitude      Decimal
+  longitude      Decimal
+  dateHeureSuivi DateTime
+}
+
+model Depense {
+  id          Int      @id @default(autoincrement())
+  agenceId    Int
+  description String
+  montant     Decimal
+  date        DateTime
+  typeDepense String
+}
+
+model Utilisateur {
+  id                    Int      @id @default(autoincrement())
+  nomUtilisateur        String
+  motDePasse            String   @unique
+  dateCreationCompte    DateTime 
+  dateDerniereConnexion DateTime
+  blocke                String   @default("non")
+  numCNI                String   @default("")
+  employeId             Int      @unique
+  isConnected           String
+  droitsAccesId         Int
+}
+
+model DroitsAcces {
+  id         Int    @id @default(autoincrement())
+  TypeDroits String @unique
+}
+
+model Conge {
+  id         Int      @id @default(autoincrement())
+  nombreJour Int
+  dateDepart DateTime
+  motif      String
+  employeId  Int
+  dateUpdate   DateTime
+}
+
+model Sanction {
+  id          Int    @id @default(autoincrement())
+  label       String
+  description String
+  employeId   Int
+  dateUpdate   DateTime
+}
+
+model Avance {
+  id            Int    @id @default(autoincrement())
+  montant       Int
+  motif         String
+  remboursement String
+  employeId     Int
+  dateUpdate   DateTime
+}
+
+model Prime {
+  id           Int    @id @default(autoincrement())
+  montant      Int
+  justificatif String
+  employeId    Int
+  dateUpdate   DateTime
+}
+
+model Recette {
+    id Int  @id @default(autoincrement())
+    nom  String
+    typeService  String
+    typePaiement String
+    montant      Int
+    dateTransaction String
+    note          String
+    agenceId      Int
+}
+
+model LigneFicheRecette {
+  id Int  @id @default(autoincrement())
+  busId   Int
+  voyageId Int
+  montant  Int
+  signature String 
+  date  DateTime
+  agenceId  Int
+  
+}
+
+model FicheSuivieVehicule {
+  id                    Int  @id @default(autoincrement())
+  immatriculation       String
+  typeVehicule          String
+  kilometrageInitial    Int
+  dateAchat             DateTime
+  dateMiseService       DateTime
+  busId                 Int
+  dateRevision          DateTime
+  detailRevision        String
+  vidange               String
+  reperationEffectuees  String
+  anomalies             String
+  carburant             String
+  pannes                String
+  vandalisme            String
+  accident              String
+  assurance             String
+  contratEntretien      String
+  garanties             String
+}
+
+model Facture {
+  id           Int  @id @default(autoincrement())
+  src          String
+  agenceId     Int
+  montant      Int
+}   
