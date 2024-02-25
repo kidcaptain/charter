@@ -91,7 +91,7 @@ export default function Page() {
                                     <label htmlFor="" className="block mb-1 text-sm  text-gray-700 ">Employé</label>
                                     <select className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " id="">
                                         {employees.map((item: any, i : number) => (
-                                            <option value="1">{item.nom}</option>
+                                            <option key={i+1} value="1">{item.nom}</option>
                                         ))}
                                     </select>
                                 </div>
@@ -154,7 +154,7 @@ export default function Page() {
                             </button>
                         </div>
                     </div>
-                    <PassagerTable childToParent={handleButtonClickEditForm} setData={getItem} />
+                    <PassagerTable agenceId={0} childToParent={handleButtonClickEditForm} setData={getItem} />
                 </section>
                 {isOpenEditForm ? (
                     <section className='bg-white col-span-1'>

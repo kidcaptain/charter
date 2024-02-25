@@ -200,7 +200,7 @@ export default function Page() {
                             </button>
                         </div>
                     </div>
-                    <PassagerTable childToParent={handleButtonClickEditForm} setData={getItem} />
+                    <PassagerTable agenceId={0} childToParent={handleButtonClickEditForm} setData={getItem} />
                 </section>
                 {isOpenEditForm ? (
                     <section className='bg-white shadow-2xl col-span-1'>

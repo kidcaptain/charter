@@ -76,7 +76,7 @@ export default function AdminLayout({
                                         </div>
                                     </li>
                                 ) : (
-                                    <Link href={"/signin"} className="text-white  bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-red-300  rounded-sm text-sm p-2 px-5 text-center">S'authentifier</Link>
+                                    <Link href={"/signin"} className="text-white  bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-red-300  rounded-sm text-sm p-2 px-5 text-center">S&apos;authentifier</Link>
                                 )
                            }
                         </ul>

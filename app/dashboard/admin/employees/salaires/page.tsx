@@ -155,7 +155,7 @@ export default function Page() {
                                 <select onChange={e => setAgenceId(e.target.value)} className="block p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " id="">
                                     <option></option>
                                     {agences.map((i: any, index: number) => (
-                                        <option value={ JSON.stringify({id:i.id, nom:i.nom})}>{i.nom}</option>
+                                        <option key={index+1} value={ JSON.stringify({id:i.id, nom:i.nom})}>{i.nom}</option>
                                     ))}
                                 </select>
                             </div>

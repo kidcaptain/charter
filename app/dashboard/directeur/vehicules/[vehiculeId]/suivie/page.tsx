@@ -157,7 +157,7 @@ export default function Page({ params }: { params: IPrams }) {
                                 </div>
                             </div>
                             <div>
-                                <div className="border border-stone-700 uppercase p-2">Date d'achat </div>
+                                <div className="border border-stone-700 uppercase p-2">Date d&apos;achat </div>
                                 <div className="border text-gray-600 border-stone-700 uppercase">
                                     <input type="date" name="dateAchat" onChange={handleInputChange} value={data?.dateAchat ? getDateFormat(data?.dateAchat) : '2024-02-20'}   className="w-full h-full px-3 hover:bg-stone-200 py-4 focus-within:outline-none bg-stone-50" />
                                 </div>
@@ -278,7 +278,7 @@ export default function Page({ params }: { params: IPrams }) {
                                 </div>
                             </div>
                             <div>
-                                <div className="border border-stone-700 uppercase p-2">Contrats d'entretien</div>
+                                <div className="border border-stone-700 uppercase p-2">Contrats d&apos;entretien</div>
                                 <div className="border text-gray-600 border-stone-700 ">
                                     <input type="radio" id="ouicontratEntretien" value="oui" name="contratEntretien" checked={data?.contratEntretien == "oui"} onChange={handleInputChange} className="block p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                                     <label htmlFor="oui" className="text-xs font-bold text-gray-700">Oui</label>

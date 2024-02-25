@@ -201,8 +201,8 @@ export default function Page() {
                 <h1 className="lowercase text-sm  text-gray-900"><Link className="hover:text-blue-600" href={"/dashboard/admin/employees"}>Employés</Link> / <Link className="hover:text-blue-600" href="#">Utilisateurs</Link></h1>
             </div>
             <div className=" py-4 flex justify-between items-start mb-2">
-                <h1 className="text-xl text-black font-bold">Utilisateurs et droits d'acces</h1>
-                <Link href={'/dashboard/admin/employees/utilisateurs/acces'} className="bg-blue-500 p-2 text-xs text-white ">Ajouter un droit d'acces</Link>
+                <h1 className="text-xl text-black font-bold">Utilisateurs et droits d&apos;acces</h1>
+                <Link href={'/dashboard/admin/employees/utilisateurs/acces'} className="bg-blue-500 p-2 text-xs text-white ">Ajouter un droit d&apos;acces</Link>
             </div>
             <div className="grid grid-cols-6 gap-4">
                 <div className="relative col-span-4 bg-white rounded-sm border overflow-x-auto text-sm">
