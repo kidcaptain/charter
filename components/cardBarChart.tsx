@@ -4,7 +4,7 @@ import Chart from "chart.js";
 
 export default function CardBarChart(props: {title? : string}) {
   React.useEffect(() => {
-    let config = {
+    let config : any = {
       type: "bar",
       data: {
         labels: [
@@ -97,8 +97,12 @@ export default function CardBarChart(props: {title? : string}) {
         },
       },
     };
-    let ctx = document.getElementById("bar-chart").getContext("2d");
-    window.myBar = new Chart(ctx, config);
+    let ctx : any = document.getElementById("bar-chart");
+    if (ctx) {
+        let ctxContext : any= ctx.getContext("2d")
+        window.myBar = new Chart(ctxContext, config);
+    }
+   
   }, []);
   return (
     <>
