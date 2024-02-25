@@ -13,7 +13,7 @@ const UserAccountNav = () => {
               });
         }
 
-    return (<SessionProvider><UserLogout children={signOutUser} /></SessionProvider>
+    return (<UserLogout children={signOutUser} />
     )
 };
 
