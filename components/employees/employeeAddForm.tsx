@@ -152,7 +152,7 @@ const EmployeeAddForm = (props: { childToParent: Function }) => {
                 </div>
                 <div className="mt-4">
                     <div className="flex gap-4 mb-1 items-start">
-                        <label className={`${classNameLabel}`}>Date d'embauche</label>
+                        <label className={`${classNameLabel}`}>Date d&apos;embauche</label>
                         {((value?.dateEmbauche && value?.dateEmbauche != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null}
                     </div>
 
