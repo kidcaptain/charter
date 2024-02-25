@@ -16,7 +16,7 @@ export default async function HomeDashboard() {
                
                 <section className="grid grid-cols-6">
                     <div className="col-span-4 p-10" >
-                    <h2 className="text-2xl text-gray-600 text-left m-auto my-10 font-bold">Bienvenue "{session?.user?.name}"</h2>
+                    <h2 className="text-2xl text-gray-600 text-left m-auto my-10 font-bold">Bienvenue {session?.user?.name}</h2>
                         <div className="grid-cols-3 gap-4 items-center grid">
                             <div className="col-span-1">
                                 <CardEmploye />
