@@ -8,7 +8,7 @@ const EmployeeAddForm = (props: { childToParent: Function }) => {
     const [poste, setPoste] = useState<any[]>([])
     const [agence, setAgence] = useState<any[]>([]);
     const [agenceId, setAgenceId] = useState<number | undefined>()
-    const classNameLabel: string = "block mb-1 text-sm font-bold text-gray-900 dark:text-white";
+    const classNameLabel: string = "block mb-1 text-sm font-bold text-gray-900  ";
     const classNameInput: string = "block w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ";
     const HandlerSubmit = async (e: any) => {
 

@@ -291,7 +291,7 @@ export default function Page() {
                         </h2>
                         <div className="p-4">
                             <div className="mt-4  gap-4">
-                                <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Nom d&apos;utilisateur</label>
+                                <label className="block mb-1 text-sm font-medium text-gray-700  ">Nom d&apos;utilisateur</label>
                                 <select name="nomUtilisateur" required autoComplete="off" onChange={handleInputChange} className="block w-full p-2  text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " id="nomUtilisateur">
                                     <option value="" ></option>
                                     {employees.map((item: any, index: number) => (
@@ -300,7 +300,7 @@ export default function Page() {
                                 </select>
                             </div>
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Mot de passe</label>
+                                <label className="block mb-1 text-sm font-medium text-gray-700  ">Mot de passe</label>
                                 <input type="password" placeholder="Mot de Passe" name="motDePasse" required autoComplete="off" onChange={handleInputChange} id="motDePasse" className="block w-full p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                             <div className="mt-4">

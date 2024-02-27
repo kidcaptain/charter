@@ -60,27 +60,27 @@ export default function Page() {
                     <h2 className="my-4 font-bold text-slate-600 text-center">Nouveau Employé</h2>
                     <div className=" mx-auto">
                         <div className="mt-4 gap-4">
-                            <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Nom</label>
+                            <label className="block mb-1 text-sm font-medium text-gray-700  ">Nom</label>
                             <input type="text" required id="nom" className="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         </div>
                         <div className="mt-4">
-                            <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Prénom</label>
+                            <label className="block mb-1 text-sm font-medium text-gray-700  ">Prénom</label>
                             <input type="text" required id="prenom" className="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         </div>
                         <div className="mt-4">
-                            <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Adresse</label>
+                            <label className="block mb-1 text-sm font-medium text-gray-700  ">Adresse</label>
                             <input type="text" required id="adresse" className="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         </div>
                         <div className="mt-4">
-                            <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Date de naissance</label>
+                            <label className="block mb-1 text-sm font-medium text-gray-700  ">Date de naissance</label>
                             <input type="date" required id="datenaissance" className="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         </div>
                         <div className="mt-4">
-                            <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Numéro de Carte d&apos;identité</label>
+                            <label className="block mb-1 text-sm font-medium text-gray-700  ">Numéro de Carte d&apos;identité</label>
                             <input type="text" required id="datenaissance" className="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         </div>
                         <div className="mt-4">
-                            <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Genre</label>
+                            <label className="block mb-1 text-sm font-medium text-gray-700  ">Genre</label>
                             <div className="flex gap-4">
                                 <input type="checkbox" required id="genrem" value="m" className="block p-1 text-gray-900 border border-gray-300 rounded-lg focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                                 <label htmlFor="genrem" className="text-xs font-bold text-gray-700">Homme</label>
@@ -90,7 +90,7 @@ export default function Page() {
                         </div>
 
                         <div className="mt-4">
-                            <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Numèro de téléphone:</label>
+                            <label className="block mb-1 text-sm font-medium text-gray-700  ">Numèro de téléphone:</label>
                             <div className="relative">
                                 <div className="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none">
                                     <svg className="w-4 h-4 text-yellow-400 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 19 18">
@@ -110,34 +110,34 @@ export default function Page() {
                     <h2 className="my-4 font-bold text-slate-600 text-center">Bus</h2>
                     <div className="mx-auto">
                         <div className="mt-4  gap-4">
-                            <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Marque</label>
+                            <label className="block mb-1 text-sm font-medium text-gray-700  ">Marque</label>
                             <input type="text" required id="nom" className="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         </div>
                         <div className="mt-4">
-                            <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Modèle</label>
+                            <label className="block mb-1 text-sm font-medium text-gray-700  ">Modèle</label>
                             <input type="text" required id="prenom" className="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         </div>
                         <div className="mt-4">
-                            <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Type de bus</label>
+                            <label className="block mb-1 text-sm font-medium text-gray-700  ">Type de bus</label>
                             <select id="countries" className="block w-full p-2 uppercase text-xs text-gray-900 border border-gray-300 rounded-lg focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                 <option value="0">Vip</option>
                                 <option value="1">Simple</option>
                             </select>
                         </div>
                         <div className="mt-4">
-                            <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Année de Fabrication</label>
+                            <label className="block mb-1 text-sm font-medium text-gray-700  ">Année de Fabrication</label>
                             <input type="date" required id="datenaissance" className="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         </div>
                         <div className="mt-4">
-                            <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Capacité</label>
+                            <label className="block mb-1 text-sm font-medium text-gray-700  ">Capacité</label>
                             <input type="number" required id="datenaissance" className="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         </div>
                         <div className="mt-4">
-                            <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Place Disponible</label>
+                            <label className="block mb-1 text-sm font-medium text-gray-700  ">Place Disponible</label>
                             <input type="number" required id="datenaissance" className="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         </div>
                         <div className="mt-4">
-                            <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Place Total</label>
+                            <label className="block mb-1 text-sm font-medium text-gray-700  ">Place Total</label>
                             <input type="number" required id="datenaissance" className="block w-full p-1 text-gray-900 border border-gray-300 rounded-lg focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         </div>
 

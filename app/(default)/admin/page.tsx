@@ -85,11 +85,11 @@ export default function Page() {
                             <h1 className='my-4 text-stone-600 text-lg text-center uppercase'>Enregistrer l&apos;administrateur</h1>
                             <div className="p-4">
                                 <div className="mt-4  gap-4">
-                                    <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Nom d&apos;utilisateur</label>
+                                    <label className="block mb-1 text-sm font-medium text-gray-700  ">Nom d&apos;utilisateur</label>
                                     <input type="text" placeholder="Nom d'utilisateur" required autoComplete="off" onChange={e => setNom(e.target.value)} id="nomUtilisateur" name="nomUtilisateur" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-sm focus-visible:ring-blue-400 " />
                                 </div>
                                 <div className="mt-4">
-                                    <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Mot de passe</label>
+                                    <label className="block mb-1 text-sm font-medium text-gray-700  ">Mot de passe</label>
                                     <input type="password" placeholder="Mot de Passe" name="motDePasse" required autoComplete="off" onChange={e => setMdp(e.target.value)} id="motDePasse" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-sm focus-visible:ring-blue-400 " />
                                 </div>
                             </div>

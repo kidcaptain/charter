@@ -90,10 +90,10 @@ class ComponentToPrint extends React.Component<DataBordereau> {
                             {
                                 this.props.passagers?.map((i: any, index: number) => (
                                     <tr key={index + 1} className="border-b border-gray-200 dark:b">
-                                        <th scope="row" className="p-2 border font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800">
+                                        <th scope="row" className="p-2 border font-medium text-gray-900 whitespace-nowrap bg-gray-50   dark:bg-gray-800">
                                             {index+1}
                                         </th>
-                                        <th scope="row" className="p-2 border font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800">
+                                        <th scope="row" className="p-2 border font-medium text-gray-900 whitespace-nowrap bg-gray-50   dark:bg-gray-800">
                                             {i.passager?.nom} {i.passager.prenom}
                                         </th>
                                         <td className="border">

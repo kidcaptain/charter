@@ -34,7 +34,7 @@ export default function CardVoyage(props: {
             <h6 className=" my-2 text-lg text-center">{props.date}</h6>
             <div className="pb-3 sm:pb-4 flex items-center justify-between space-x-4  p-4 rtl:space-x-reverse">
                 <div className="flex gap-2 items-center">
-                    <div className=" flex bg-blue-500 rounded-full p-2 font-medium items-center gap-4 truncate dark:text-white stroke-white">
+                    <div className=" flex bg-blue-500 rounded-full p-2 font-medium items-center gap-4 truncate   stroke-white">
                         <Image src={trajetSvg} height={24} width={24} alt="trajet svg" />
                     </div>
                     <div>

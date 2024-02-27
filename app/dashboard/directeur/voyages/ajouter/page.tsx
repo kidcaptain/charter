@@ -202,15 +202,15 @@ export default function Page() {
                                 </span>
                             </div>
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Date de Départ</label>
+                                <label className="block mb-1 text-sm font-bold text-gray-900  ">Date de Départ</label>
                                 <input onChange={e => { checkDates(e.target); handleInputChange(e) }} required type="date" id="dateDepart" placeholder="Départ" name="dateDepart" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Date d&apos;arrivée</label>
+                                <label className="block mb-1 text-sm font-bold text-gray-900  ">Date d&apos;arrivée</label>
                                 <input onChange={e => { checkDates(e.target); handleInputChange(e) }} required type="date" id="dateArrivee" placeholder="Arrivée" name="dateArrivee" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Bus</label>
+                                <label className="block mb-1 text-sm font-bold text-gray-900  ">Bus</label>
                                 <select id="busId" name="busId" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option></option>
                                     {bus.map((item: any, i: number) => (
@@ -220,7 +220,7 @@ export default function Page() {
 
                             </div>
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Trajet</label>
+                                <label className="block mb-1 text-sm font-bold text-gray-900  ">Trajet</label>
                                 <select id="trajetId" name="trajetId" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option></option>
                                     {trajet.map((item: any, i: number) => (
@@ -231,7 +231,7 @@ export default function Page() {
                             {
                                 agence ? null : (
                                     <div className="mt-4">
-                                    <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Agence</label>
+                                    <label className="block mb-1 text-sm font-bold text-gray-900  ">Agence</label>
                                     <select id="agenceId" name="agenceId" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                         <option></option>
                                         {agences.map((item: any, i: number) => (
@@ -243,7 +243,7 @@ export default function Page() {
                             }
                            
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Type de voyages:</label>
+                                <label className="block mb-1 text-sm font-bold text-gray-900  ">Type de voyages:</label>
                                 <select id="typeVoyage" name="typeVoyage" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option></option>
                                     <option value="aller-retour">Aller-Retour</option>
@@ -251,7 +251,7 @@ export default function Page() {
                                 </select>
                             </div>
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Prix du voyage</label>
+                                <label className="block mb-1 text-sm font-bold text-gray-900  ">Prix du voyage</label>
                                 <input onChange={handleInputChange} required type="number" id="prixVoyage" name="prixVoyage" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                             <div className="mt-4 flex">

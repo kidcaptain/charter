@@ -39,26 +39,26 @@ const AddFormPassager = (props: { childToParent: Function, agenceId: number | nu
             <div className=" mx-auto p-4">
                 <div className="mt-4 flex gap-4">
                     <div>
-                        <label className="block mb-1 text-sm  font-bold text-gray-900 dark:text-white">Nom</label>
+                        <label className="block mb-1 text-sm  font-bold text-gray-900  ">Nom</label>
                         <input type="text" required onChange={handleInputChange} placeholder="Nom" name="nom" id="nom" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                     </div>
                     <div>
                         <div>
-                            <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Prénom</label>
+                            <label className="block mb-1 text-sm font-bold text-gray-900  ">Prénom</label>
                             <input type="text" required id="prenom" name="prenom" placeholder="Prénom" onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         </div>
                     </div>
                 </div>
                 <div className="mt-4">
-                    <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Adresse</label>
+                    <label className="block mb-1 text-sm font-bold text-gray-900  ">Adresse</label>
                     <input type="text" required id="adresse" name="adresse" placeholder="Adresse" onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                 </div>
                 <div className="mt-4">
-                    <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Date de naissance</label>
+                    <label className="block mb-1 text-sm font-bold text-gray-900  ">Date de naissance</label>
                     <input type="date" required id="datenaissance" name="dateNaissance" placeholder="Date de Naissance" onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                 </div>
                 <div className="mt-4">
-                    <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Genre</label>
+                    <label className="block mb-1 text-sm font-bold text-gray-900  ">Genre</label>
                     <div className="flex gap-4">
                         <input type="radio" required onChange={handleInputChange} id="genrem" name="genre" value="m" className="block p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         <label htmlFor="genrem" className="text-xs font-bold text-gray-900">Homme</label>
@@ -67,18 +67,18 @@ const AddFormPassager = (props: { childToParent: Function, agenceId: number | nu
                     </div>
                 </div>
                 <div className="mt-4">
-                    <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Numèro de téléphone:</label>
+                    <label className="block mb-1 text-sm font-bold text-gray-900  ">Numèro de téléphone:</label>
                     <input type="tel" id="tel" name="tel" onChange={handleInputChange} aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none sm:text-md focus-visible:ring-blue-400" placeholder="620456789" required />
                 </div>
                 <div className="mt-4">
-                    <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Numèro de CNI:</label>
+                    <label className="block mb-1 text-sm font-bold text-gray-900  ">Numèro de CNI:</label>
                     <input type="text" id="numCNI" name="numCNI" onChange={handleInputChange} aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none sm:text-md focus-visible:ring-blue-400" required />
                 </div>
                 {
                     props.agenceId ?
                         (
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Numèro de CNI:</label>
+                                <label className="block mb-1 text-sm font-bold text-gray-900  ">Numèro de CNI:</label>
                                 <input type="text" id="agenceId" name="agenceId" value={props.agenceId} hidden={true} aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none sm:text-md focus-visible:ring-blue-400" required />
                             </div>
                         ) : null

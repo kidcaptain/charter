@@ -49,21 +49,21 @@ const TrajetAddForm = (props: { childToParent: Function }) => {
             {((data?.lieudepart && data?.lieudepart != "") && (data?.lieuarrivee == data?.lieudepart)) ? (<div className="text-xs bg-yellow-100 my-2 p-4">Le lieu de départ et le lieu d&apos;arrivée sont pariels</div>) : null}
                 <div className="mt-4">
                     <div className="flex gap-4 mb-1 items-start">
-                        <label className="block text-sm font-bold text-gray-900 dark:text-white">Lieu de Départ</label>
+                        <label className="block text-sm font-bold text-gray-900  ">Lieu de Départ</label>
                         {((data?.lieudepart && data?.lieudepart != "") && (data?.lieuarrivee != data?.lieudepart)) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null}
                     </div>
                     <input onChange={handleInputChange} required type="text" id="lieudepart" placeholder="Départ" name="lieudepart" className={`${className} ${((data?.lieudepart && data?.lieudepart != "") && (data?.lieuarrivee != data?.lieudepart)) ? "bg-green-50 ring-green-400/30 ring-4" : ""}`} />
                 </div>
                 <div className="mt-4">
                     <div className="flex gap-4 mb-1 items-start">
-                        <label className="block text-sm font-bold text-gray-900 dark:text-white">Lieu d&apos;arrivée</label>
+                        <label className="block text-sm font-bold text-gray-900  ">Lieu d&apos;arrivée</label>
                         {((data?.lieuarrivee && data?.lieuarrivee != "") && (data?.lieuarrivee != data?.lieudepart)) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null}
                     </div>
                     <input onChange={handleInputChange} required type="text" id="lieuarrivee" placeholder="Arrivée" name="lieuarrivee" className={`${className} ${((data?.lieuarrivee && data?.lieuarrivee != "") && (data?.lieuarrivee != data?.lieudepart)) ? "bg-green-50 ring-green-400/30 ring-4" : ""}`} />
                 </div>
                 <div className="mt-4">
                     <div className="flex gap-4 mb-1 items-start">
-                        <label className="block text-sm font-bold text-gray-900 dark:text-white">Heure de Départ</label>
+                        <label className="block text-sm font-bold text-gray-900  ">Heure de Départ</label>
                         {((data?.heuredepart && data?.heuredepart != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null}
                     </div>
 
@@ -71,14 +71,14 @@ const TrajetAddForm = (props: { childToParent: Function }) => {
                 </div>
                 <div className="mt-4">
                     <div className="flex gap-4 mb-1 items-start">
-                        <label className="block text-sm font-bold text-gray-900 dark:text-white">Heure d&apos;arrivée</label>
+                        <label className="block text-sm font-bold text-gray-900  ">Heure d&apos;arrivée</label>
                         {((data?.heurearrivee && data?.heurearrivee != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null}
                     </div>
                     <input onChange={handleInputChange} required type="time" id="heurearrivee" name="heurearrivee" className={`${className} ${((data?.heurearrivee && data?.heuredepart != "")) ? "bg-green-50 ring-green-400/30 ring-4" : ""}`} />
                 </div>
                 <div className="mt-4">
                     <div className="flex gap-4 mb-1 items-start">
-                        <label className="block text-sm font-bold text-gray-900 dark:text-white">Nombre de kilomètre entre les deux points</label>
+                        <label className="block text-sm font-bold text-gray-900  ">Nombre de kilomètre entre les deux points</label>
                         {((data?.distance && parseInt(data?.distance) > 0)) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null}
                     </div>
                     <input onChange={handleInputChange} required type="number" id="distance" name="distance" className={`${className} ${((data?.distance && data?.distance != "") && parseInt(data?.distance) > 0) ? "bg-green-50 ring-green-400/30 ring-4" : ""}`} />
