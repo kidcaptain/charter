@@ -88,6 +88,12 @@ export const LinksAdmin : {label: string, selected: boolean, icon: string, link:
         link: "/dashboard/admin/employees"
     },
     {
+        label: "Ventes des tickets",
+        selected: false,
+        icon: user,
+        link: "/dashboard/admin/ventes"
+    },
+    {
         label: "Véhicules",
         selected: false,
         icon: bus,
