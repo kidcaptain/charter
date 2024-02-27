@@ -12,7 +12,6 @@ datasource db {
 }
  
 
- 
 model Passager {
   id            Int      @id @default(autoincrement())
   nom           String
@@ -240,5 +239,7 @@ model Facture {
   id           Int  @id @default(autoincrement())
   src          String
   agenceId     Int
+  nom          String
+  ext          String
   montant      Int
 }   
