@@ -18,5 +18,4 @@ export default async function HomeDashboard() {
     }
     return <h2>Please login to see this admin page</h2>
 };  
-    return <h2>Please login to see this admin page</h2>
-};  
+   
