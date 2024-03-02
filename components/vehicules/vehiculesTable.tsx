@@ -114,7 +114,7 @@ const VehiculeTable = (props: { childToParent: Function, setData: Function, isAd
                                     { 
                                     props.isAdmin === "admin" ? ( <>
                                      <Link href={`/dashboard/admin/vehicles/${item.id}/rapports`} onClick={() => props.setData({ action: "fiche", item: item })} className="bg-purple-600 text-white text-sm p-1 px-2 ">Rapport </Link>
-                                     <Link href={`/dashboard/admin/vehicles/${item.id}/suivi`} onClick={() => props.setData({ action: "fiche", item: item })} className="bg-purple-600 text-white text-sm p-1 px-2 ">Fiche de suivi </Link></>) : 
+                                     <Link href={`/dashboard/admin/vehicles/${item.id}/suivie`} onClick={() => props.setData({ action: "fiche", item: item })} className="bg-purple-600 text-white text-sm p-1 px-2 ">Fiche de suivi </Link></>) : 
                                 (  <Link href={`/dashboard/directeur/vehicules/${item.id}/rapports`} onClick={() => props.setData({ action: "fiche", item: item })} className="bg-purple-600 text-white text-sm p-1 px-2 ">Rapport </Link>)}
                                   
                                 </td>
