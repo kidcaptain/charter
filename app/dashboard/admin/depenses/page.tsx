@@ -3,16 +3,16 @@
 import CardLineChart from "@/components/cardLineChart";
 import { getDateFormat } from "@/functions/actionsClient";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
-export default function Depenses() {
+export default function Page() {
     const [tabulation, setTabulation] = useState<boolean>(false);
     const [agences, setAgences] = useState<any[]>([]);
     const [depenses, setDepenses] = useState<any[]>([]);
     const [value, setValue] = useState<any>();
     const [moisDepense, setMoisDepense] = useState<any[]>([])
     const [moisLigne, setMoisLigne] = useState<any[]>([])
-
+    const typeDepense = useRef<any>(null)
     const date = new Date();
     const year = date.getFullYear();
     const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
@@ -49,7 +49,6 @@ export default function Depenses() {
             console.log(err)
         }
     }
-
     const handleInputChange = (event: any) => {
         const target = event.target
         const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -57,14 +56,12 @@ export default function Depenses() {
             return { ...oldValue, [target.name]: value }
         })
     }
-
     const deleteItem = async (id: number) => {
         const res = await fetch("/api/agences/" + id, { method: "DELETE", cache: "no-store" })
         if (!res.ok) {
             console.log("error")
         }
     }
-
     useEffect(() => {
         const getAgence = async () => {
             const res = await fetch("/api/agences", { cache: "no-store" })
@@ -216,16 +213,22 @@ export default function Depenses() {
         };
         getAgence();
         getDepense()
-    }, [depenses])
+    }, [])
     return (
         <div className="p-10">
-            <h1 className="text-4xl uppercase text-gray-600 my-5">Les Dépenses et journaux</h1>
-            <div className="text-sm font-bold">
-                <button onClick={e => setTabulation(false)} className={!tabulation ? "p-2 bg-white  uppercase px-4" : "p-2 uppercase px-4" }>Dépenses</button>
-                <button onClick={e => setTabulation(true)} className={tabulation ? "p-2 bg-white   px-4" : "p-2 px-4"}>BILAN GÉNÉRAL ET STATISTIQUE DE PRODUCTION</button>
+            {/* <h1 className="text-4xl uppercase text-gray-600 my-5">Les Dépenses et Bilan</h1> */}
+            <div className="text-sm font-bold my-2 flex gap-2">
+                <button onClick={e => setTabulation(false)} className={`${!tabulation ? " bg-white shadow-xl  " : ""} border uppercase overflow-hidden   rounded-md  hover:bg-stone-100 p-2  px-4`}>Dépenses</button>
+                {/* <button onClick={e => setTabulation(true)} className={`${tabulation ? " bg-white shadow-xl  " : ""} border uppercase overflow-hidden     rounded-md  hover:bg-stone-100 p-2  px-4`}>BILAN GÉNÉRAL ET STATISTIQUE DE PRODUCTION</button> */}
+                <Link href={"/dashboard/admin/production"} className={`border uppercase overflow-hidden     rounded-md  hover:bg-stone-100 p-2  px-4`}>PRODUCTION</Link>
+                
+
             </div>
             {!tabulation ? (
-                <div className="grid grid-cols-4 gap-4 grid-rows-4 items-start">
+                <div className="grid grid-cols-4 gap-4  items-start">
+                    <h2 className="py-4 text-xl col-span-full uppercase text-slate-900 border-b">
+                        Dépenses
+                    </h2>
                     <div className="max-w-md bg-white col-span-1 row-span-2 overflow-hidden rounded-md shadow-2xl">
                         <h2 className="uppercase bg-blue-500 from-blue-600 bg-gradient-to-br font-bold  text-white p-4">
                             Enregistrer une dépense
@@ -251,77 +254,96 @@ export default function Depenses() {
                             </div>
                             <div className="mt-2">
                                 <label className="  text-sm font-bold">Type de dépenses</label>
-                                <select id="countries" name="typeDepense" onChange={handleInputChange} className="block text-sm w-full p-2  text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
+                                <select id="countries" ref={typeDepense} name="typeDepense" onChange={handleInputChange} className="block text-sm w-full p-2  text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
+                                    <option value=""></option>
+
                                     <option value="salaire">Salaire</option>
+                                    <option value="employe">Employé</option>
+                                    <option value="voyage">Voyage</option>
                                     <option value="ration">Ration</option>
                                     <option value="bus">Bus</option>
                                     <option value="autre">Autres</option>
                                 </select>
+                                
                             </div>
+                            {
+                                typeDepense.current?.value == "autre" ? (
+                                    <div className="mt-2">
+                                        <label className="block mb-1 text-sm font-bold">Dépense liée à </label>
+                                        <input type="text" required name="typeDepense" onChange={handleInputChange} id="large-input" className="block w-full p-1.5 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
+                                    </div>
+                                ) : null
+                            }
                             <button type="submit" className="text-white mt-4 hover:bg-blue-700 rounded-sm bg-blue-500 text-sm p-2">
                                 Enregistrer
                             </button>
-                            <button id="buttonReset" type="reset" className="text-white mt-4 hover:bg-stone-700 rounded-sm bg-stone-500 text-sm p-2">Recommencer</button>
+                            <button id="buttonReset" type="reset" onClick={() => {typeDepense.current = null}} className="text-white mt-4 hover:bg-stone-700 rounded-sm bg-stone-500 text-sm p-2">Recommencer</button>
                         </form>
                     </div>
-                    <div className="w-full col-span-3 bg-white overflow-hidden shadow-2xl border  row-span-2">
+                    <div className="w-full col-span-3 bg-white rounded-md overflow-hidden shadow-2xl border  row-span-2">
                         <div className=" p-4  border-b">
-                            <h2 className="uppercase">
+                            <h2 className="uppercase font-bold">
                                 Dépenses
                             </h2>
+
+                        </div>
+                        <div className="p-4">
                             <Link href="/dashboard/admin/depenses/hebdomadaires" className="text-stone-800 border bg-gray-100 hover:bg-gray-300 text-xs p-2 rounded-sm">Fiches de dépenses hebdomadaires</Link>
                             <Link href="/dashboard/admin/depenses/Journalieres" className="text-stone-800 border bg-gray-100 hover:bg-gray-300 text-xs p-2 rounded-sm">Fiches de dépenses Journalières</Link>
+                            <Link href="/dashboard/admin/depenses/statistiques" className="text-stone-800 border bg-gray-100 hover:bg-gray-300 text-xs p-2 rounded-sm">Rapport des dépenses</Link>
                         </div>
+                        <div className="p-4">
 
-                        <table className="w-full text-sm text-left rtl:text-right text-black">
-                            <thead className="text-sm uppercase">
-                                <tr>
-                                    <th scope="col" className="px-3 py-2 border border-2 border-stone-500">
-                                        Id
-                                    </th>
-                                    <th scope="col" className="px-3 py-2 border border-2 border-stone-500">
-                                        Agence
-                                    </th>
-                                    <th scope="col" className="px-3 py-2 border border-2 border-stone-500">
-                                        Montant
-                                    </th>
-                                    <th scope="col" className="px-3 py-2 border border-2 border-stone-500">
-                                        Type de dépense
-                                    </th>
-                                    <th scope="col" className="px-3 py-2 border border-2 border-stone-500">
-                                        Enregistré le
-                                    </th>
-                                    <th scope="col" className="px-3 py-2 border border-2 border-stone-500">
-                                        Action
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-stone-100 ">
-                                {depenses.map((item: any, i: number) => (
-                                    <tr key={i + 1}>
-                                        <th scope="row" className="px-3 py-2 border border-stone-400">
-                                            {i + 1}
+                            <table className="w-full text-sm text-left rtl:text-right text-black">
+                                <thead className="text-sm uppercase">
+                                    <tr>
+                                        <th scope="col" className="px-3 py-2 border  border-stone-500">
+                                            Id
                                         </th>
-                                        <td className="px-3 py-2 border border-stone-400">
-                                            {item.agence.nom}
-                                        </td>
-                                        <td className="px-3 py-2 border border-stone-400">
-                                            {item.depense.montant}
-                                        </td>
-                                        <td className="px-3 py-2 border border-stone-400">
-                                            {item.depense.typeDepense}
-                                        </td>
-                                        <td className="px-3 py-2 border border-stone-400">
-                                            {getDateFormat(item.depense.date)}
-                                        </td>
-                                        <td className="px-3 py-2 border border-stone-400">
-                                            <button onClick={() => deleteItem(item.depense.id)} className="bg-red-500 hover:bg-red-700 text-white text-xs p-2">Retirer</button>
-                                        </td>
+                                        <th scope="col" className="px-3 py-2 border  border-stone-500">
+                                            Agence
+                                        </th>
+                                        <th scope="col" className="px-3 py-2 border  border-stone-500">
+                                            Montant
+                                        </th>
+                                        <th scope="col" className="px-3 py-2 border  border-stone-500">
+                                            Type de dépense
+                                        </th>
+                                        <th scope="col" className="px-3 py-2 border  border-stone-500">
+                                            Enregistré le
+                                        </th>
+                                        <th scope="col" className="px-3 py-2 border  border-stone-500">
+                                            Action
+                                        </th>
                                     </tr>
-                                ))}
+                                </thead>
+                                <tbody className="bg-stone-100 ">
+                                    {depenses.map((item: any, i: number) => (
+                                        <tr key={i + 1}>
+                                            <th scope="row" className="px-3 py-2 border border-stone-400">
+                                                {i + 1}
+                                            </th>
+                                            <td className="px-3 py-2 border border-stone-400">
+                                                {item.agence.nom}
+                                            </td>
+                                            <td className="px-3 py-2 border border-stone-400">
+                                                {item.depense.montant}
+                                            </td>
+                                            <td className="px-3 py-2 border border-stone-400">
+                                                {item.depense.typeDepense}
+                                            </td>
+                                            <td className="px-3 py-2 border border-stone-400">
+                                                {getDateFormat(item.depense.date)}
+                                            </td>
+                                            <td className="px-3 py-2 border border-stone-400">
+                                                <button onClick={() => deleteItem(item.depense.id)} className="bg-red-500 hover:bg-red-700 text-white text-xs p-2">Retirer</button>
+                                            </td>
+                                        </tr>
+                                    ))}
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div className="col-span-4 row-span-2">
                         {
@@ -334,7 +356,7 @@ export default function Depenses() {
                 </div>
             ) : (
                 <div>
-                    
+
                     <div className="mt-4 bg-white overflow-hidden h-full ">
                         <h2 className="p-4 text-xl uppercase text-slate-900 border-b">
                             bilan général et statistique de production
@@ -399,13 +421,13 @@ export default function Depenses() {
                                             Total
                                         </th>
                                         <td className=" border border-stone-800">
-                                        <input type="text" className="bg-inherit px-6 py-3  w-full h-full block" />
+                                            <input type="text" className="bg-inherit px-6 py-3  w-full h-full block" />
                                         </td>
                                         <td className="px-6 py-3 border border-stone-800 ">
                                             Total
                                         </td>
                                         <td className=" border border-stone-800">
-                                        <input type="text" className="bg-inherit px-6 py-3  w-full h-full block" />
+                                            <input type="text" className="bg-inherit px-6 py-3  w-full h-full block" />
                                         </td>
                                     </tr>
                                 </tfoot>

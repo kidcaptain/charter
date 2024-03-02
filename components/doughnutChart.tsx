@@ -5,7 +5,7 @@ import { title } from "process";
 
 export default function DoughnutChart(props: { val: number,back1: string, back2: string, label1: string, label2: string, val2: number, id: string}) {
     React.useEffect(() => {
-        var config :any = {
+        var config = {
             type: "doughnut",
             data: {
                 labels: [
@@ -75,13 +75,12 @@ export default function DoughnutChart(props: { val: number,back1: string, back2:
                 },
             },
         };
-        let ctx : any = document.getElementById(`line-chart-${props.id}`);
-        if (ctx) {
-            let ctxContext : any= ctx.getContext("2d");
-            let charter = new Chart(ctxContext, config);
+        var doc: any = document.getElementById(`line-chart-${props.id}`);
+        if (doc) {
+            var ctx = doc.getContext("2d");
         }
-      
-    }, []);
+        window.myLine = new Chart(ctx, config);
+    }, [props.val, props.val2]);
     return (
         <>
             <div className="relative h-full text-gray-800 flex flex-col min-w-0 break-words w-full">

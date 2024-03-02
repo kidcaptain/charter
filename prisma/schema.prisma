@@ -11,7 +11,6 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
  
-
 model Passager {
   id            Int      @id @default(autoincrement())
   nom           String
@@ -137,6 +136,7 @@ model Depense {
   montant     Decimal
   date        DateTime
   typeDepense String
+  idTypeDepense   String @default("")
 }
 
 model Utilisateur {
@@ -180,7 +180,8 @@ model Avance {
   motif         String
   remboursement String
   employeId     Int
-  dateUpdate   DateTime
+  dateUpdate    DateTime
+
 }
 
 model Prime {
