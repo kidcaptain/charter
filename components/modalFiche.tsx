@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react"
 import Popup from "./ui/popup";
+import HelpPopup from "./ui/helpPopup";
 
 export default function ModalFiche(props: { id?: string, isAdmin: string }) {
 
@@ -158,13 +159,13 @@ export default function ModalFiche(props: { id?: string, isAdmin: string }) {
 
     return (
         <div className="bg-white w-full h-full">
-            <div className="inline-block justify-start pb-5 gap-1 p-4">
+            <div className="justify-start pb-5 gap-3 flex  p-4">
                 <button type="button" onClick={() => setShowVacancy(true)} className=" hover:bg-slate-200 text-sm border p-2 rounded-sm font-medium bg-slate-50">Donner des Congés</button>
                 <button type="button" onClick={() => setShowSanction(true)} className=" hover:bg-slate-200 text-sm border p-2 rounded-sm font-medium bg-slate-50">Donner une Sanction</button>
                 <button type="button" onClick={() => setShowAvanceSalaire(true)} className=" hover:bg-slate-200 text-sm border p-2 rounded-sm font-medium bg-slate-50">Avance sur salaire</button>
                 <button onClick={() => setShowPrimeExtra(true)} className=" hover:bg-slate-200 text-sm border p-2 rounded-sm font-medium bg-slate-50">Attribuer des primes et extra</button>
             {
-                props.isAdmin === "admin" ? (    <Link href={`/dashboard/${props.isAdmin}/employees/${props.id}/bulletin`} className=" hover:bg-blue-600 text-white text-sm border p-2 rounded-sm font-medium bg-blue-400">Générer fiche de paie</Link>) :     <Link href={`/dashboard/${props.isAdmin}/employes/${props.id}/bulletin`} className=" hover:bg-blue-600 text-white text-sm border p-2 rounded-sm font-medium bg-blue-400">Générer fiche de paie</Link>
+                props.isAdmin === "admin" ? (    <Link href={`/dashboard/${props.isAdmin}/employees/${props.id}/bulletin`} className="hover:bg-black hover:text-white text-sm border border-black  flex items-center p-2 rounded-sm font-medium bg-slate-50 gap-2 px-4">Générer fiche de paie <HelpPopup message="Remplir et imprimer la fiche de paie d'un employé." />  </Link>) :     <Link href={`/dashboard/${props.isAdmin}/employes/${props.id}/bulletin`} className=" hover:bg-blue-600 text-white text-sm border p-2 rounded-sm font-medium bg-blue-400">Générer fiche de paie</Link>
             }
             </div>
             {showVacancy ? (

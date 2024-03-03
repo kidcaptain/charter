@@ -19,8 +19,8 @@ const SanctionTable = (props: { id?: string }) => {
     }, [sanction])
 
     return (
-        <div className="bg-white shadow-xl rounded-sm">
-            <h1 className=" p-4 text-gray-900 uppercase border-b">Les sanctions</h1>
+        <div className="bg-white border overflow-hidden shadow-2xl rounded-md">
+            <h1 className=" p-4 text-gray-900 uppercase border-b font-bold">Les sanctions</h1>
             <div className="relative overflow-x-auto">
                 <table className="w-full text-left text-xs rtl:text-right text-gray-900 dark:text-gray-400">
                     <thead className="text-xs uppercase text-gray-900  dark:text-gray-400">
@@ -32,7 +32,7 @@ const SanctionTable = (props: { id?: string }) => {
                                 Label
                             </th>
                             <th scope="col" className="p-4 py-3 border-b-2 ">
-                                Description
+                                Montant
                             </th>
                             
                             {/* <th scope="col" className="p-4 py-3 border-b-2">

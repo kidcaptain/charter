@@ -104,57 +104,57 @@ const EmployeeEditForm = (props: { id?: string }) => {
     return (
         employe ? (
             <form onSubmit={HandlerSubmit} className="rounded-md overflow-hidden shadow-2xl" >
-                <h2 className="p-4 bg-cyan-300 from-cyan-700 bg-gradient-to-br font-bold text-white uppercase">
+                <h2 className="p-4  font-bold text-white bg-black uppercase">
                     Informations sur l&apos;employé
                 </h2>
 
                 <div className="grid grid-cols-3 uppercase">
                     <div>
-                        <div className="border p-4">
-                            <h2 className="block mb-1 text-lg  text-gray-900 font-bold">Nom Complet</h2>
+                        <div className="border border-black p-4">
+                            <h2 className="block mb-1 text-sm  text-gray-900 font-bold">Nom Complet</h2>
                             <p>{employe.employe.nom} {employe.employe.prenom}</p>
                         </div>
-                        <div className="border p-4">
-                            <h2 className="block mb-1 text-lg  text-gray-900 font-bold">Adresse</h2>
+                        <div className="border border-black p-4">
+                            <h2 className="block mb-1 text-sm  text-gray-900 font-bold">Adresse</h2>
                             <p>{employe.employe.adresse}</p>
                         </div>
-                        <div className="border p-4">
-                            <h2 className="block mb-1 text-lg  text-gray-900 font-bold">Téléphone</h2>
+                        <div className="border border-black p-4">
+                            <h2 className="block mb-1 text-sm  text-gray-900 font-bold">Téléphone</h2>
                             <p>{employe.employe.telephone}</p>
                         </div>
-                        <div className="border p-4">
-                            <h2 className="block mb-1 text-lg  text-gray-900 font-bold">Numéro CNI</h2>
+                        <div className="border border-black p-4">
+                            <h2 className="block mb-1 text-sm  text-gray-900 font-bold">Numéro CNI</h2>
                             <p>{employe.employe.numCNI}</p>
                         </div>
-                        <div className="border p-4">
-                            <h2 className="block mb-1 text-lg  text-gray-900 font-bold">Date de naissance</h2>
+                        <div className="border border-black p-4">
+                            <h2 className="block mb-1 text-sm  text-gray-900 font-bold">Date de naissance</h2>
                             <p>{getDateFormat(employe.employe.dateNaissance)}</p>
                         </div>
-                        <div className="border p-4">
-                            <h2 className="block mb-1 text-lg  text-gray-900 font-bold">Genre</h2>
+                        <div className="border border-black p-4">
+                            <h2 className="block mb-1 text-sm  text-gray-900 font-bold">Genre</h2>
                             <p>{employe.employe.genre === "m" ? "Homme" : "Femme"} </p>
                         </div>
                     </div>
                     <div>
-                        <div className="border p-4">
-                            <h2 className="block mb-1 text-lg  text-gray-900 font-bold">Poste</h2>
+                        <div className="border border-black p-4">
+                            <h2 className="block mb-1 text-sm  text-gray-900 font-bold">Poste</h2>
                             <p>{employe.poste.titre} </p>
                         </div>
-                        <div className="border p-4">
-                            <h2 className="block mb-1 text-lg  text-gray-900 font-bold">Agence</h2>
+                        <div className="border border-black p-4">
+                            <h2 className="block mb-1 text-sm  text-gray-900 font-bold">Agence</h2>
                             <p>{employe.agence.nom} </p>
                         </div>
-                        <div className="border p-4">
-                            <h2 className="block mb-1 text-lg  text-gray-900 font-bold">matricule</h2>
-                            <p>{employe.employe.matricule ?? ""} </p>
+                        <div className="border border-black p-4">
+                            <h2 className="block mb-1 text-sm  text-gray-900 font-bold">matricule</h2>
+                            <p>{employe.employe.matricule ?? "Aucun"} </p>
                         </div>
-                        <div className="border p-4">
-                            <h2 className="block mb-1 text-lg  text-gray-900 font-bold">Nature du contrat</h2>
-                            <p>{employe.employe.natureContrat ?? ""} </p>
+                        <div className="border border-black p-4">
+                            <h2 className="block mb-1 text-sm  text-gray-900 font-bold">Nature du contrat</h2>
+                            <p>{employe.employe.natureContrat ?? "Indeterminé"} </p>
                         </div>
-                        <div className="border p-4">
-                            <h2 className="block mb-1 text-lg  text-gray-900 font-bold">ancienneté</h2>
-                            <p>{employe.employe.ancienneté ?? ""} </p>
+                        <div className="border border-black p-4">
+                            <h2 className="block mb-1 text-sm  text-gray-900 font-bold">ancienneté</h2>
+                            <p>{employe.employe.ancienneté ?? "Indeterminé"} </p>
                         </div>
                     </div>
                     <div>
