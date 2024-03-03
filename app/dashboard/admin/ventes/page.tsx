@@ -15,18 +15,22 @@ import ComponentTicketPrint from "@/components/ui/ComponentToPrint";
 import CardVoyage from "@/components/cardVoyage";
 import svg from "@/public/images/loader.svg";
 import Image from "next/image";
+import HelpPopup from "@/components/ui/helpPopup";
 
 export default function Page() {
 
     const pathname = usePathname();
     const classname = `text-sm p-2 text-center`
     const router = useRouter()
-
-
+    const [tab, setTab] = useState<boolean>(false);
+    const [tab2, setTab2] = useState<boolean>(false);
+    const [tab3, setTab3] = useState<boolean>(false);
+    const [reste, setReste] = useState<number>(0)
+    const [avance, setAvance] = useState<number>(0)
     const { data: session, status } = useSession()
-    // Variables
-    const typeClass = useRef<any>();
-    const typeVoyage = useRef<any>();
+    const [typeClass, setTypeClass] = useState<string>("");
+    const [typeVoyage, setTypeVoyage] = useState<string>("");
+    const [trajet, setTrajet] = useState<string>("");
     const [item, setItem] = useState<any>(null);
     const [ticket, setTicket] = useState<any>(null);
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
@@ -37,22 +41,54 @@ export default function Page() {
     const [value, setValue] = useState<any>()
     const [voyages, setVoyage] = useState<any[]>([])
     const [agences, setAgences] = useState<any[]>([])
-    const [method, setMethod] = useState<any>()
+    const [method, setMethod] = useState<string>("")
     const [employe, setEmploye] = useState<any>()
     const [passager, setPassager] = useState<any>(null)
     const [agence, setAgence] = useState<any>(null);
     const [numTicket, setNumTicket] = useState<number>(0);
-
+    const [trajets, setTrajets] = useState<any[]>([]);
 
     if (status === "unauthenticated") {
         router.push("/signin");
     }
 
-    const replace  = (str: string) => {
-        return  str.replaceAll("-", "")
-      }
+
+    const [voyagesResult, setVoyagesResult] = useState<any[]>([]);
+    const [dateDepart, setDateDepart] = useState<any>();
+    const [onSearched, setOnsearched] = useState<boolean>(false);
+    const HandleSubmit = () => {
+        const tab: any[] = []
+        voyages.map((item: any) => {
+            if ((item.bus.typeBus == typeClass) && (item.voyages?.typeVoyage == typeVoyage) && (item.voyages?.trajetId == parseInt(trajet))) {
+                tab.push(item)
+            }
+        })
+        setVoyagesResult(tab)
+        setOnsearched(true)
+    }
+
+    const replace = (str: string) => {
+        return str.replaceAll("-", "")
+    }
     const getMethod = (val: any) => {
         setMethod(val)
+    }
+    const validationTab = () => {
+        switch (method) {
+            case "payer":
+                setTab(false)
+                setTab2(false)
+                setTab3(true)
+                break;
+            case "reserver":
+                setTab(false)
+                setTab2(false)
+                setTab3(false)
+                break;
+            default:
+                alert("Cochez l'une des deux options")
+                break;
+        }
     }
     // Functions
     const handleInputChange = (event: any) => {
@@ -80,6 +116,7 @@ export default function Page() {
             })
             if (res.ok) {
                 editVoyage(item.voyages);
+                setReste(0)
                 configPopup("Reservation effectuée", "blue", "Reservation")
             }
         } catch (err) {
@@ -124,7 +161,7 @@ export default function Page() {
             numeroSiege: (item.voyages?.placeDisponible),
             prixTicket: item.voyages?.prixVoyage,
             voyageId: voyageId,
-            typeTicket: typeClass.current.value,
+            typeTicket: typeClass,
             statusTicket: "valide",
             dateCreation: `${year}-${month}-${day}T${hours}:${minutes}`,
             passagerId: id,
@@ -158,7 +195,7 @@ export default function Page() {
             date: `${year}-${month}-${day}T00:00:00.000Z`,
             agenceId: voyage.agenceId
         }
-        console.log(data)
+
         try {
             const res = await fetch(`/api/lignerecette?date=${data.date}&busId=${data.busId}&voyageId=${data.voyageId}`, {
                 method: 'GET', cache: 'no-store'
@@ -177,10 +214,16 @@ export default function Page() {
                 const resupdate = await fetch(`/api/lignerecette/${tab[0].id}`, {
                     method: 'PUT', cache: 'no-store', body: JSON.stringify(updateData)
                 })
+                if (resupdate.ok) {
+                    document.getElementById("resetbtn")?.click()
+                }
             } else {
                 const respost = await fetch(`/api/lignerecette`, {
                     method: 'POST', cache: 'no-store', body: JSON.stringify(data)
                 })
+                if (respost.ok) {
+                    document.getElementById("resetbtn")?.click()
+                }
             }
         } catch (err) {
             console.log(err)
@@ -201,7 +244,7 @@ export default function Page() {
                         telephone: value.tel,
                         email: "",
                         numCNI: value.numCNI,
-                        agenceId: value.agenceId
+                        agenceId: item.voyages?.agenceId
                     }
                     const res = await fetch('/api/passagers', {
                         method: 'POST',
@@ -212,9 +255,11 @@ export default function Page() {
                         setPassager({ passager: d, prix: item.voyages?.prixVoyage })
                         if (method == "reserver") {
                             postReservation(d.id, item.voyages?.id, e.agenceId);
-                        } else {
+                        }
+                        if (method == "payer") {
                             postTicket(d.id, item.voyages?.id)
                         }
+                        setMethod("")
                         setTicket(item)
                         setItem(null)
                         setValue(null)
@@ -254,7 +299,20 @@ export default function Page() {
     const showModal = (val: boolean) => {
         setIsOpenPopup(val)
     }
+    const handleNextTab = () => {
+        if (value?.nom && value?.prenom && value?.adresse && value?.dateNaissance && value?.genre && value?.numCNI) {
+            setTab2(true)
+            setTab(false)
+        } else {
+            alert("Veillez remplir correctement le formulaire!")
+        }
+    }
+    const handleItemOnclick = () => {
+        setTab(true)
+    }
+
     useEffect(() => {
+
         const getData = async () => {
             const data = await selectVoyage();
             setVoyage(data);
@@ -267,6 +325,15 @@ export default function Page() {
             const data: any[] = await res.json();
             setNumTicket(data.length)
         }
+        const getTrajet = async () => {
+            const res = await fetch("/api/trajets", { cache: "no-store" })
+            if (!res.ok) {
+                throw new Error("Failed")
+            }
+            const data = await res.json();
+            setTrajets(data)
+        };
+        getTrajet()
         getLenghtTicket()
         const getAgences = async () => {
             const res = await fetch("/api/agences", { cache: "no-store" })
@@ -280,17 +347,79 @@ export default function Page() {
         getAgences();
     }, [])
 
-
+    const reset = () => {
+        setOnsearched(false);
+    }
     return (
-        <section className="w-full h-full relative ">
-            <section className="relative ">
-                <div style={{ width: '100%', minHeight: "100%", backdropFilter: "blur(1px)" }} className=" shadow-2xl h-full p-10  relative overflow-hidden z-10 max-w-4xl  ">
-                    <h4 className="border-b  text-black font-bold uppercase text-sm">
-                        Réservation et achat de ticket
+        <section className="w-full h-full relative p-10 ">
+            <div className=" py-4 flex justify-between items-start mb-2">
+                <h1 className="text-xl text-gray-900">Réservation et achat de tickets</h1>
+            </div>
+            <section className={`relative flex  justify-start  ${(!tab && !tab2) ? 'flex-col' : 'flex-row'}`}>
+                <div style={{ width: '100%', minHeight: "100%", backdropFilter: "blur(1px)" }} className=" shadow-2xl max-w-3xl border rounded-md h-full relative overflow-hidden z-10    ">
+                    <h4 className="border-b p-4 text-black font-bold uppercase text-xl">
+                        Formulaire de ventes et reservation
                     </h4>
-                    <form onSubmit={HandlerSubmit} className="">
-                        <div className="gap-2  grid grid-cols-2 ">
-                            <div className="">
+                    <form onSubmit={HandlerSubmit} className="px-10 py-5">
+                        <div>
+                            <div className={`px-4 ${(!tab && !tab2 && !tab3) ? 'block' : 'hidden'}`}>
+                                <div className="text-blue-400 relative font-medium flex items-center gap-4 ">
+                                    <div className="bg-blue-400 flex justify-center items-center w-4 h-4 text-black p-4 rounded-full">1</div>
+
+                                    <p className="uppercase">
+                                        Choissir un voyage
+                                    </p>
+                                    <HelpPopup message="Vous retrouvez un formulaire de recherche et les différents voyages disponibles. " />
+                                </div>
+                                <div className="flex gap-4 justify-between">
+                                    <div className="mt-2">
+                                        <label className="block mb-1 text-sm font-bold text-gray-800">Type de voyages:</label>
+                                        <select id="countries" onChange={e => setTypeVoyage(e.target.value)} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 ">
+                                            <option></option>
+                                            <option value="aller-retour">Aller-Retour</option>
+                                            <option value="aller simple">Aller Simple</option>
+                                        </select>
+                                    </div>
+                                    <div className="mt-2">
+                                        <label className="block mb-1 text-sm font-bold text-gray-800">Type de bus:</label>
+                                        <select id="countries" onChange={e => setTypeClass(e.target.value)} className="block  w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 ">
+                                            <option></option>
+                                            <option value="simple">Standard</option>
+                                            <option value="vip">vip</option>
+                                        </select>
+                                    </div>
+                                    {/* <div className="mt-2">
+                                        <label className="block mb-1 text-sm font-bold text-gray-800">Agences:</label>
+                                        <select id="agenceId" name="agenceId" onChange={handleInputChange} className="block  w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 ">
+                                            <option></option>
+                                            {
+                                                agences.map((i: any, index: number) => (
+                                                    <option key={index + 1} value={i.id}>{i.nom}</option>
+                                                ))}
+                                        </select>
+                                    </div> */}
+                                    <div className="mt-2">
+                                        <label className="block mb-1 text-sm font-bold text-gray-800">Trajet:</label>
+                                        <select id="trajetId" name="trajetId" onChange={e => setTrajet(e.target.value)} className="block w-full p-2 text-sm font-bold text-gray-900 border shadow  border-gray-300  focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-green-400 ">
+                                            <option></option>
+                                            {trajets.map((item: any, i: number) => (
+                                                <option key={i} value={[item.id]}>{item.lieuDepart} - {item.lieuArrivee} ({item.heureArrivee} - {item.heureDepart})</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="mt-4">
+                                    <button type="reset" onClick={() => { setItem(null); setBol(false); setPassager(null) }} className=" p-2 px-3 rounded-md hover:bg-stone-400 text-sm hover:text-white border border-stone-500 text-stone-500 font-bold">Retour</button>
+                                    <button type="button" onClick={() => HandleSubmit()} disabled={voyages.length == 0} className={` mx-2 p-2 px-3 rounded-md  hover:text-white border  text-sm ${voyages.length > 0 ? 'text-green-500 hover:bg-green-400 border-green-500' : "text-stone-500 hover:bg-stone-400 border-stone-500"}font-bold`}>Rechercher</button>
+                                    {
+                                        onSearched ? (
+                                            <button type="button" onClick={reset} className=" mx-2 p-2 px-3 rounded-md hover:bg-blue-400 hover:text-white border border-blue-500 text-sm text-blue-500 font-bold">Tout afficher</button>
+                                        ) : null
+                                    }
+                                </div>
+                            </div>
+                            <div className={`${(tab && !tab2) ? 'block' : 'hidden'}`}>
+                                <h4 className="text-blue-400 font-medium flex items-center gap-4 uppercase"> <div className="bg-blue-400 flex justify-center items-center w-4 h-4 text-black p-4 rounded-full">2</div> Information du client  <HelpPopup message="Remplir correctement tout les informations demandées." /></h4>
                                 <div className="mt-2">
                                     <label className={`block mb-1 text-sm  font-bold text-gray-800 ${(validator && (value.nom == undefined)) ? "ring-2 ring-red-500" : ""}`}>Nom</label>
                                     <input type="text" required autoComplete="off" onChange={handleInputChange} placeholder="Nom" name="nom" id="nom" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
@@ -310,9 +439,9 @@ export default function Page() {
                                 <div className="mt-2">
                                     <label className="block mb-1 text-sm font-bold text-gray-800">Genre</label>
                                     <div className="flex gap-4">
-                                        <input type="radio" required onChange={handleInputChange} id="genrem" name="genre" value="m" className="block p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
+                                        <input type="radio" onChange={handleInputChange} id="genrem" name="genre" value="m" className="block p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
                                         <label htmlFor="genrem" className="text-sm font-bold text-gray-800">Homme</label>
-                                        <input type="radio" required onChange={handleInputChange} id="genref" value="f" name="genre" className="block p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
+                                        <input type="radio" onChange={handleInputChange} id="genref" value="f" name="genre" className="block p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
                                         <label htmlFor="genref" className="text-sm font-bold text-gray-800">Femme</label>
                                     </div>
                                 </div>
@@ -324,74 +453,128 @@ export default function Page() {
                                     <label className="block mb-1 text-sm font-bold text-gray-800">Numèro de CNI:</label>
                                     <input type="text" id="numCNI" autoComplete="off" name="numCNI" onChange={handleInputChange} aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none focus-visible:ring-blue-400" required />
                                 </div>
+                                <div className="mt-4">
+                                    <button type="button" onClick={() => { setTab(false); setTab2(false) }} className=" p-2 px-3 rounded-md hover:bg-stone-400 hover:text-white border border-stone-500 text-stone-500 font-bold">Recommencer</button>
+                                    <button type="button" onClick={handleNextTab} className=" mx-2 p-2 px-3 rounded-md hover:bg-blue-400 hover:text-white border border-blue-500 text-blue-500 font-bold">Continuer</button>
+                                </div>
                             </div>
-                            <div className="p-4">
+                            <div className={`px-4 ${(!tab && tab2) ? 'block' : 'hidden'}`}>
                                 <div className="mt-2">
-                                    <label className="block mb-1 text-sm font-bold text-gray-800">Type de voyages:</label>
-                                    <select id="countries" ref={typeVoyage} required className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 ">
-                                        <option></option>
-                                        <option value="aller-retour">Aller-Retour</option>
-                                        <option value="aller simple">Aller Simple</option>
-                                    </select>
-                                </div>
-                                <div className="mt-2">
-                                    <label className="block mb-1 text-sm font-bold text-gray-800">Type de bus:</label>
-                                    <select id="countries" ref={typeClass} required className="block  w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 ">
-                                        <option></option>
-                                        <option value="simple">Standard</option>
-                                        <option value="vip">vip</option>
-                                    </select>
-                                </div>
-                                <div className="mt-2">
-                                    <label className="block mb-1 text-sm font-bold text-gray-800">Agences:</label>
-                                    <select id="agenceId" name="agenceId" onChange={handleInputChange}  required className="block  w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 ">
-                                        <option></option>
-                                        { 
-                                        agences.map((i: any, index: number) => (
-                                            <option key={index+1} value={i.id}>{i.nom}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="mt-2">
-                                    <label className="block mb-1 text-sm font-bold text-gray-800">Paiement</label>
-                                    <div className="flex gap-1">
-                                        <input type="radio" required onChange={e => getMethod(e.target.value)} id="reserver" name="method" value="reserver" className="block p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
-                                        <label htmlFor="reserver" className="text-sm font-bold text-gray-800">Réserver</label>
-                                        <input type="radio" required onChange={e => getMethod(e.target.value)} id="payer" value="payer" name="method" className="block ml-4 p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
-                                        <label htmlFor="payer" className="text-sm font-bold text-gray-800">Payer</label>
+                                    <h4 className="text-blue-400 font-medium flex items-center gap-4 "> <div className="bg-blue-400 flex justify-center items-center w-4 h-4 text-black p-4 rounded-full">3</div><span className="uppercase">Fiche de recette</span><HelpPopup message="Remplir correctement tout les informations demandées." /></h4>
+                                    <div className="mt-4">
+
+                                        <div className="flex gap-1">
+                                            <input type="radio" required onChange={e => getMethod(e.target.value)} id="reserver" name="method" value="reserver" className="block p-1  text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
+                                            <label htmlFor="reserver" className="text-sm font-bold text-gray-800">Réserver</label>
+                                            <input type="radio" required onChange={e => getMethod(e.target.value)} id="payer" value="payer" name="method" className="block ml-4 p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
+                                            <label htmlFor="payer" className="text-sm font-bold text-gray-800">Payer</label>
+                                        </div>
+                                    </div>
+                                    {
+                                        (method == "payer" && item) ? (
+                                            <>
+                                                <div className="mt-4">
+                                                    <div className="flex gap-4 mb-1 items-start">
+                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Service</label>
+                                                        {/* {((data?.nom && data?.nom != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                                    </div>
+                                                    <input value={"Achat de ticket de bus"} disabled type="text" id="nom" placeholder="Nom" name="nom" className={`block text-sm w-full p-2 text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200  sm:text-md focus-visible:ring-blue-400  `} />
+                                                </div>
+                                                <div className="mt-4">
+                                                    <div className="flex gap-4 mb-1 items-start">
+                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Montant à payer</label>
+                                                        {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                                    </div>
+                                                    <input value={parseInt(item.voyages?.prixVoyage)} disabled type="number" id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200 sm:text-md focus-visible:ring-blue-400 " ue-400  `} />
+                                                </div>
+                                                <div className="mt-4">
+                                                    <div className="flex gap-4 mb-1 items-start">
+                                                        <label htmlFor="typePaiement" className="block mb-1 text-sm font-medium text-gray-900 ">Type De Paiement</label>
+                                                        {/* {((data?.typePaiement && data?.typePaiement != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                                    </div>
+                                                    <select name="typePaiement" required autoComplete="off" className={`block w-full p-2 uppercase text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400  `} id="typePaiement">
+                                                        <option value="" ></option>
+                                                        <option value="cash" >Cash</option>
+                                                        <option value="mobile money" >Mobile money</option>
+                                                    </select>
+                                                </div>
+                                            </>
+                                        ) : null
+                                    }
+                                    {
+                                        method == "reserver" && item ? (
+                                            <>
+                                                <div className="mt-4">
+                                                    <div className="flex gap-4 mb-1 items-start">
+                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Service</label>
+                                                        {/* {((data?.nom && data?.nom != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                                    </div>
+                                                    <input value={"reservation de ticket de bus"} disabled type="text" id="nom" placeholder="Nom" name="nom" className={`block text-sm w-full p-2 text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200  sm:text-md focus-visible:ring-blue-400  `} />
+                                                </div>
+                                                <div className="mt-4">
+                                                    <div className="flex gap-4 mb-1 items-start">
+                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Avance versée</label>
+                                                        {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                                    </div>
+                                                    <input type="number" id="montant" onChange={e => setAvance(parseInt(e.target.value))} max={parseInt(item.voyages?.prixVoyage)} name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " ue-400  `} />
+                                                </div>
+                                                <div className="mt-4">
+                                                    <div className="flex gap-4 mb-1 items-start">
+                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">reste à payé</label>
+                                                        {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                                    </div>
+                                                    <input disabled type="number" onChange={e => setReste(parseInt(e.target.value))} value={parseInt(item.voyages?.prixVoyage) - avance} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " ue-400  `} />
+                                                </div>
+                                                <div className="mt-4">
+                                                    <div className="flex gap-4 mb-1 items-start">
+                                                        <label htmlFor="typePaiement" className="block mb-1 text-sm font-medium text-gray-900 ">Type De Paiement</label>
+                                                        {/* {((data?.typePaiement && data?.typePaiement != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                                    </div>
+                                                    <select name="typePaiement" required autoComplete="off" className={`block w-full p-2 uppercase text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400  `} id="typePaiement">
+                                                        <option value="" ></option>
+                                                        <option value="cash" >Cash</option>
+                                                        <option value="mobile money" >Mobile money</option>
+                                                    </select>
+                                                </div>
+                                                <div className="mt-4">
+                                                    <div className="flex gap-4 mb-1 items-start">
+                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Date de confirmation de la reservation</label>
+                                                        {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                                    </div>
+                                                    <input type="date" id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " ue-400  `} />
+                                                </div>
+                                            </>
+                                        ) : null
+                                    }
+                                    <div className="mt-4">
+                                        <button type="button" onClick={() => { setTab(true); setTab2(false); setItem(null) }} className=" p-2 px-3 rounded-md hover:bg-stone-400 text-sm hover:text-white border border-stone-500 text-stone-500 font-bold">Retour</button>
+                                        <button type="submit" onClick={validationTab} className=" mx-2 p-2 px-3 rounded-md hover:bg-blue-400 hover:text-white border border-blue-500 text-sm text-blue-500 font-bold">Valider</button>
                                     </div>
                                 </div>
-                                {!bol ? (
-                                    <button type="button" onClick={() => { setIsOpenModal(true); setBol(true) }} className="text-white mt-4 flex py-2 items-center gap-2 justify-center hover:shadow-md transition ease-linear hover:from-blue-700 rounded-sm bg-blue-500 text-sm from-blue-600 bg-gradient-to-t p-2">
-                                        Valider
-                                    </button>
-                                ) : null
-                                }
-                                {(item != null) ? (
-                                    <div className="mt-2">
-                                        <CardVoyage isHidden={true} id={item.voyages?.id} isVip={true} agence="" date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
-                                    </div>
+                            </div>
+                            <div className={`px-8 ${(!tab && !tab2 && tab3) ? 'block' : 'hidden'}`}>
+                                <div className="my-4">
+                                    <button type="reset" onClick={() => { window.location.reload() }} className=" p-2 px-3 rounded-md hover:bg-stone-400 text-sm hover:text-white border border-stone-500 text-stone-500 font-bold">Nouvelle vente</button>
+                                </div>
+                                {(passager != null) ? (
+                                    <ComponentTicketPrint item={{
+                                        client: `${passager?.passager?.nom} ${passager?.passager?.prenom}`,
+                                        tel: passager?.passager?.telephone,
+                                        depart: getDateFormat(ticket?.voyages?.dateDepart),
+                                        voyage: `C${ticket?.voyages?.id}`,
+                                        montant: ticket?.voyage?.prixVoyage,
+                                        remboursement: 0,
+                                        caisse: `GUICHET ${session?.user?.name}`,
+                                        numticket: (numTicket + 1).toString(),
+                                        type: ticket?.voyage?.typeVoyage,
+                                        trajet: `${ticket?.trajet?.lieuDepart} / ${ticket?.trajet.lieuArrivee}`,
+                                        siege: ticket?.voyages?.placeDisponible
+                                    }} />
                                 ) : null}
                             </div>
                         </div>
-                        <div className="px-8">
-                            {((passager != null) && (ticket != null) && method === "payer") ? (
-                                <ComponentTicketPrint item={{
-                                    client: `${passager?.passager?.nom} ${passager?.passager?.prenom}`,
-                                    tel: passager?.passager?.telephone,
-                                    depart: getDateFormat(ticket?.voyages?.dateDepart),
-                                    voyage: `C${ticket?.voyages?.id}`,
-                                    montant: ticket?.voyage?.prixVoyage,
-                                    remboursement: 0,
-                                    caisse: `GUICHET ${session?.user?.name}`,
-                                    numticket: (numTicket + 1).toString() + replace(getDateFormat(ticket?.voyage?.dateDepart)),
-                                    type: ticket?.voyage?.typeVoyage,
-                                    trajet: `${ticket?.trajet?.lieuDepart} / ${ticket?.trajet.lieuArrivee}`,
-                                    siege: ticket?.voyages?.placeDisponible
-                                }} />
-                            ) : null}
-                        </div>
-                        <div className="flex gap-4 p-4 justify-end">
+
+                        {/* <div className="flex gap-4 p-4 justify-end">
                             {
                                 bol || !((passager != null) && (ticket != null) && method === "payer") ? (
                                     <button type="submit" className="text-white mt-4 flex py-2 items-center gap-2 justify-center hover:shadow-md transition ease-linear hover:from-blue-700 rounded-sm bg-blue-500 text-sm from-blue-600 bg-gradient-to-t p-2">
@@ -399,17 +582,87 @@ export default function Page() {
                                     </button>
                                 ) : null
                             }
-                            <button type="reset" onClick={() => { setItem(null); setBol(false); setPassager(null) }} id="resetbtn" className="text-white mt-4 flex py-2 items-center gap-2 justify-center hover:shadow-md transition ease-linear hover:from-stone-700 rounded-sm bg-stone-500 text-sm from-stone-600 bg-gradient-to-t p-2">
-                                Recommencer
-                            </button>
-                        </div>
+                          
+                        </div> */}
+                        <button type="reset" id="resetbtn" className="text-white mt-4 hidden opacity-0 py-2 items-center gap-2 justify-center hover:shadow-md transition ease-linear hover:from-stone-700 rounded-sm bg-stone-500 text-sm from-stone-600 bg-gradient-to-t p-2">
+                            Recommencer
+                        </button>
                     </form>
+
                 </div>
+                {(!tab && !tab2 && !tab3) ? (
+                    <div className=" h-full px-10 py-5" >
+                        <div className="my-2  font-bold text-blue-400 flex items-center gap-2">
+                            <span className="uppercase">Voyages disponibles </span>
+                            <HelpPopup message="Cliquez sur le voyage pour le selectionner." />
+                        </div>
+                        {
+                            !onSearched ? (
+                                <ul className=" grid grid-cols-4 gap-8 relative h-full ">
+                                    {voyages.map((item: any, i: number) => (item.voyages?.placeDisponible != 0 ?
+                                        <li key={i} onClick={() => { setItem(item); handleItemOnclick() }} className="cursor-pointer" >
+                                            <CardVoyage isHidden={true} id={item.voyages?.id} isVip={true} agence="" date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
+                                        </li> : null
+                                    ))}
+                                </ul>
+                            ) : (
+                                <ul className=" grid grid-cols-4 gap-8 relative h-full ">
+                                    {voyagesResult.map((item: any, i: number) => (item.voyages?.placeDisponible != 0 ?
+                                        <li key={i} onClick={() => { setItem(item); handleItemOnclick() }} className="cursor-pointer" >
+                                            <CardVoyage isHidden={true} id={item.voyages?.id} isVip={true} agence="" date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
+                                        </li> : null
+                                    ))}
+                                </ul>
+                            )
+                        }
+                    </div>
+                ) : null}
+                {(!tab && tab2) ? (
+                    <div>
+                        {(item != null) ? (
+                            <div className=" p-4">
+                                <h4 className="text-blue-400 my-4 font-medium flex items-center gap-4 "><span className="uppercase">Recapitulatif</span><HelpPopup message="Cliquez sur retour pour changer ces informations." /></h4>
+                                <div className="bg-white shadow-2xl w-96 rounded-md border overflow-hidden">
+                                    <h6 className="p-4 uppercase border-b font-bold">Client</h6>
+                                    <ul>
+                                        <li className="py-2 font-semibold  px-4 flex text-gray-700 flex-row justify-between">
+                                            <span>Nom et prénom:</span> <span>{value.nom} {value.prenom}</span>
+                                        </li>
+                                        <li className="py-2 px-4 font-semibold flex flex-row text-gray-700 justify-between">
+                                            <span>telephone:</span> <span>{value.tel}</span>
+                                        </li>
+                                        <li className="py-2 px-4 font-semibold flex flex-row text-gray-700 justify-between">
+                                            <span>numéro CNI:</span> <span>{value.numCNI}</span>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                                <div className="bg-white shadow-2xl w-96 rounded-md border overflow-hidden">
+                                    <h6 className="p-4 uppercase border-b font-bold">Voyage</h6>
+                                    <ul>
+                                        <li className="py-2 px-4 font-semibold flex text-gray-700  flex-row justify-between">
+                                            <span>Date de départ:</span> <span>{getDateFormat(item.voyages?.dateDepart)}</span>
+                                        </li>
+                                        <li className="py-2 px-4 font-semibold flex text-gray-700  flex-row justify-between">
+                                            <span>Prix:</span> <span>{item.voyages?.prixVoyage}</span>
+                                        </li>
+                                        <li className="py-2 px-4 font-semibold flex text-gray-700  flex-row justify-between">
+                                            <span>Trajet:</span> <span>{item.trajet?.lieuDepart} - {item.trajet?.lieuArrivee}</span>
+                                        </li>
+                                        <li className="py-2 px-4 font-semibold flex text-gray-700  flex-row justify-between">
+                                            <span>Heures:</span> <span>{item.trajet?.heureDepart} - {item.trajet?.heureArrivee}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        ) : null}
+                    </div>
+                ) : null}
             </section>
             {/* ) : (<div>
                     <Image src={svg} width={15} height={15} alt="Loader" className="animate-spin" /> <p className="text-white">Chargement du formulaire...</p>
                 </div>)} */}
-            <ModalTrajet isOpen={isOpenModal} setData={HandlerItem} typeBus={typeClass.current?.value} typeVoyage={typeVoyage.current?.value} slug="M" childToParent={HandlerChange} />
+            {/* <ModalTrajet isOpen={isOpenModal} setData={HandlerItem} trajet={trajet.current} typeBus={typeClass.current?.value} typeVoyage={typeVoyage.current?.value} childToParent={HandlerChange} /> */}
             {isOpenPopup ? (<Popup color={popupData?.color} title={popupData.title} message={popupData?.message} onShow={showModal} />) : null}
         </section>
     )

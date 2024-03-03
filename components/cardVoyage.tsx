@@ -30,17 +30,16 @@ export default function CardVoyage(props: {
         setIsOpenModal(val);
     }
     return (
-        <div className="bg-white shadow-lg rounded-md overflow-hidden border border-t-8 border-t-slate-700 transition-all ease-linear">
+        <div className="bg-white shadow-2xl max-w-96 hover:translate-y-2  hover:shadow-green-900/50 rounded-md overflow-hidden border border-t-8 border-t-slate-700 transition-all ease-linear">
             <h6 className=" my-2 text-lg text-center">{props.date}</h6>
             <div className="pb-3 sm:pb-4 flex items-center justify-between space-x-4  p-4 rtl:space-x-reverse">
                 <div className="flex gap-2 items-center">
-                    <div className=" flex bg-blue-500 rounded-full p-2 font-medium items-center gap-4 truncate   stroke-white">
+                    <div className=" flex bg-blue-500 rounded-full p-2 font-medium items-center gap-4 truncate dark:text-white stroke-white">
                         <Image src={trajetSvg} height={24} width={24} alt="trajet svg" />
                     </div>
                     <div>
                         <span className="font-bold text-sm uppercase ">Charter Express</span> <br />
                         <span className="font-semibold text-sm">{props.agence}</span> <br />
-
                     </div>
                 </div>
                 <div className="text-right">

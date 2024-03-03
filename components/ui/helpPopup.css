@@ -1,0 +1,7 @@
+#help:hover #help-message{
+    display: block;
+}
+
+#help #help-message{
+    display: none;
+}
