@@ -90,7 +90,7 @@ class ComponentToPrint extends React.Component<DataFicheProduction> {
             <div>
                 <div className="h-full w-full">
                     <div className="text-center font-bold my-8">
-                        <Image src={'/images/logo.jpeg'} width={60} height={60} alt="" />
+                        <Image src={'/images/logo.jpeg'} className="m-auto" width={80} height={80} alt="" />
                         <h2>CHARTER EXPRESS VOYAGES</h2>
                         <ul>
                             <li>  ENTREPRISE DE TRANSPORT INTER-URBAIN</li>
