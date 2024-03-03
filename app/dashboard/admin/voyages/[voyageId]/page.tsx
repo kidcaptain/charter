@@ -20,6 +20,7 @@ export default function Voyage({ params }: { params: IPrams }) {
   const [chauffeur, setChauffeur] = useState<any[]>([])
   const [passagers, setPassagers] = useState<any[]>([])
   const [trajet, setTrajet] = useState<any[]>([])
+  const [chef, setChef] = useState<any>()
 
 
   useEffect(() => {
@@ -32,6 +33,7 @@ export default function Voyage({ params }: { params: IPrams }) {
       setTrajet(data)
     };
     const getAgence = async (id: number) => {
+  
       const res = await fetch("/api/agences/" + id, { cache: "no-store" })
       if (!res.ok) {
         throw new Error("Failed")
@@ -56,6 +58,7 @@ export default function Voyage({ params }: { params: IPrams }) {
       getEmploye(data.employeId)
       setBus(data)
     };
+    
     const getPassager = async (id: number) => {
       const res = await fetch(`/api/passagers/${id}`, { cache: "no-store" })
       if (!res.ok) {
@@ -85,9 +88,7 @@ export default function Voyage({ params }: { params: IPrams }) {
       setVoyage(val);
       const tab: any[] = []
       const tickets: any[] = await getTickets(val.id);
-      if (tickets.length > 0) {
-        getAgence(tickets[0].agenceId);
-      }
+      getAgence(val.agenceId);
       tickets.map(async (i: any) => {
         const p = await getPassager(i.passagerId)
         tab.push({ passager: p, ticket: i })
