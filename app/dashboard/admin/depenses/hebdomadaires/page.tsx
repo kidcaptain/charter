@@ -45,49 +45,87 @@ export default function Page() {
         let day2 = date.getDate();
         let tab: any[] = []
         const t = 7 - date.getDay();
-
-        for (let index = 0; index < date.getDay(); index++) {
-            if ((day - index) <= 0) {
+        let d = date.getDay() - 1;
+        if (d == -1) {
+            d = 6
+        };
+        for (let index = 0; index < d; index++) {
+            if ((day - 1) <= 0) {
+                month = month - 1
                 if (month % 2 == 0) {
-                    month = month - 1;
                     if (month == 2) {
-                        day = 28;
+                        if (year == 2024 || year == 2028 || year == 2032 || year == 2036 || year == 2040) {
+                            day = 29;
+                        } else {
+                            day = 28;
+                        }
                     } else {
                         day = 30;
                     }
-                    if (month == 1) {
-                        year = year - 1;
-                    }
+                } else {
+                    day = 31;
                 }
             } else {
-                day = day2 - index;
-
+                day = day - 1;
             }
             const daym = (day) < 10 ? `0${day}` : `${day}`;
             const monthm = (month) < 10 ? `0${month}` : `${month}`;
             tab.push(`${year}-${monthm}-${daym}`)
         }
+
         tab = tab.reverse();
         day = date.getDate();
-        for (let index = 0; index < t; index++) {
-            if ((day - index) <= 0) {
+        month = date.getMonth() + 1;
+        const daym2 = (day) < 10 ? `0${day}` : `${day}`;
+        const monthm2 = (month) < 10 ? `0${month}` : `${month}`;
+        tab.push(`${year}-${monthm2}-${daym2}`)
+        if (d != 6) {
+            for (let index = 0; index < t; index++) {
                 if (month % 2 == 0) {
-                    month = month - 1;
                     if (month == 2) {
-                        day = 28;
+                        if (year == 2024 || year == 2028 || year == 2032 || year == 2036 || year == 2040) {
+                            if (day == 29) {
+                                month = month + 1;
+                                day = 1;
+                            } else {
+                                day = day + 1;
+                            }
+                        } else {
+                            if (day == 28) {
+                                month = month + 1;
+                                day = 1;
+                            } else {
+                                day = day + 1;
+                            }
+                        }
                     } else {
-                        day = 30;
+                        if (day == 30) {
+                            month = month + 1;
+                            day = 1;
+                            if (month == 13) {
+                                month = 1
+                            }
+                        } else {
+                            day = day + 1;
+                        }
                     }
-                    if (month == 1) {
-                        year = year - 1;
+                } else {
+                    if (day == 31) {
+                        month = month + 1;
+                        day = 1;
+                        if (month == 13) {
+                            month = 1
+                        }
+                    } else {
+                        day = day + 1;
                     }
                 }
-            } else {
-                day = day2 + index;
+
+
+                const daym = (day) < 10 ? `0${day}` : `${day}`;
+                const monthm = (month) < 10 ? `0${month}` : `${month}`;
+                tab.push(`${year}-${monthm}-${daym}`)
             }
-            const daym = (day + 1) < 10 ? `0${day + 1}` : `${day + 1}`;
-            const monthm = (month) < 10 ? `0${month}` : `${month}`;
-            tab.push(`${year}-${monthm}-${daym}`)
         }
         const tab2: any[] = []
         const tab3: any[] = []

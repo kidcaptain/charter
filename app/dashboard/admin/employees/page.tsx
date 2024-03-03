@@ -6,6 +6,7 @@ import { getDateFormat } from "@/functions/actionsClient";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import svg from '@/public/images/loader.svg'
+import HelpPopup from "@/components/ui/helpPopup";
 
 export default function Page() {
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -32,8 +33,6 @@ export default function Page() {
             setIsOpenPopup(false)
         }, 5000);
     }
-
-
     const getEmployeByNom = async (name: string) => {
         const tab: never[] = [];
         setEmployees(tab);
@@ -51,8 +50,6 @@ export default function Page() {
             alert("Entrée une valeur dans la zone de texte")
         }
     };
-
-
     const deleteEmploye = async (id: number) => {
         if (confirm("Confimer la suppression")) {
             const res = await fetch(`/api/employes/${id}`, { method: "DELETE", cache: "no-store" })
@@ -111,27 +108,31 @@ export default function Page() {
                     (
                         <div className="bg-white transition-all overflow-hidden  col-span-1 shadow-2xl rounded-md">
                             <EmployeeAddForm childToParent={handleOnEmit}></EmployeeAddForm>
-                            <button className="text-stone-500 mt-4 font-bold text-xs text-center p-2" type="button" onClick={() => setIsOpenForm(false)}>Fermer</button>
+                            <button className="text-stone-500 border-stone-700 border rounded-md mt-4 hover:bg-stone-600 hover:text-white font-bold text-xs text-center p-2" type="button" onClick={() => setIsOpenForm(false)}>Fermer</button>
                         </div>
                     ) : null}
                 <div className={(isOpen || isOpenForm || isOpenEditor) ? "  col-span-3 bg-white shadow-2xl rounded-md border" : " col-span-full bg-white shadow-2xl rounded-md border"}>
-                    <h2 className="p-4 uppercase border-b">
+                    <h2 className="p-4 uppercase border-b font-bold text-xl">
                         Employés
                     </h2>
                     <div>
-                        <div className="grid gap-2 grid-cols-8 items-start p-4 rounded-sm ">
-                            <div className="col-span-2">
-                                <input type="search" name="" onChange={(e) => setSearchValue(e.target.value)} placeholder="Rechercher par nom" className="focus:outline-none border focus:ring-4 focus-visible:ring-green-500/30 focus-visible:bg-green-50 bg-stone-100 p-2 text-sm  w-full bg-inherit" id="" />
-                                <button onClick={() => getEmployeByNom(searchValue)} className="text-white bg-green-600 hover:bg-green-700 font-medium text-xs p-2 mt-4 rounded-sm">Rechercher</button>
+                        <div className="grid gap-2 grid-cols-5 items-center p-4 rounded-sm ">
+                            <div className="col-span-2 flex items-center gap-2">
+                                <input type="search" name="" onChange={(e) => setSearchValue(e.target.value)} placeholder="Rechercher par nom" className="focus:outline-none rounded-md border focus:ring-4 focus-visible:ring-green-500/30 focus-visible:bg-green-50 bg-stone-100 p-2 text-sm bg-inherit" id="" />
+                                <button onClick={() => getEmployeByNom(searchValue)} className="text-white bg-green-600 hover:bg-green-700 font-medium text-sm p-2 rounded-sm">Rechercher</button>
+                                <HelpPopup message="Faites une recherche d'un employé employé en fonction de son nom." />
                             </div>
-                            <Link href={"/dashboard/admin/employees/salaires"} className="text-white text-center col-span-1 hover:bg-cyan-700 bg-cyan-500 font-medium text-xs  p-2 rounded-sm">Afficher les salaires</Link>
-                            <button onClick={() => { setIsOpenForm(true); setIsOpen(false); setIsOpenEditor(false) }} className="text-white col-span-1 bg-blue-600 hover:bg-blue-700 text-xs font-medium p-2 rounded-sm">Nouveau employé</button>
-                            <Link href={"/dashboard/admin/employees/utilisateurs"} className="text-white text-center col-span-1 hover:bg-cyan-700 bg-cyan-500 font-medium text-xs  p-2 rounded-sm">Utilisateurs</Link>
+                            <Link href={"/dashboard/admin/employees/salaires"} className="text-black text-center col-span-1 border border-black flex justify-center gap-2 items-center hover:bg-black bg-white hover:text-white font-medium text-sm  p-2 rounded-sm">Afficher les salaires <HelpPopup message="Imprimer et afficher les salaires des employés de chaques mois." /></Link>
+                            <Link href={"/dashboard/admin/employees/utilisateurs"} className="text-black text-center col-span-1 flex items-center justify-center gap-2 hover:bg-black bg-white border-black border hover:text-white font-medium text-sm  p-2 rounded-sm">Utilisateurs
+                                <HelpPopup message="Cliquez ici pour ajouter un utilisateur, vous avez aussi la possiblité de modifier les droits d'acces des utilisateurs." />
+                            </Link>
+                            <button onClick={() => { setIsOpenForm(true); setIsOpen(false); setIsOpenEditor(false) }} className="text-white col-span-1 bg-blue-600 hover:bg-blue-800 text-sm font-medium p-2 rounded-sm">Nouveau employé</button>
+
                             {/* <button className="bg-red-500 col-span-1 hover:bg-red-800 text-white font-medium text-xs p-2 rounded-sm">Tout Supprimer</button> */}
                         </div>
-                        <div className="relative overflow-x-auto p-4" style={{maxHeight: 700}}>
+                        <div className="relative overflow-x-auto p-4" style={{ maxHeight: 700 }}>
                             {employees.length == 0 ?
-                                (<Image src={svg} className='animate-spin mx-auto' width={25} height={25} alt='Loader image' />) :
+                                (<h2 className="text-center text-gray-700 font-medium">Aucun employé enregistré</h2>) :
                                 (
                                     <table className="w-full  text-left text-sm rtl:text-right text-gray-500 ">
                                         <thead className=" text-gray-900 uppercase ">
@@ -218,10 +219,10 @@ export default function Page() {
                 </div>
             </div>
             {isFind ? (
-                <section className="bg-black/50 w-full h-full top-0 left-0 fixed z-20">
-                    <div className=" mx-auto my-auto mt-8 w-full h-full">
-                        <div className="bg-white max-w-7xl mx-auto rounded-sm shadow-2xl ">
-                            <h2 className="p-4 border-b uppercase">Resultat de nom = {searchValue}</h2>
+                <section className="bg-black/50 w-full h-full  top-0 left-0 fixed z-20">
+                    <div className=" mx-auto my-auto mt-8 w-full h-full flex justify-center items-center">
+                        <div className="bg-white max-w-7xl mx-auto shadow-2xl rounded-md overflow-hidden">
+                            <h2 className="p-4 border-b font-bold uppercase">Resultat de nom = {searchValue}</h2>
                             <div className="p-4">
                                 <table className="w-full  text-left text-xs rtl:text-right text-gray-500 ">
                                     <thead className=" text-gray-900 uppercase ">
@@ -278,15 +279,15 @@ export default function Page() {
                                                     <td className="p-2 border flex flex-row flex-wrap items-center">
                                                         <button onClick={() => deleteEmploye(item.id)} className="bg-red-500 text-white font-medium text-xs text-center p-1 px-2">Retirer</button>
                                                         <Link href={`/dashboard/admin/employees/${item.id}`} className="bg-cyan-500 p-1 px-2 text-white font-medium text-xs text-center ">Fiche Personnelle</Link>
+                                                        <Link href={`/dashboard/admin/employees/${item.id}/editer`} className="bg-yellow-500 p-1 px-2 text-white font-medium text-xs text-center ">Modifier</Link>
                                                     </td>
                                                 </tr>
                                             );
                                         })}
-
                                     </tbody>
                                 </table>
                             </div>
-                            <button type="button" onClick={() => setIsFind(false)} className="text-xs bg-stone-700 text-white p-2">Fermer</button>
+                            <button type="button" onClick={() => setIsFind(false)} className="text-sm px-4 hover:bg-stone-900 mt-4  bg-stone-700 text-white rounded-md p-2">Fermer</button>
                         </div>
                     </div>
                 </section>

@@ -409,8 +409,8 @@ export default function Page() {
                                     </div>
                                 </div>
                                 <div className="mt-4">
-                                    <button type="reset" onClick={() => { setItem(null); setBol(false); setPassager(null) }} className=" p-2 px-3 rounded-md hover:bg-stone-400 text-sm hover:text-white border border-stone-500 text-stone-500 font-bold">Retour</button>
-                                    <button type="button" onClick={() => HandleSubmit()} disabled={voyages.length == 0} className={` mx-2 p-2 px-3 rounded-md  hover:text-white border  text-sm ${voyages.length > 0 ? 'text-green-500 hover:bg-green-400 border-green-500' : "text-stone-500 hover:bg-stone-400 border-stone-500"}font-bold`}>Rechercher</button>
+                                   
+                                    <button type="button" onClick={() => HandleSubmit()} disabled={voyages.length == 0} className={` p-2 px-3 rounded-md  hover:text-white border  text-sm ${voyages.length > 0 ? 'text-green-500 hover:bg-green-400 border-green-500' : "text-stone-500 hover:bg-stone-400 border-stone-500"}font-bold`}>Rechercher</button>
                                     {
                                         onSearched ? (
                                             <button type="button" onClick={reset} className=" mx-2 p-2 px-3 rounded-md hover:bg-blue-400 hover:text-white border border-blue-500 text-sm text-blue-500 font-bold">Tout afficher</button>

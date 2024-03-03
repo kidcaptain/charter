@@ -1,5 +1,6 @@
 
 import { getDateFormat } from "@/functions/actionsClient";
+import Image from "next/image";
 import React, { useRef } from "react";
 import ReactToPrint from "react-to-print";
 
@@ -48,9 +49,11 @@ class ComponentToPrint extends React.Component<DataBordereau> {
                             <li> N° Contribuable:M09020001474P</li>
                             <li>  RRCCM N°: 2002U04 du 15/10/2002</li>
                         </ul>
+                        <Image src={"/images/logo.jpeg"} width={85} height={85} alt="" className="m-auto" />
 
                     </div>
                 <h1 className="text-center font-bold my-4 text-4xl uppercase">Bordereau de route</h1>
+                <h2 className="text-center font-bold my-4 text-2xl uppercase">Agence {this.props.agence?.nom}</h2>
                 <div className="flex justify-between  uppercase">
                     <h4 className="flex items-center gap-2"><span className="font-bold">Départ :</span> {this.props.trajet?.lieuDepart}</h4>
                     <h4 className="flex items-center gap-2"><span className="font-bold">Déstination :</span>  {this.props.trajet?.lieuArrivee} </h4>
@@ -90,10 +93,10 @@ class ComponentToPrint extends React.Component<DataBordereau> {
                             {
                                 this.props.passagers?.map((i: any, index: number) => (
                                     <tr key={index + 1} className="border-b border-gray-200 dark:b">
-                                        <th scope="row" className="p-2 border font-medium text-gray-900 whitespace-nowrap bg-gray-50   dark:bg-gray-800">
+                                        <th scope="row" className="p-2 border font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800">
                                             {index+1}
                                         </th>
-                                        <th scope="row" className="p-2 border font-medium text-gray-900 whitespace-nowrap bg-gray-50   dark:bg-gray-800">
+                                        <th scope="row" className="p-2 border font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800">
                                             {i.passager?.nom} {i.passager.prenom}
                                         </th>
                                         <td className="border">
@@ -117,7 +120,7 @@ class ComponentToPrint extends React.Component<DataBordereau> {
                 <div className="grid mt-4 grid-cols-2 items-start">
                     <div className="     text-sm">
                         <div className=""><div className="font-bold  uppercase py-2 ">Nom du chauffeur</div> {this.props.chauffeur?.nom} {this.props.chauffeur?.prenom}</div>
-                        <div className=""><div className="font-bold uppercase py-2 ">Chef d&apos;agence arrivée</div> {this.props.agence?.nom}</div>
+                        <div className=""><div className="font-bold uppercase py-2 ">Chef d&apos;agence </div> </div>
                         <div className=""><div className="font-bold uppercase py-2 ">Heure d&apos;arrivée</div> {this.props.trajet?.heureArrivee}</div>
                         <div className=""><div className="font-bold uppercase py-2 ">Observation</div> <textarea name="" placeholder="Observation" className="bg-gray-100 w-full resize-none focus-visible:outline-none" id="" cols={30} rows={10}></textarea></div>
                     </div>

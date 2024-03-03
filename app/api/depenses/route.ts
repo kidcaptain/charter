@@ -6,8 +6,16 @@ export const GET = async (req: NextRequest) => {
     const { searchParams } = new URL(req.url);
     const agenceId = searchParams.get("agenceId");
     const date = searchParams.get("date");
+    const idTypeDepense = searchParams.get("idTypeDepense");
+    const typeDepense = searchParams.get("typeDepense");
+   
     try {
-        if (agenceId && date) {
+        if(idTypeDepense && date && typeDepense) {
+            
+            const depenses = await prisma.depense.findMany({ where: { date: `${date}T00:00:00.000Z`, idTypeDepense: idTypeDepense, typeDepense: typeDepense} });
+            return new NextResponse(JSON.stringify(depenses), { status: 200 });
+            
+        } else if (agenceId && date) {
             const depenses = await prisma.depense.findMany({ where: { date: `${date}T00:00:00.000Z`, agenceId: parseInt(agenceId)} });
             return new NextResponse(JSON.stringify(depenses), { status: 200 });
         } else if (agenceId) {
@@ -29,7 +37,7 @@ export const GET = async (req: NextRequest) => {
 
 export const POST = async (req: Request) => {
     const body = await req.json();
-    const { agenceId, description, montant, date, typeDepense } = body;
+    const { agenceId, description, montant, date, typeDepense, idTypeDepense } = body;
     try {
         const employe = await prisma.depense.create({
             data: {
@@ -37,7 +45,8 @@ export const POST = async (req: Request) => {
                 description: description,
                 montant: parseInt(montant),
                 date: `${date}`,
-                typeDepense: typeDepense
+                typeDepense: typeDepense,
+                idTypeDepense: idTypeDepense
             }
         });
         return NextResponse.json(employe)

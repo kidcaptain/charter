@@ -9,6 +9,9 @@ export const GET = async (req: NextRequest) => {
       if (employeId) {
         const sanctions = await prisma.sanction.findMany({where: {employeId: parseInt(employeId)}});
         return new NextResponse(JSON.stringify(sanctions), { status: 200 });
+      }else{
+        const sanctions = await prisma.sanction.findMany();
+        return new NextResponse(JSON.stringify(sanctions), { status: 200 });
       }
     } catch (error: any) {
       return new NextResponse(
@@ -20,14 +23,15 @@ export const GET = async (req: NextRequest) => {
   
 export const POST = async (req: Request) => {
     const body = await req.json();
-    const { label, description, employeId, dateUpdate } = body;
+    const { label, description, employeId, dateUpdate, montant } = body;
     try {
       const employe = await prisma.sanction.create({
         data: {
           label: label,
           description: description,
           dateUpdate: `${dateUpdate}T00:00:00.000Z`,
-          employeId: parseInt(employeId)
+          employeId: parseInt(employeId),
+          montant: parseInt(montant)
         }
       });
       return NextResponse.json(employe)

@@ -1,4 +1,5 @@
 
+import Image from "next/image";
 import React, { useRef } from "react";
 import ReactToPrint from "react-to-print";
 
@@ -48,12 +49,13 @@ class ComponentToPrint extends React.Component<DataSalaireEmploye> {
         return (
             <div className="p-4">
                 <div className="text-center font-bold my-8">
-                        <h2 className=" text-4xl">CHARTER EXPRESS VOYAGES</h2>
-                        <h4>Salaire du mois de {month}/{year}</h4>
-                    </div>
-                    <div className="text-xl uppercase font-bold my-4 text-center">
+                    <Image src={"/images/logo.jpeg"} width={80} height={80} alt="" className="m-auto" />
+                    <h2 className=" text-4xl">CHARTER EXPRESS VOYAGES</h2>
+                    <h4>Salaire du mois de {month}/{year}</h4>
+                </div>
+                <div className="text-xl uppercase font-bold my-4 text-center">
                     agence {this.props.agence}
-                    </div>
+                </div>
                 <table className="w-full text-xs text-center uppercase text-gray-800 ">
                     <thead className="text-xs uppercase bg-green-300 text-gray-900 border border-stone-800 ">
                         <tr>

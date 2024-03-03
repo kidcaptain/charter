@@ -36,13 +36,10 @@ export default function Voyages() {
                         </Link>
                     </div>
                     <section className="grid grid-cols-8 grid-rows-4 w-full gap-4">
-                        <section className="col-span-2 row-span-4 bg-white shadow-xl rounded-sm">
-                            <NewVoyageList />
-                        </section>
-                        <section className="col-span-6 row-span-1">
+                        <section className="col-span-8 row-span-1">
                             <SearchFormVoyage />
                         </section>
-                        <section className="col-span-6 row-span-3">
+                        <section className="col-span-8 row-span-3">
                             <VoyageTable childToParent={editerEvent} />
                         </section>
                     </section>

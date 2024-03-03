@@ -172,6 +172,7 @@ model Sanction {
   description String
   employeId   Int
   dateUpdate   DateTime
+  montant     Int
 }
 
 model Avance {

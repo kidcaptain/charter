@@ -1,4 +1,5 @@
 
+import Image from "next/image";
 import React, { useRef } from "react";
 import ReactToPrint from "react-to-print";
 
@@ -49,6 +50,7 @@ class ComponentToPrint extends React.Component<DataPrintComponent> {
                         <h4>Fiche Hebdomadaire des dépenses</h4>
                         <h4>Agence de {this.props.agence}</h4>
                     </div>
+                    <Image src={"/images/logo.jpeg"} width={80} height={80} alt="" className="m-auto" />
                     <div className="text-xl p-4 text-center">
                         <span>Semaine du </span> {this.props.depenses[0]?.date} <span>au {this.props.depenses[6]?.date}</span>
                     </div>

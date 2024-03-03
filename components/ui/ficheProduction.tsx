@@ -1,10 +1,14 @@
 
-import React, { useRef } from "react";
+import Image from "next/image";
+import React, { useEffect, useRef, useState } from "react";
 import ReactToPrint from "react-to-print";
 
 export default function FicheProduction(props: { item: DataFicheProduction }) {
     let componentRef: any = useRef();
-
+    const [itemProp, setItemProp] = useState<DataFicheProduction>()
+    useEffect(() => {
+        setItemProp(props.item)
+    }, [itemProp])
     return (
         <>
             <div>
@@ -15,7 +19,11 @@ export default function FicheProduction(props: { item: DataFicheProduction }) {
                 />
 
                 {/* component to be printed */}
-                <ComponentToPrint depense={props.item.depense} semaine={props.item.semaine} production={props.item.production} date1={props.item.date1} date2={props.item.date2} ref={(el) => (componentRef = el)} />
+                {
+                    itemProp ? (
+                        <ComponentToPrint depense={props.item.depense} totalRecette={props.item.totalRecette} production={props.item.production} date1={props.item.date1} date2={props.item.date2} ref={(el) => (componentRef = el)} />
+                    ) : null
+                }
             </div>
         </>
     );
@@ -24,7 +32,8 @@ interface Production {
     bus: any;
     data: {
         typeVoyage: string,
-        montant: string
+        montant: string,
+        jour: string
     }[]
 }
 export interface DataFicheProduction {
@@ -32,15 +41,7 @@ export interface DataFicheProduction {
     production: Production[],
     date1: string,
     date2: string,
-    semaine: {
-        lundi: any[],
-        mardi: any[],
-        mercredi: any[],
-        jeudi: any[],
-        vendredi: any[],
-        samedi: any[],
-        dimanche: any[]
-    }
+    totalRecette: number[]
 }
 
 class ComponentToPrint extends React.Component<DataFicheProduction> {
@@ -67,6 +68,13 @@ class ComponentToPrint extends React.Component<DataFicheProduction> {
         { jour: "Dimanche", type: "retour" },
         { jour: "Dimanche", type: "aller" }
         ];
+        const dayks: any[] = [{jour:"Lundi", montant: this.props.totalRecette[0] + this.props.totalRecette[1] },
+         {jour:"Mardi", montant: this.props.totalRecette[2] + this.props.totalRecette[3]},
+          {jour:"Mecredi", montant: this.props.totalRecette[4] + this.props.totalRecette[5]}, 
+          {jour:"Jeudi", montant: this.props.totalRecette[6] + this.props.totalRecette[7]},
+           {jour:"Vendredi", montant: this.props.totalRecette[8] + this.props.totalRecette[9]},
+            {jour:"Samedi", montant: this.props.totalRecette[10] + this.props.totalRecette[11]},
+             {jour:"Dimanche", montant: this.props.totalRecette[12] + this.props.totalRecette[13]}];
         let Tlundi: number = 0;
         let Tmardi: number = 0;
         let Tmercredi: number = 0;
@@ -74,72 +82,15 @@ class ComponentToPrint extends React.Component<DataFicheProduction> {
         let Tvendredi: number = 0;
         let Tsamedi: number = 0;
         let Tdimanche: number = 0;
-        let TlundiR: number = 0;
-        let TmardiR: number = 0;
-        let TmercrediR: number = 0;
-        let TjeudiR: number = 0;
-        let TvendrediR: number = 0;
-        let TsamediR: number = 0;
-        let TdimancheR: number = 0;
 
-        this.props.semaine.lundi.map((i) => {
-            Tlundi = Tlundi + parseInt(i.montant)
-        })
-        this.props.semaine.mardi.map((i) => {
-            Tmardi = Tmardi + parseInt(i.montant)
-        })
-        this.props.semaine.mercredi.map((i) => {
-            Tmercredi = Tmercredi + parseInt(i.montant)
-        })
-        this.props.semaine.jeudi.map((i) => {
-            Tjeudi = Tjeudi + parseInt(i.montant)
-        })
-        this.props.semaine.vendredi.map((i) => {
-            Tvendredi = Tvendredi + parseInt(i.montant)
-        })
-        this.props.semaine.samedi.map((i) => {
-            Tsamedi = Tsamedi + parseInt(i.montant)
-        })
-        this.props.semaine.dimanche.map((i) => {
-            Tdimanche = Tdimanche + parseInt(i.montant)
-        })
 
         let totalBrut: number = 0;
-        // this.props.production.map((i) => {
-        //     totalBrut = totalBrut + parseInt(i.montant)
-        // })
-        // days.map((i: string, index: number) => {
-        //     switch (i) {
-        //         case "Lundi":
-        //             TlundiR = this.props?.production[index]?.montant - Tlundi
-        //             break;
-        //         case "Mardi":
-        //             TmardiR = this.props?.production[index]?.montant - Tmardi
-        //             break;
-        //         case "Mecredi":
-        //             TmercrediR = this.props?.production[index]?.montant - Tmercredi
-        //             break;
-        //         case "Jeudi":
-        //             TjeudiR = this.props?.production[index]?.montant - Tjeudi
-        //             break;
-        //         case "Vendredi":
-        //             TvendrediR = this.props?.production[index]?.montant - Tvendredi
-        //             break;
-        //         case "Samedi":
-        //             TsamediR = this.props?.production[index]?.montant - Tsamedi
-        //             break;
-        //         case "Dimanche":
-        //             TdimancheR = this.props?.production[index]?.montant - Tdimanche
-        //             break;
-        //         default:
-        //             break;
-        //     }
-        // }
-        // )
+
         return (
             <div>
                 <div className="h-full w-full">
                     <div className="text-center font-bold my-8">
+                        <Image src={'/images/logo.jpeg'} width={60} height={60} alt="" />
                         <h2>CHARTER EXPRESS VOYAGES</h2>
                         <ul>
                             <li>  ENTREPRISE DE TRANSPORT INTER-URBAIN</li>
@@ -284,9 +235,11 @@ class ComponentToPrint extends React.Component<DataFicheProduction> {
                                                     </th>
                                                     {
                                                         days.map((r: any, idn: number) => (
-                                                            <th key={idn} scope="col" className=" py-3 px-1  border  border-stone-800  text-right">
-                                                                {i.data[idn]?.typeVoyage == r.type ? i.data[idn]?.montant : 0} fcfa
-                                                            </th>
+                                                            i.data ? (
+                                                                <th key={idn} scope="col" className=" py-3 px-1  border  border-stone-800  text-right">
+                                                                    {i.data[idn]?.montant} fcfa
+                                                                </th>
+                                                            ) : null
                                                         ))
                                                     }
                                                     <th scope="col" className=" py-3 px-1  border  border-stone-800  text-right">
@@ -303,56 +256,47 @@ class ComponentToPrint extends React.Component<DataFicheProduction> {
                             <tfoot>
                                 <tr className="bg-red-500">
                                     <th className="text-xs uppercase border border-stone-800 py-2 px-1 text-black" >Total</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tmardi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tmardi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tmercredi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tmercredi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tjeudi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tjeudi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tvendredi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tvendredi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right"  >{Tsamedi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right"  >{Tsamedi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >{Tdimanche} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >{Tdimanche} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >   {Tlundi + Tmardi + Tmercredi + Tjeudi + Tvendredi + Tsamedi + Tdimanche} fcfa</th>
+                                    {
+                                        this.props.totalRecette.map((i: number, index: number) => (
+                                            <th key={index} scope="col" className=" py-3 px-1  border  border-stone-800  text-right">
+                                                {i}
+                                            </th>
+                                        ))
+                                    }
+                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >   {this.props.totalRecette[0] + this.props.totalRecette[1] + this.props.totalRecette[2] + this.props.totalRecette[3] + this.props.totalRecette[4] + this.props.totalRecette[5] + this.props.totalRecette[6] + this.props.totalRecette[7] + this.props.totalRecette[8] + this.props.totalRecette[9] + this.props.totalRecette[10] + this.props.totalRecette[11] + this.props.totalRecette[12] + this.props.totalRecette[13]} fcfa</th>
 
                                 </tr>
                                 <tr className="bg-green-400">
                                     <th className="text-xs uppercase border border-stone-800 py-2 px-1 text-black" >Total brut</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
+                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{this.props.totalRecette[0] + this.props.totalRecette[1]} fcfa</th>
+                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{this.props.totalRecette[2] + this.props.totalRecette[3]} fcfa</th>
+                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{this.props.totalRecette[4] + this.props.totalRecette[5]} fcfa</th>
+                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{this.props.totalRecette[6] + this.props.totalRecette[7]} fcfa</th>
+                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{this.props.totalRecette[8] + this.props.totalRecette[9]} fcfa</th>
+                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{this.props.totalRecette[10] + this.props.totalRecette[11]} fcfa</th>
+                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{this.props.totalRecette[12] + this.props.totalRecette[13]} fcfa</th>
 
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >  {totalBrut} fcfa</th>
+                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >  {this.props.totalRecette[0] + this.props.totalRecette[1] + this.props.totalRecette[2] + this.props.totalRecette[3] + this.props.totalRecette[4] + this.props.totalRecette[5] + this.props.totalRecette[6] + this.props.totalRecette[7] + this.props.totalRecette[8] + this.props.totalRecette[9] + this.props.totalRecette[10] + this.props.totalRecette[11] + this.props.totalRecette[12] + this.props.totalRecette[13]} fcfa</th>
                                 </tr>
                                 <tr className="bg-yellow-400">
                                     <th className="text-xs uppercase border border-stone-800 py-2 px-1 text-black" >Depenses</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
+                                    {
+                                        dayks.map((i: any, index: number) => (
+                                            <th colSpan={2} key={index+1} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{(this.props.depense[index]?.jour == i) && this.props.depense[index] ?  this.props.depense[index].montant : 0} fcfa</th>
+                        
+                                        ))
+                                    }
 
                                     <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >  {totalBrut} fcfa</th>
                                 </tr>
                                 <tr className="bg-blue-700 ">
                                     <th className="text-xs uppercase border border-stone-800 py-2 px-1 text-black" >Net</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
+                                    {
+                                        dayks.map((i: any, index: number) => (
+                                            <th colSpan={2} key={index+1} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " > {(this.props.depense[index]?.jour == i) && this.props.depense[index] ? dayks[index].montant - this.props.depense[index].montant  : 0} fcfa</th>
+                        
+                                        ))
+                                    }
 
                                     <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >  {totalBrut} fcfa</th>
 
@@ -360,7 +304,7 @@ class ComponentToPrint extends React.Component<DataFicheProduction> {
                             </tfoot>
                         </table>
 
-                        <table className="w-full mt-10 text-xs font-mono text-center uppercase text-gray-800 ">
+                        {/* <table className="w-full mt-10 text-xs font-mono text-center uppercase text-gray-800 ">
                             <tbody>
                                 <tr className="bg-lime-500">
                                     <th rowSpan={2} className="text-xs uppercase border border-stone-800 py-2 px-1 text-black" >Prod VIP</th>
@@ -441,7 +385,7 @@ class ComponentToPrint extends React.Component<DataFicheProduction> {
                                     <th className="text-xs uppercase border border-stone-800 py-2 px-1 text-black" >Net</th>
                                 </tr>
                             </thead>
-                        </table>
+                        </table> */}
                     </div>
 
                 </div>
