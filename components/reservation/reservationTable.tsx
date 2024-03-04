@@ -2,22 +2,21 @@ import { getDateFormat, selectReservation } from "@/functions/actionsClient";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-
-const ReservationTable = () => {
+export default function ReservationTable() {
 
     const [reservation, setReservation] = useState<any[]>([])
 
     useEffect(() => {
-        const getVoyage = async (id: number) => {
-            const res = await fetch("/api/voyages?agenceId=" + id, { cache: "no-store" })
+        const getVoyage = async () => {
+            const res = await fetch("/api/voyages", { cache: "no-store" })
             if (!res.ok) {
                 throw new Error("Failed")
             }
             const data = await res.json();
             return data
         };
-        const getPassager = async (id: number) => {
-            const res = await fetch("/api/passagers?agenceId=" + id, { cache: "no-store" })
+        const getPassager = async () => {
+            const res = await fetch("/api/passagers", { cache: "no-store" })
             if (!res.ok) {
                 throw new Error("Failed")
             }
@@ -25,8 +24,8 @@ const ReservationTable = () => {
             return data
         };
 
-        const getReservationTable = async (id: number) => {
-            const res = await fetch("/api/reservations?agenceId=" + id, { cache: "no-store" })
+        const getReservationTable = async () => {
+            const res = await fetch("/api/reservations", { cache: "no-store" })
             if (!res.ok) {
                 throw new Error("Failed")
             }
@@ -36,24 +35,23 @@ const ReservationTable = () => {
         const agence = localStorage.getItem("agence")
 
         const getReservation = async () => {
-            if (agence) {
-                const t = JSON.parse(agence)
-                const tabPassager: any[] = await getPassager(t.agenceId);
-                const tabVoyages: any[] = await getVoyage(t.agenceId);
-                const tabReservation: any[] = await getReservationTable(t.agenceId);
-                const tab: any[] = [];
-                tabReservation.map((r) => {
-                    tabPassager.map((i) => {
-                        tabVoyages.map((j) => {
-                            if ((r.passagerId === i.id) && (r.voyageId === j.id)) {
-                                tab.push({ passager: i, voyages: j, reservation: r })
-                            }
-                        })
+
+            const tabPassager: any[] = await getPassager();
+            const tabVoyages: any[] = await getVoyage();
+            const tabReservation: any[] = await getReservationTable();
+            const tab: any[] = [];
+            tabReservation.map((r) => {
+                tabPassager.map((i) => {
+                    tabVoyages.map((j) => {
+                        if ((r.passagerId === i.id) && (r.voyageId === j.id)) {
+                            tab.push({ passager: i, voyages: j, reservation: r })
+                        }
                     })
                 })
-                setReservation(tab)
-            }
+            })
+            setReservation(tab)
         }
+
         getReservation()
 
     }, [reservation])
@@ -63,41 +61,40 @@ const ReservationTable = () => {
         const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
         const day = (date.getDate()) < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
         const data = {
-          busId: voyage.busId,
-          voyageId: voyage.id,
-          montant: voyage.prixVoyage,
-          signature: "",
-          date: `${year}-${month}-${day}T00:00:00.000Z`,
-          agenceId: voyage.agenceId
+            busId: voyage.busId,
+            voyageId: voyage.id,
+            montant: voyage.prixVoyage,
+            signature: "",
+            date: `${year}-${month}-${day}T00:00:00.000Z`,
+            agenceId: voyage.agenceId
         }
-        console.log(data)
         try {
-          const res = await fetch(`/api/lignerecette?date=${data.date}&busId=${data.busId}&voyageId=${data.voyageId}`, {
-            method: 'GET', cache: 'no-store'
-          })
-          const tab: any[] = await res.json();
-          if (tab.length > 0) {
-            const updateData = {
-              busId: tab[0].busId,
-              voyageId: tab[0].voyageId,
-              montant: parseInt(tab[0].montant) + parseInt(voyage.prixVoyage),
-              signature: tab[0].signature,
-              date: tab[0].date,
-              agenceId: tab[0].agenceId,
+            const res = await fetch(`/api/lignerecette?date=${data.date}&busId=${data.busId}&voyageId=${data.voyageId}`, {
+                method: 'GET', cache: 'no-store'
+            })
+            const tab: any[] = await res.json();
+            if (tab.length > 0) {
+                const updateData = {
+                    busId: tab[0].busId,
+                    voyageId: tab[0].voyageId,
+                    montant: parseInt(tab[0].montant) + parseInt(voyage.prixVoyage),
+                    signature: tab[0].signature,
+                    date: tab[0].date,
+                    agenceId: tab[0].agenceId,
+                }
+                // console.log(updateData)
+                const resupdate = await fetch(`/api/lignerecette/${tab[0].id}`, {
+                    method: 'PUT', cache: 'no-store', body: JSON.stringify(updateData)
+                })
+            } else {
+                const respost = await fetch(`/api/lignerecette`, {
+                    method: 'POST', cache: 'no-store', body: JSON.stringify(data)
+                })
             }
-            // console.log(updateData)
-            const resupdate = await fetch(`/api/lignerecette/${tab[0].id}`, {
-              method: 'PUT', cache: 'no-store', body: JSON.stringify(updateData)
-            })
-          } else {
-            const respost = await fetch(`/api/lignerecette`, {
-              method: 'POST', cache: 'no-store', body: JSON.stringify(data)
-            })
-          }
         } catch (err) {
-          console.log(err)
+            console.log(err)
         }
-      }
+    }
     const HandlerSubmit = async (id: number, validite: string, item: any) => {
         if (confirm("Confirmé l'opération")) {
             const data = {
@@ -159,9 +156,7 @@ const ReservationTable = () => {
         return "simple"
     }
     const postTicket = async (voyageId: any, item: any) => {
-        const agence = localStorage.getItem("agence")
-        if (agence) {
-            const t = JSON.parse(agence)
+
             const date = new Date()
             const year = date.getFullYear();
             const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
@@ -179,7 +174,7 @@ const ReservationTable = () => {
                 dateCreation: `${year}-${month}-${day}T${hours}:${minutes}`,
                 agenceId: item.voyages?.agenceId,
                 passagerId: item.passager.id,
-                employeId: t.employeId
+                employeId: 0
             }
             try {
                 const res = await fetch(`/api/ticket`, {
@@ -192,7 +187,7 @@ const ReservationTable = () => {
             } catch (err) {
                 console.log(err)
             }
-        }
+        
     }
 
 
@@ -202,7 +197,7 @@ const ReservationTable = () => {
     return (
         <section className="w-full h-full">
             <div className="col-span-3  h-full  ">
-                <h2 className="p-4  text-gray-700 text-left">
+                <h2 className="p-4  font-bold text-gray-700 text-left">
                     Réservations
                 </h2>
                 <div className="p-4 text-left">
@@ -226,11 +221,11 @@ const ReservationTable = () => {
 
                                 </div>
                                 <div className={`flex border-t  p-2  gap-2  ${item.reservation.statutReservation === "annulé" ? "bg-red-400" : "bg-white"}`} >
-                                    { }
+                                    
                                     {
                                         item.reservation.statutReservation === "validé" ? (
                                             <div>
-                                                <Link href={"/dashboard/caisse/ticket"} className="text-cyan-700 hover:text-white hover:bg-cyan-500 rounded-sm bg-cyan-100 text-xs  p-2">
+                                                <Link href={"/dashboard/admin/ticket"} className="text-cyan-700 hover:text-white hover:bg-cyan-500 rounded-sm bg-cyan-100 text-xs  p-2">
                                                     Générer le ticket
                                                 </Link>
                                             </div>
@@ -265,4 +260,3 @@ const ReservationTable = () => {
     )
 }
 
-export default ReservationTable

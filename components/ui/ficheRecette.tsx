@@ -42,13 +42,15 @@ class ComponentToPrint extends React.Component<DataFicheRecette> {
             <div className="p-4 w-full h-full min-h-full" id="fichier">
                 <div className="max-w-5xl  font-serif m-auto p-4 bg-white h-full w-full" id="document">
                     <div className="text-center font-medium my-8">
-                        <Image src={"/images/logo.jpeg"} width={85} height={85} alt="" className="m-auto" />
+                    <Image src={"/images/logo.jpeg"} width={85} height={85} alt="" className="m-auto" />
                         <h2 className=" text-4xl">CHARTER EXPRESS VOYAGES</h2>
                         <h3>ENTREPRISE DE TRANSPORT INTER-URBAIN</h3>
                         <h3>BP: 5029 YAOUNDE-TEL: 699 91 76 12</h3>
                         <h3>N° contribuable: M09020001474P - RCCM N° 202 U 04 du 15/10/2002</h3>
                         <h3>site web: www.charter-voyage.com - Email: directiongeneral@charter.com</h3>
                     </div>
+                   
+
                     <hr className="border-2 border-black" />
                     <div className="text-xl p-4 text-right">
                         Yaoundé, le <span > {`${year}-${month}-${day}`} </span>

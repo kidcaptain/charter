@@ -95,10 +95,10 @@ export default function Page() {
         <div className="w-full p-10">
 
             <div className=" py-4 flex justify-between items-start mb-2">
-                <h1 className="text-xl text-gray-900">Les Passagers et utilisateurs</h1>
+                <h1 className="text-xl text-gray-900">Les Passagers</h1>
             </div>
             <div className="mt-4 gap-4 grid items-start grid-cols-4 mx-auto ">
-                {isOpenAddForm ? (
+                {/* {isOpenAddForm ? (
                     <section className='bg-white border rounded-md overflow-hidden shadow-2xl col-span-1'>
                         <form onSubmit={HandlerSubmit} className=" bg-white  ">
                             <h2 className=" p-4 bg-blue-500 from-blue-700 bg-gradient-to-bl font-bold text-white border-b uppercase gap-4">
@@ -185,9 +185,9 @@ export default function Page() {
                             </div>
                         </form>
                     </section>
-                ) : ""}
+                ) : ""} */}
                 <section className={`  shadow-2xl border rounded-md ${(isOpenEditForm || isOpenAddForm) ? " col-span-3 " : "col-span-full"} `}>
-                    <div className='flex mb-4 justify-between p-4 bg-white'>
+                    {/* <div className='flex mb-4 justify-between p-4 bg-white'>
                         <div className='flex'>
                             <button onClick={() => handleButtonClickAddForm(true)} className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-sm text-xs px-5 py-2.5 text-center">
                                 Enregistrer un passager
@@ -199,7 +199,7 @@ export default function Page() {
                                 Imprimer
                             </button>
                         </div>
-                    </div>
+                    </div> */}
                     <PassagerTable agenceId={0} childToParent={handleButtonClickEditForm} setData={getItem} />
                 </section>
                 {isOpenEditForm ? (

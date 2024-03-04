@@ -9,31 +9,11 @@ import { getDateFormat } from "@/functions/actionsClient";
 import Link from "next/link";
 
 export default function Page() {
-    const [isOpenEditForm, setIsOpenEditForm] = useState<boolean>(false);
+
     const [data, setData] = useState<any>();
     const [ticket, setTicket] = useState<any[]>([]);
 
-    const handleButtonClickEditForm = (val: boolean) => {
-        setIsOpenEditForm(val);
-        console.log(val)
-    }
-
-    const getItem = (val: any) => {
-        setData(val)
-    }
-
-    const [isOpenAddForm, setIsOpenAddForm] = useState<boolean>(false);
-
-    const handleButtonClickAddForm = (val: boolean) => {
-        setIsOpenAddForm(val);
-    }
-    const handleOnEmit = (val: boolean) => {
-        if (val) {
-            alert("Walter white")
-        } else {
-            alert("Better Call Saul")
-        }
-    }
+ 
 
     useEffect(() => {
 
@@ -119,7 +99,7 @@ export default function Page() {
                                         {getDateFormat(item.dateCreation)}
                                     </td>
                                     <td className="p-2 border" >
-                                        <Link href={"/dashboard/caisse/ticket/"+item.id} className="hover:text-stone-900 hover:font-medium">Imprimer</Link>
+                                        <Link href={"/dashboard/admin/ticket/"+item.id} className="hover:text-stone-900 hover:font-medium">Imprimer</Link>
                                     </td>
                                 </tr>
                             ))}

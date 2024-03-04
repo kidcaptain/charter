@@ -134,7 +134,7 @@ export default function Page() {
                             {employees.length == 0 ?
                                 (<h2 className="text-center text-gray-700 font-medium">Aucun employé enregistré</h2>) :
                                 (
-                                    <table className="w-full  text-left text-sm rtl:text-right text-gray-500 ">
+                                    <table className="w-full  text-left text-sm rtl:text-right text-gray-800 font-medium ">
                                         <thead className=" text-gray-900 uppercase ">
                                             <tr>
                                                 <th scope="col" className="p-2 border-2 border-stone-700">
@@ -146,6 +146,11 @@ export default function Page() {
                                                 <th scope="col" className="p-2 border-2 border-stone-700 ">
                                                     Poste
                                                 </th>
+                                                {
+                                                    !isOpenForm ? (<th scope="col" className="p-2 border-2 border-stone-700">
+                                                        Salaire
+                                                    </th>) : null
+                                                }
                                                 <th scope="col" className="p-2 border-2 border-stone-700">
                                                     Adresse
                                                 </th>
@@ -157,7 +162,7 @@ export default function Page() {
                                                         Date de Naissance
                                                     </th>) : null
                                                 }
-
+                                               
                                                 <th scope="col" className="p-2 border-2 border-stone-700">
                                                     Téléphone
                                                 </th>
@@ -184,6 +189,9 @@ export default function Page() {
                                                         </td>
                                                         <td className="p-2 border-2 border-stone-700 ">
                                                             {item.poste.titre}
+                                                        </td>
+                                                        <td className="p-2 border-2 border-stone-700 ">
+                                                            {item.poste.salaire}
                                                         </td>
                                                         <td className="p-2 border-2 border-stone-700 ">
                                                             {item.employe.adresse}

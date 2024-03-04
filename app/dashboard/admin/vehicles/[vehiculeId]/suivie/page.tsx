@@ -1,5 +1,6 @@
 "use client"
 import FicheSuivie from "@/components/ui/ficheSuivi"
+import HelpPopup from "@/components/ui/helpPopup"
 import { getDateFormat } from "@/functions/actionsClient"
 import Link from "next/link"
 import { FormEvent, useState, useEffect } from "react"
@@ -395,7 +396,7 @@ export default function Page({ params }: { params: IPrams }) {
             </div>
 
             <div>
-                <div className="shadow-2xl border rounded-md overflow-hidden">
+                <div className="shadow-2xl border rounded-md ">
                     <h2 className="p-4 bg-white uppercase border-b font-bold">Fiche de suivie</h2>
                     <div>
                         <div className="p-4">
@@ -403,6 +404,7 @@ export default function Page({ params }: { params: IPrams }) {
                                 <label htmlFor="" className="text-sm font-bold text-gray-900 mr-2">Semaine du </label>
                                 <input type="date" name="" onChange={e => { setDate(e.target.value) }} className="inline-block p-2 text-xs text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " id="" />
                                 <button type="button" onClick={() => getDepense(date)} className=" hover:bg-green-600 inline-block text-xs border p-2 rounded-sm text-white bg-green-500">Génerer</button>
+                                {/* <HelpPopup message="Le document affchera la suivie d'un vehicule peut!" /> */}
                             </div>
                         </div>
                     </div>

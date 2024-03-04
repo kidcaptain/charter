@@ -184,9 +184,7 @@ export default function Agences() {
     }
     return (
         <div className="w-full p-10">
-            <div className=" py-4 flex justify-between items-start mb-2">
-                <h1 className="text-xl text-gray-900">Agences</h1>
-            </div>
+           
             {modalForm()}
             <div className="flex gap-2 items-end my-2">
                 <button onClick={handleButtonClick} className="text-white bg-blue-600 hover:bg-blue-700 text-xs flex p-2 rounded-sm">Ajouter une agences</button>

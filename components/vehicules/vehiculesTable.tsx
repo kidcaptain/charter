@@ -111,12 +111,13 @@ const VehiculeTable = (props: { childToParent: Function, setData: Function, isAd
                                     <button type="button" onClick={() => props.setData({ action: "horsService", item: item })} className="bg-green-500 text-white text-sm p-1 px-2">Mettre Hors Service</button>
                                     <button type="button" onClick={() => props.setData({ action: "signal", item: item })} className="bg-cyan-500 text-white text-sm p-1 px-2">Signaler une panne</button>
                                     <button type="button" onClick={() => props.setData({ action: "fiche", item: item })} className="bg-blue-500 text-white text-sm p-1 px-2 ">Fiche technique </button>
-                                    { 
-                                    props.isAdmin === "admin" ? ( <>
-                                     <Link href={`/dashboard/admin/vehicles/${item.id}/rapports`} onClick={() => props.setData({ action: "fiche", item: item })} className="bg-purple-600 text-white text-sm p-1 px-2 ">Rapport </Link>
-                                     <Link href={`/dashboard/admin/vehicles/${item.id}/suivie`} onClick={() => props.setData({ action: "fiche", item: item })} className="bg-purple-600 text-white text-sm p-1 px-2 ">Fiche de suivi </Link></>) : 
-                                (  <Link href={`/dashboard/directeur/vehicules/${item.id}/rapports`} onClick={() => props.setData({ action: "fiche", item: item })} className="bg-purple-600 text-white text-sm p-1 px-2 ">Rapport </Link>)}
-                                  
+                                    <div className='mt-2'>
+                                        {
+                                            props.isAdmin === "admin" ? (<Link href={`/dashboard/admin/vehicles/${item.id}/rapports`} onClick={() => props.setData({ action: "fiche", item: item })} className="bg-purple-600 text-white text-sm p-1 px-2 ">Rapport </Link>) :
+                                                (<Link href={`/dashboard/directeur/vehicules/${item.id}/rapports`} onClick={() => props.setData({ action: "fiche", item: item })} className="bg-purple-600 text-white text-sm p-1 px-2 ">Rapport </Link>)}
+                                        <Link className="bg-green-400 hover:bg-green-600 text-sm p-1 px-2 text-white" href={`/dashboard/admin/vehicles/${item.id}/suivie`}>Fiche de suivie </Link>
+
+                                    </div>
                                 </td>
                             </tr>
                         ))}

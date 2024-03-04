@@ -10,15 +10,14 @@ export const GET = async (req: NextRequest) => {
   const trajetId = searchParams.get("trajetId");
 
   try {
-    if (id) {
-      const voyage = await prisma.voyage.findUnique({ where: { id: parseInt(id) } });
-      return new NextResponse(JSON.stringify(voyage), { status: 200 });
-    }
-    else if (dateDepart) {
-      const voyage = await prisma.voyage.findMany({ where: { dateDepart: `${dateDepart}T00:00:00.000Z` } });
-      return new NextResponse(JSON.stringify(voyage), { status: 200 });
-    } else if (typeVoyage && busId && trajetId) {
+    if (typeVoyage && busId && trajetId) {
       const voyage = await prisma.voyage.findMany({ where: { typeVoyage: typeVoyage, busId: busId, trajetId: parseInt(trajetId) } });
+      return new NextResponse(JSON.stringify(voyage), { status: 200 });
+    } else if (id && busId) {
+      const voyage = await prisma.voyage.findMany({ where: { id: parseInt(id), busId: busId } });
+      return new NextResponse(JSON.stringify(voyage), { status: 200 });
+    } else if (dateDepart) {
+      const voyage = await prisma.voyage.findMany({ where: { dateDepart: `${dateDepart}T00:00:00.000Z` } });
       return new NextResponse(JSON.stringify(voyage), { status: 200 });
     } else {
       const voyages = await prisma.voyage.findMany();

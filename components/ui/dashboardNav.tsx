@@ -3,7 +3,7 @@ import Link from "next/link";
 import DashboardLink from "@/components/ui/dashboardLink";
 import { usePathname } from "next/navigation";
 import Image from 'next/image'
-import menuSvg from '@/public/images/menu.svg'
+import menuSvg from '@/public/images/logo.jpeg'
 export default function DashboardNav(props: { items: { label: string, selected: boolean, icon: string, link: string }[], label: string }) {
 
     const pathname = usePathname()
@@ -12,7 +12,8 @@ export default function DashboardNav(props: { items: { label: string, selected: 
     return (
         <div className="relative w-80 z-10 ">
             <aside className=" w-full bg-stone-100 overflow-hidden h-full z-40  pb-6 justify-between  ">
-                <div className="  flex items-center justify-between gap-2 px-4 md:px-2">
+                <div className="  flex items-center justify-starts gap-2 px-4 md:px-2">
+                    <Image width={50} height={50} src={menuSvg} alt="logo.jpeg" />
                     <span className="block text-center  text-2xl font-semibold my-3 text-blue-500 ">
                         Charter Express
                     </span>

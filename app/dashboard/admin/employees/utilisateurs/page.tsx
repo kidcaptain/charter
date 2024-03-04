@@ -234,7 +234,7 @@ export default function Page() {
             </div>
             <div className=" py-4 flex justify-between items-start mb-2">
                 <h1 className="text-xl text-black font-bold">Utilisateurs ({userTotal})</h1>
-                <Link href={'/dashboard/admin/employees/utilisateurs/acces'} className="bg-blue-500 p-2 text-xs text-white ">Ajouter un droit d&apos;acces</Link>
+                <Link href={'/dashboard/admin/employees/utilisateurs/acces'} className="bg-blue-500 p-2 text-xs text-white ">Ajouter un droit d'acces</Link>
             </div>
             <div className="grid grid-cols-6 gap-4">
                 <div className="relative col-span-4 bg-white rounded-sm border shadow-2xl  text-sm" >

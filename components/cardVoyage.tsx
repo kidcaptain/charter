@@ -1,5 +1,6 @@
+"use client"
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalReservation from "./modalReservation";
 import Image from "next/image";
 import trajetSvg from '@/public/images/trajet.svg'
@@ -20,7 +21,19 @@ export default function CardVoyage(props: {
 
     const [isOpen, setIsOpen] = useState<boolean>(true);
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+    const [agence, setAgence]= useState<string>("")
 
+    useEffect(() => {
+        const getAgences = async () => {
+            const res = await fetch("/api/agences/"+props.agence, { cache: "no-store" })
+            if (!res.ok) {
+                return null
+            }
+            const data = await res.json();
+            setAgence(data?.nom)
+        }
+        getAgences();
+    }, [])
 
     const HandlerChange = () => {
         setIsOpen(!isOpen);
@@ -30,16 +43,16 @@ export default function CardVoyage(props: {
         setIsOpenModal(val);
     }
     return (
-        <div className="bg-white shadow-2xl max-w-96 hover:translate-y-2  hover:shadow-green-900/50 rounded-md overflow-hidden border border-t-8 border-t-slate-700 transition-all ease-linear">
-            <h6 className=" my-2 text-lg text-center">{props.date}</h6>
+        <div title={`${props.isVip ? 'Bus vip' :'Bus standard' }`} className={`bg-white shadow-2xl max-w-96 hover:translate-y-2  hover:shadow-green-900/50 rounded-md overflow-hidden border border-t-8 ${props.isVip ? 'border-t-yellow-400' :'border-t-slate-700' } transition-all ease-linear`}>
+            <h6 className=" my-2 text-sm text-center font-semibold ">Départ le {props.date}</h6>
             <div className="pb-3 sm:pb-4 flex items-center justify-between space-x-4  p-4 rtl:space-x-reverse">
                 <div className="flex gap-2 items-center">
-                    <div className=" flex bg-blue-500 rounded-full p-2 font-medium items-center gap-4 truncate dark:text-white stroke-white">
+                    <div className=" flex border-blue-500 border-2 rounded-full p-2 font-medium items-center gap-4 truncate dark:text-white stroke-white">
                         <Image src={trajetSvg} height={24} width={24} alt="trajet svg" />
                     </div>
                     <div>
                         <span className="font-bold text-sm uppercase ">Charter Express</span> <br />
-                        <span className="font-semibold text-sm">{props.agence}</span> <br />
+                        <span className="font-semibold text-sm">{agence}</span> <br />
                     </div>
                 </div>
                 <div className="text-right">

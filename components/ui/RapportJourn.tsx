@@ -1,7 +1,8 @@
 
+import Image from "next/image";
 import React, { useRef } from "react";
 import ReactToPrint from "react-to-print";
-
+import logo from "@/public/images/logo.jpeg"
 export default function RapportJourn(props: { item: DataRapportJourn }) {
     let componentRef: any = useRef();
 
@@ -15,7 +16,7 @@ export default function RapportJourn(props: { item: DataRapportJourn }) {
                 />
 
                 {/* component to be printed */}
-                <ComponentToPrint bus={props.item.bus} simple={props.item.simple} total={props.item.total} date={props.item.date} ref={(el) => (componentRef = el)} />
+                <ComponentToPrint bus={props.item.bus} chauffeur={props.item.chauffeur}  simple={props.item.simple} total={props.item.total} date={props.item.date} ref={(el) => (componentRef = el)} />
             </div>
         </>
     );
@@ -25,7 +26,8 @@ export interface DataRapportJourn {
     simple: any[],
     date: string,
     total: number,
-    bus: any
+    bus: any,
+    chauffeur: any
 }
 
 class ComponentToPrint extends React.Component<DataRapportJourn> {
@@ -36,6 +38,7 @@ class ComponentToPrint extends React.Component<DataRapportJourn> {
             <div className="p-4 w-full h-full min-h-full" id="fichier">
                 <div className="max-w-5xl  font-serif m-auto p-4 bg-white h-full w-full" id="document">
                     <div className="text-center font-medium my-8">
+                        <Image src={logo} width={100} height={100} alt="" className="m-auto" />
                         <h2 className=" text-4xl">CHARTER EXPRESS VOYAGES</h2>
                         <h3>ENTREPRISE DE TRANSPORT INTER-URBAIN</h3>
                         <h3>BP: 5029 YAOUNDE-TEL: 699 91 76 12</h3>
@@ -47,15 +50,13 @@ class ComponentToPrint extends React.Component<DataRapportJourn> {
                         Yaoundé, le <span > {this.props.date} </span>
                     </div>
                     <h2 className="underline text-2xl text-center uppercase font-bold">Rapport Journalière</h2>
-                    <h3>N°BUS {this.props.bus.id}</h3>
+                    <h3 className="p-4 font-bold">N°BUS: {this.props.bus.modele} {this.props.bus.marque}</h3>
+                    <h3 className="p-4 font-bold">CHAUFFEUR: {this.props.chauffeur?.nom} {this.props.chauffeur?.prenom}</h3>
                     <div className="p-4">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-800 ">
                             <thead className="text-sm text-center text-gray-900 border ">
                                 <tr>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
-                                        Jours
-                                    </th>
-
+                                   
                                     <th scope="col" className=" py-4 px-2 border border-stone-800">
                                         ALLER
                                     </th>
@@ -80,6 +81,7 @@ class ComponentToPrint extends React.Component<DataRapportJourn> {
                                         return (
                                             (
                                                 <tr key={index + 1} className="font-normal" >
+                                              
                                                     <th className=" border  px-3 py-4 border-stone-800">
                                                         {i.voyage?.typeVoyage}
                                                     </th>

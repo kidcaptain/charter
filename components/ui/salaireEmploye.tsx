@@ -2,7 +2,7 @@
 import Image from "next/image";
 import React, { useRef } from "react";
 import ReactToPrint from "react-to-print";
-
+import logo from "@/public/images/logo.jpeg"
 export default function SalaireEmploye(props: { item: DataSalaireEmploye }) {
     let componentRef: any = useRef();
 
@@ -16,14 +16,14 @@ export default function SalaireEmploye(props: { item: DataSalaireEmploye }) {
                 />
 
                 {/* component to be printed */}
-                <ComponentToPrint agence={props.item.agence} employes={props.item.employes} ref={(el) => (componentRef = el)} />
+                <ComponentToPrint  employes={props.item.employes} date={props.item.date} ref={(el) => (componentRef = el)} />
             </div>
         </>
     );
 }
 interface DataSalaireEmploye {
     employes: any[];
-    agence: string
+    date: string
 }
 class ComponentToPrint extends React.Component<DataSalaireEmploye> {
 
@@ -38,25 +38,30 @@ class ComponentToPrint extends React.Component<DataSalaireEmploye> {
         //     totalDepense = totalDepense + parseInt(i.montant)
         // })
         let totalBrut: number = 0;
+        let totalPrime: number = 0;
+        let totalRetenue: number = 0;
+        let totalChargeNet : number = 0;
         this.props.employes.map((i) => {
             totalBrut = totalBrut + parseInt(i.poste.salaire);
             if (i.prime) {
+                totalPrime+= parseInt(i.prime.montant)
                 total = totalBrut + total + parseInt(i.prime.montant)
             } else {
                 total = totalBrut + total
             }
+            if (i.retenue) {
+                totalRetenue+= parseInt(i.retenue.montant)
+            }
         })
+        totalChargeNet = totalBrut + totalPrime - totalRetenue;
         return (
-            <div className="p-4">
+            <div className="p-4 ">
                 <div className="text-center font-bold my-8">
-                    <Image src={"/images/logo.jpeg"} width={80} height={80} alt="" className="m-auto" />
                     <h2 className=" text-4xl">CHARTER EXPRESS VOYAGES</h2>
-                    <h4>Salaire du mois de {month}/{year}</h4>
+                    <h4>Salaire du mois de {this.props.date == "" ? `${year}-${month}`   : this.props.date }</h4>
                 </div>
-                <div className="text-xl uppercase font-bold my-4 text-center">
-                    agence {this.props.agence}
-                </div>
-                <table className="w-full text-xs text-center uppercase text-gray-800 ">
+                <Image src={logo} width={80} height={80} alt="" />
+                <table className="w-full text-xs font-mono text-center uppercase text-gray-800 ">
                     <thead className="text-xs uppercase bg-green-300 text-gray-900 border border-stone-800 ">
                         <tr>
                             <th scope="col" className=" py-3 px-1 border border-stone-800 ">
@@ -77,14 +82,14 @@ class ComponentToPrint extends React.Component<DataSalaireEmploye> {
                             <th scope="col" className=" py-3 px-1 border border-stone-800">
                                 Salaire brut
                             </th>
-                            <th scope="col" className="text-center  border border-stone-800">
+                            <th scope="col" className="text-center p-0 border border-stone-800">
                                 <div className="py-3 px-1">
                                     Avantage/Retenue sur salaire
                                 </div>
                                 <div className="grid  grid-cols-3">
-                                    <div className="border-t border-stone-800 py-3 px-1  ">Motif</div>
-                                    <div className="border-t border-stone-800 py-3 px-1 ">Montant total</div>
-                                    <div className="border-t border-stone-800 py-3 px-1 ">Montant Amputé</div>
+                                    <div className="border border-stone-800 py-3 px-1  ">Motif</div>
+                                    <div className="border border-stone-800 py-3 px-1 ">Montant total</div>
+                                    <div className="border border-stone-800 py-3 px-1 ">Montant Amputé</div>
                                 </div>
                             </th> <th scope="col" className=" py-3 px-1 border border-stone-800">
                                 Charges
@@ -105,19 +110,23 @@ class ComponentToPrint extends React.Component<DataSalaireEmploye> {
                                 <th className=" py-2 px-1 border border-stone-800">{item.employe?.nom} {item.employe?.prenom}</th>
                                 <th className=" py-2 px-1 border border-stone-800">{item.employe?.telephone}</th>
                                 <th className=" py-2 px-1 border border-stone-800">{item.employe?.numCNI}</th>
-                                <th className=" py-2 px-1 border border-stone-800">{item.poste.titre}</th>
+                                <th className=" py-2 px-1 border border-stone-800">{item.poste?.titre}</th>
                                 <th className=" py-2 px-1 border border-stone-800  uppercase">{item.poste.salaire}<span className="text-xs">fcfa</span></th>
-                                <th className="  border border-stone-800">
+                                <th className="  border border-stone-800 p-0">
                                     {item.prime ? (
-                                        <div className="grid grid-cols-3 text-center">
-                                            <div className="border py-2 px-1 border-stone-800">{item.prime.justificatif}</div>
-                                            <div className="border py-2 px-1 border-stone-800">{item.prime.montant} FCFA</div>
-                                            <div className="border py-2 px-1 border-stone-800">0</div>
+                                        <div className="grid grid-cols-3">
+                                            <div className="border py-2 px-1  text-left border-stone-800">
+                                                <p>Avantage: {item.prime?.justificatif}</p> <br />
+                                                <p>Retenue: {item.retenue?.label}</p>
+                                            </div>
+                                            <div className="border py-2 px-1 border-stone-800">{item.prime?.montant} FCFA</div>
+                                            <div className="border py-2 px-1 border-stone-800">{item.retenue?.montant} FCFA</div>
                                         </div>
                                     ) : null}
+                                   
                                 </th>
                                 <th className=" py-2 px-1 border border-stone-800">0</th>
-                                <th className=" py-2 px-1 border border-stone-800  uppercase">{item.prime ? item.poste.salaire + item.prime.montant : item.poste.salaire} fcfa </th>
+                                <th className=" py-2 px-1 border border-stone-800  uppercase">{item.poste.salaire + item.prime?.montant - item.retenue?.montant} fcfa </th>
                                 <th className=" py-2 px-1 border border-stone-800"></th>
                             </tr>
                         ))}
@@ -126,15 +135,15 @@ class ComponentToPrint extends React.Component<DataSalaireEmploye> {
                         <tr>
                             <th className="text-xs uppercase border border-stone-800 bg-green-500 py-2 px-1 text-white" colSpan={5}>Total</th>
                             <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 " colSpan={1}>{totalBrut} fcfa</th>
-                            <th className="text-xs uppercase border border-stone-800 text-black " colSpan={1} >
+                            <th className="text-xs uppercase border border-stone-800 p-0 text-black " colSpan={1} >
                                 <div className="grid  grid-cols-3">
-                                    <div className="border border-stone-800 py-2 px-1">0</div>
-                                    <div className="border border-stone-800 py-2 px-1">0</div>
-                                    <div className="border border-stone-800 py-2 px-1">0</div>
+                                    <div className="border border-stone-800 py-2 px-1"></div>
+                                    <div className="border border-stone-800 py-2 px-1">{totalPrime} fcfa</div>
+                                    <div className="border border-stone-800 py-2 px-1">{totalRetenue} Fcfa</div>
                                 </div>
                             </th>
                             <th className="text-xs uppercase border border-stone-800 text-black " colSpan={1}>0 <span className="text-xs"> fcfa</span></th>
-                            <th className="text-xs uppercase border border-stone-800 text-black" colSpan={1}>{total}      <span className="text-xs">fcfa</span></th>
+                            <th className="text-xs uppercase border border-stone-800 text-black" colSpan={1}>{totalChargeNet}      <span className="text-xs">fcfa</span></th>
                             <th className="border border-stone-800">
 
                             </th>

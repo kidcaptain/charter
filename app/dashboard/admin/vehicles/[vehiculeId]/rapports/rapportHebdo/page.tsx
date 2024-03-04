@@ -12,9 +12,11 @@ interface IPrams {
 
 export default function Page({ params }: { params: IPrams }) {
     const [fiche, setFiche] = useState<any[]>([]);
-    const [ficheRetour, setFicheRetour] = useState<any[]>([]);
+    const [bus, setBus] = useState<any>();
     
     const [date, setDate] = useState<string>("");
+    const [date1, setDate1] = useState<string>("");
+    const [date2, setDate2] = useState<string>("");
     const [total, setTotal] = useState<number>(0);
     const getLigneRecette = async (id: number, date: string) => {
         const res = await fetch(`/api/lignerecette?busId=${id}&date=${date}`, { cache: "no-store" })
@@ -31,17 +33,22 @@ export default function Page({ params }: { params: IPrams }) {
             console.log("error")
         }
         const data = await res.json();
+        setBus(data)
         return data
     };
-    const getEmploye = async (id: number) => {
-        const res = await fetch(`/api/employes/${id}`, { cache: "no-store" })
+
+    const getVoyage = async (id: number, busId: number) => {
+        const res = await fetch("/api/voyages?busId"+ busId + "&id=" + id, { cache: "no-store" })
         if (!res.ok) {
             console.log("error")
         }
         const data = await res.json();
         return data
     };
+
     const getRapportBus = async (str: string) => {
+      
+        const buss = await getBus();
         const date = new Date(str);
         let year = date.getFullYear();
         let month = date.getMonth() + 1;
@@ -49,121 +56,138 @@ export default function Page({ params }: { params: IPrams }) {
         let day2 = date.getDate();
         let tab: any[] = []
         const t = 7 - date.getDay();
-        const bus = await getBus();
-        const chauffeur = await getEmploye(bus.employeId);
-
-        for (let index = 0; index < date.getDay(); index++) {
-            if ((day - index) <= 0) {
+        let d = date.getDay() - 1;
+        if (d == -1) {
+            d = 6
+        };
+        for (let index = 0; index < d; index++) {
+            if ((day - 1) <= 0) {
+                month = month - 1
                 if (month % 2 == 0) {
-                    month = month - 1;
                     if (month == 2) {
-                        day = 28;
+                        if (year == 2024 || year == 2028 || year == 2032 || year == 2036 || year == 2040) {
+                            day = 29;
+                        } else {
+                            day = 28;
+                        }
                     } else {
                         day = 30;
                     }
-                    if (month == 1) {
-                        year = year - 1;
-                    }
+                } else {
+                    day = 31;
                 }
             } else {
-                day = day2 - index;
-
+                day = day - 1;
             }
             const daym = (day) < 10 ? `0${day}` : `${day}`;
             const monthm = (month) < 10 ? `0${month}` : `${month}`;
             tab.push(`${year}-${monthm}-${daym}`)
         }
+
         tab = tab.reverse();
         day = date.getDate();
-        for (let index = 0; index < t; index++) {
-            if ((day - index) <= 0) {
+        month = date.getMonth() + 1;
+        const daym2 = (day) < 10 ? `0${day}` : `${day}`;
+        const monthm2 = (month) < 10 ? `0${month}` : `${month}`;
+        tab.push(`${year}-${monthm2}-${daym2}`)
+        if (d != 6) {
+            for (let index = 0; index < t; index++) {
                 if (month % 2 == 0) {
-                    month = month - 1;
                     if (month == 2) {
-                        day = 28;
+                        if (year == 2024 || year == 2028 || year == 2032 || year == 2036 || year == 2040) {
+                            if (day == 29) {
+                                month = month + 1;
+                                day = 1;
+                            } else {
+                                day = day + 1;
+                            }
+                        } else {
+                            if (day == 28) {
+                                month = month + 1;
+                                day = 1;
+                            } else {
+                                day = day + 1;
+                            }
+                        }
                     } else {
-                        day = 30;
+                        if (day == 30) {
+                            month = month + 1;
+                            day = 1;
+                            if (month == 13) {
+                                month = 1
+                            }
+                        } else {
+                            day = day + 1;
+                        }
                     }
-                    if (month == 1) {
-                        year = year - 1;
+                } else {
+                    if (day == 31) {
+                        month = month + 1;
+                        day = 1;
+                        if (month == 13) {
+                            month = 1
+                        }
+                    } else {
+                        day = day + 1;
                     }
                 }
-            } else {
-                day = day2 + index;
+                const daym = (day) < 10 ? `0${day}` : `${day}`;
+                const monthm = (month) < 10 ? `0${month}` : `${month}`;
+                tab.push(`${year}-${monthm}-${daym}`)
             }
-            const daym = (day + 1) < 10 ? `0${day + 1}` : `${day + 1}`;
-            const monthm = (month) < 10 ? `0${month}` : `${month}`;
-            tab.push(`${year}-${monthm}-${daym}`)
         }
+        const tab2: any[] = []
+        let somme = 0;
         for (let i = 0; i < tab.length; i++) {
             const element = tab[i];
-            let somme = 0;
+          
             let sommeRec = 0;
-            const recette: any[] = await getLigneRecette(bus.id, element)
+            const recette: any[] = await getLigneRecette(buss.id, element)
             if (recette.length > 0) {
-                recette.map((j) => {
-                    sommeRec = sommeRec + parseInt(j.montant);
+                recette.map( async (j) => {
+                    sommeRec = sommeRec + parseInt(j.montant)
+                    const voyage : any[] = await getVoyage(j.voyageId, buss.id)
+                    somme+=parseInt(j.montant);
                 })
             }
             
-            const tab2: any[] = []
             const k = new Date(element).getDay();
             switch (k) {
                 case 0:
-                    tab2.push({ label: "Dimanche", montant: somme, date: element })
+                    tab2.push({ label: "Dimanche", montant: sommeRec, date: element })
                     break;
                 case 1:
-                    tab2.push({ label: "Lundi", montant: somme, date: element })
+                    tab2.push({ label: "Lundi", montant: sommeRec, date: element })
                     break;
                 case 2:
-                    tab2.push({ label: "Mardi", montant: somme, date: element })
+                    tab2.push({ label: "Mardi", montant: sommeRec, date: element })
                     break;
                 case 3:
-                    tab2.push({ label: "Mercredi", montant: somme, date: element })
+                    tab2.push({ label: "Mercredi", montant: sommeRec, date: element })
                     break;
                 case 4:
-                    tab2.push({ label: "Jeudi", montant: somme, date: element })
+                    tab2.push({ label: "Jeudi", montant: sommeRec, date: element })
                     break;
                 case 5:
-                    tab2.push({ label: "Vendredi", montant: somme, date: element })
+                    tab2.push({ label: "Vendredi", montant: sommeRec, date: element })
                     break;
                 case 6:
-                    tab2.push({ label: "Samedi", montant: somme, date: element })
+                    tab2.push({ label: "Samedi", montant: sommeRec, date: element })
                     break;
                 default:
                     break;
             }
-            setFiche(tab2)
         }
         
-
+        setFiche(tab2)
+        setDate1(tab[0])
+        setDate2(tab[6])
+        setTotal(somme)
     }
     useEffect(() => {
 
     }, [])
 
-    // const onSubmit = async () => {
-    //     const res = await fetch("/api/depenses?date=" + dateUpdate, { cache: "no-store" })
-    //     if (!res.ok) {
-    //         console.log("error")
-    //     }
-    //     const data = await res.json();
-    //     const tabDepense: any[] = await data;
-    //     const tab: any[] = [];
-    //     const tabBus: any[] = [];
-    //     console.log(tabDepense)
-    //     tabDepense.map((i) => {
-    //         if (i.typeDepense === "bus") {
-    //             tabBus.push(i)
-    //         } else {
-    //             tab.push(i)
-    //         }
-    //     })
-
-    //     setDate(dateUpdate)
-    //     setDepenses(tab)
-    //     setDepensesBus(tabBus)
-    // }
     return (
         <div className="p-10 h-full">
             <div className=" py-4 flex lowercase text-sm justify-between items-start mb-2">
@@ -186,7 +210,7 @@ export default function Page({ params }: { params: IPrams }) {
             </div>
 
             <div className="p-4 w-full h-full min-h-full">
-                <RapportHebdo item={{  simple: fiche, date: date, total: total }} />
+                <RapportHebdo item={{  simple: fiche, date: date1, date2: date2, total: total, bus: bus }} />
             </div>
         </div>
     )

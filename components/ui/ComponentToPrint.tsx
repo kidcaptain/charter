@@ -59,7 +59,7 @@ class ComponentToPrint extends React.Component<DataTableProps> {
       <div>
 
         <div className=" max-w-md bg-white  relative p-4 m-auto">
-          <Image src={'/images/logo.jpeg'} width={500} height={10} alt="" className="w-full absolute opacity-20 m-auto h-full" />
+          <Image src={'/images/logo.jpeg'} width={500} height={10} alt="" className="w-2/4 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 opacity-20 m-auto h-2/4" />
           <div className="relative font-semibold">
             <h4 className="p-4 uppercase text-2xl text-blue-600 italic font-medium text-center border-b ">Charter Express</h4>
             <hr className="border-yellow-400 border-2" />

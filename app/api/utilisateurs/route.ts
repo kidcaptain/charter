@@ -3,10 +3,17 @@ import { prisma } from '@/utils/connect';
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (req: NextRequest) => {
-
+  const { searchParams } = new URL(req.url);
+  const nomUtilisateur = searchParams.get("nomUtilisateur");
+  const numCNI = searchParams.get("numCNI");
   try {
-    const utilisateurs = await prisma.utilisateur.findMany();
-    return new NextResponse(JSON.stringify(utilisateurs), { status: 200 });
+    if (numCNI && nomUtilisateur) {
+      const utilisateurs = await prisma.utilisateur.findMany({ where: { numCNI: numCNI, nomUtilisateur: nomUtilisateur } });
+      return new NextResponse(JSON.stringify(utilisateurs), { status: 200 });
+    } else {
+      const utilisateurs = await prisma.utilisateur.findMany();
+      return new NextResponse(JSON.stringify(utilisateurs), { status: 200 });
+    }
   } catch (error: any) {
     console.log(error);
     return new NextResponse(
@@ -38,7 +45,7 @@ export const POST = async (req: Request) => {
       }
 
     })
-    
+
     return NextResponse.json(utilisateur)
 
   } catch (error) {

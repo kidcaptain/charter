@@ -3,14 +3,16 @@ import { prisma } from "@/utils/connect";
 
 export const POST = async (req: Request) => {
   const body = await req.json();
-  const { passagerId, voyageId, agenceId, dateReservation, statutReservation } = body;
+  const { passagerId, voyageId, agenceId, dateReservation, statutReservation, avance, dateConfirmation } = body;
   const reservations = await prisma.reservation.create({
     data: {
       passagerId: parseInt(passagerId),
       voyageId: parseInt(voyageId),
       dateReservation: `${dateReservation}T00:00:00.000Z`,
       statutReservation: statutReservation,
-      agenceId: parseInt(agenceId)
+      agenceId: parseInt(agenceId),
+      avance: parseInt(avance),
+      dateConfirmation: dateConfirmation
     }
   });
   return NextResponse.json(reservations)
@@ -42,7 +44,7 @@ export const PUT = async (req: Request) => {
 
   const body = await req.json();
 
-  const { passagerId, voyageId, agenceId, dateReservation, statutReservation } = body;
+  const { passagerId, voyageId, agenceId, dateReservation, statutReservation, avance, dateConfirmation  } = body;
   try {
     const reservations = await prisma.reservation.update({
       where: { Id: parseInt(`${id}`) },
@@ -51,7 +53,9 @@ export const PUT = async (req: Request) => {
         voyageId: parseInt(voyageId),
         dateReservation: `${dateReservation}T00:00:00.000Z`,
         statutReservation: statutReservation,
-        agenceId: parseInt(agenceId)
+        agenceId: parseInt(agenceId),
+        avance: parseInt(avance),
+        dateConfirmation: dateConfirmation
       }
     });
     return NextResponse.json(reservations)

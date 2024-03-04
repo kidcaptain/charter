@@ -149,7 +149,7 @@ export default function Vehicules() {
                     <button className="text-white bg-green-600 text-xs flex items-center p-2 rounded-sm">Rechercher</button>
                 </form>
             </div> */}
-            <div className=" col-span-3 w-full bg-white shadow-xl rounded-sm">
+            <div className=" col-span-3 w-full bg-white border shadow-2xl rounded-sm">
                 <VehiculeTable isAdmin="admin" childToParent={deleteData} setData={handleAction} />
             </div>
             {isHorsServiceForm ? (
@@ -160,7 +160,7 @@ export default function Vehicules() {
                         </h2>
                         <div className="p-4">
                             <div className="mt-2">
-                                <label className="  text-sm font-bold text-gray-800  ">Origine et description de la panne</label>
+                                <label className="  text-sm font-bold text-gray-800 dark:text-white">Origine et description de la panne</label>
                                 <textarea required id="panneVehicule" onChange={e => setPanne(e.target.value)} name="panneVehicule" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 "></textarea>
                             </div>
                         </div>

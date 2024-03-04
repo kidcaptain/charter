@@ -13,6 +13,7 @@ export default function Page() {
     const [depenses, setDepenses] = useState<any[]>([]);
     const [value, setValue] = useState<any>();
     const [moisDepense, setMoisDepense] = useState<any[]>([])
+    const [voyage, setvoyage] = useState<any[]>([])
     const [moisLigne, setMoisLigne] = useState<any[]>([])
     const typeDepense = useRef<any>(null)
     const date = new Date();
@@ -82,6 +83,14 @@ export default function Page() {
             }
             const data = await res.json();
             setEmployes(data)
+        };
+        const getVoyage = async () => {
+            const res = await fetch("/api/voyages", { cache: "no-store" })
+            if (!res.ok) {
+                console.log("error")
+            }
+            const data = await res.json();
+            setvoyage(data)
         };
         getEmploye()
         const getBus = async () => {
@@ -241,7 +250,6 @@ export default function Page() {
                 <button onClick={e => setTabulation(false)} className={`${!tabulation ? " bg-white shadow-xl  " : ""} border uppercase overflow-hidden   rounded-md  hover:bg-stone-100 p-2  px-4`}>Dépenses</button>
                 {/* <button onClick={e => setTabulation(true)} className={`${tabulation ? " bg-white shadow-xl  " : ""} border uppercase overflow-hidden     rounded-md  hover:bg-stone-100 p-2  px-4`}>BILAN GÉNÉRAL ET STATISTIQUE DE PRODUCTION</button> */}
                 <Link href={"/dashboard/admin/production"} className={`border uppercase overflow-hidden     rounded-md  hover:bg-stone-100 p-2  px-4`}>PRODUCTION</Link>
-                {/* <Link href={"/dashboard/admin/journal"} className={`border uppercase overflow-hidden     rounded-md  hover:bg-stone-100 p-2  px-4`}>JOURNAL</Link> */}
 
             </div>
             {!tabulation ? (
@@ -281,9 +289,10 @@ export default function Page() {
                                     <option value="voyage">Voyage</option>
                                     <option value="ration">Ration</option>
                                     <option value="bus">Bus</option>
+                                    <option value="carburant">Carburant</option>
+                                    <option value="peage">Peage</option>
                                     <option value="autre">Autres</option>
                                 </select>
-
                             </div>
                             {
                                 typeDepense.current?.value == "autre" ? (
@@ -305,15 +314,28 @@ export default function Page() {
                                         </select>
                                     </div>
                                 ) : null
-                            }
+                            } 
                             {
-                                (typeDepense.current?.value == "employe") || (typeDepense.current?.value == "salaire") ? (
+                                (typeDepense.current?.value == "employe") || (typeDepense.current?.value == "salaire")  ? (
                                     <div className="mt-2">
                                         <label className="  text-sm font-bold">Employé</label>
                                         <select id="idTypeDepense" name="idTypeDepense" onChange={handleInputChange} className="block text-xs w-full p-2 uppercase text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                             <option></option>
                                             {employes.map((item: any, i: number) => (
                                                 <option key={i + 1} value={item.id}>{item.nom} {item.prenom}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                ) : null
+                            }
+                             {
+                                (typeDepense.current?.value == "ration") || (typeDepense.current?.value == "carburant") || (typeDepense.current?.value == "peage") || (typeDepense.current?.value == "voyage")  ? (
+                                    <div className="mt-2">
+                                        <label className="  text-sm font-bold">Employé</label>
+                                        <select id="idTypeDepense" name="idTypeDepense" onChange={handleInputChange} className="block text-xs w-full p-2 uppercase text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
+                                            <option></option>
+                                            {voyage.map((item: any, i: number) => (
+                                                <option key={i + 1} value={item.id}>N° Voyage {item.id} {item.dateDepart}</option>
                                             ))}
                                         </select>
                                     </div>

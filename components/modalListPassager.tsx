@@ -48,10 +48,10 @@ export default function ModalListPassager(props: {childToParent: Function, isOpe
                             </thead>
                             <tbody className="bg-gray-50">
                                 <tr className="border-b border-gray-200 dark:b">
-                                    <th scope="row" className="p-2 border font-medium text-gray-900 whitespace-nowrap bg-gray-50   dark:bg-gray-800">
+                                    <th scope="row" className="p-2 border font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800">
                                         1
                                     </th>
-                                    <th scope="row" className="p-2 border font-medium text-gray-900 whitespace-nowrap bg-gray-50   dark:bg-gray-800">
+                                    <th scope="row" className="p-2 border font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800">
                                         Nana
                                     </th>
                                     <td className="border">

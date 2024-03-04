@@ -26,18 +26,11 @@ export default function Page() {
     const handleButtonClickAddForm = (val: boolean) => {
         setIsOpenAddForm(val);
     }
-    const handleOnEmit = (val: boolean) => {
-        if (val) {
-            alert("Walter white")
-        } else {
-            alert("Better Call Saul")
-        }
-    }
 
     useEffect(() => {
 
         const selectTicker = async () => {
-            const response = await fetch(`/api/ticket`, {
+            const response = await fetch(`/api/reservations`, {
                 method: 'GET',
                 body: JSON.stringify(data),
             })
@@ -51,7 +44,7 @@ export default function Page() {
     }, [])
 
     return (
-        <div className="w-full p-10">
+        <div className="w-full p-10 shadow-2xl">
             <div className=" py-4 flex justify-between items-start mb-2">
                 <h1 className="text-xl text-gray-900 uppercase">Reservations</h1>
             </div>

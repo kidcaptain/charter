@@ -361,8 +361,6 @@ export default function Page() {
                     </div>
                 </div>
                 <div className="py-20 px-5  shadow-2xl m-auto mt-4 min-h-screen bg-white">
-
-                    <button>Afficher</button>
                     {
                         (recettes.length > 0) ? (
                             <FicheProduction item={{

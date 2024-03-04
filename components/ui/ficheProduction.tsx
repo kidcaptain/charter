@@ -1,5 +1,4 @@
 
-import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import ReactToPrint from "react-to-print";
 
@@ -75,22 +74,21 @@ class ComponentToPrint extends React.Component<DataFicheProduction> {
            {jour:"Vendredi", montant: this.props.totalRecette[8] + this.props.totalRecette[9]},
             {jour:"Samedi", montant: this.props.totalRecette[10] + this.props.totalRecette[11]},
              {jour:"Dimanche", montant: this.props.totalRecette[12] + this.props.totalRecette[13]}];
-        let Tlundi: number = 0;
-        let Tmardi: number = 0;
-        let Tmercredi: number = 0;
-        let Tjeudi: number = 0;
-        let Tvendredi: number = 0;
-        let Tsamedi: number = 0;
-        let Tdimanche: number = 0;
-
-
         let totalBrut: number = 0;
+        let totalDepense: number = 0;
+        this.props.depense.map((l) => {
+            totalDepense+=l.montant
+        })
+        dayks.map((l) => {
+            totalBrut+=l.montant
+        })
+
+
 
         return (
             <div>
                 <div className="h-full w-full">
                     <div className="text-center font-bold my-8">
-                        <Image src={'/images/logo.jpeg'} className="m-auto" width={80} height={80} alt="" />
                         <h2>CHARTER EXPRESS VOYAGES</h2>
                         <ul>
                             <li>  ENTREPRISE DE TRANSPORT INTER-URBAIN</li>
@@ -287,18 +285,18 @@ class ComponentToPrint extends React.Component<DataFicheProduction> {
                                         ))
                                     }
 
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >  {totalBrut} fcfa</th>
+                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >  {totalDepense} fcfa</th>
                                 </tr>
                                 <tr className="bg-blue-700 ">
                                     <th className="text-xs uppercase border border-stone-800 py-2 px-1 text-black" >Net</th>
                                     {
                                         dayks.map((i: any, index: number) => (
-                                            <th colSpan={2} key={index+1} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " > {(this.props.depense[index]?.jour == i) && this.props.depense[index] ? dayks[index].montant - this.props.depense[index].montant  : 0} fcfa</th>
+                                            <th colSpan={2} key={index+1} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " > { dayks[index].montant - (this.props.depense[index]?.montant ?? 0) } fcfa</th>
                         
                                         ))
                                     }
 
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >  {totalBrut} fcfa</th>
+                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >  {totalBrut - totalDepense} fcfa</th>
 
                                 </tr>
                             </tfoot>

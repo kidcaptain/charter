@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import svg from "@/public/images/valide.svg";
+import { getDateFormat } from "@/functions/actionsClient";
 
 export default function Page() {
     const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false);
@@ -34,7 +35,7 @@ export default function Page() {
                 dateTransaction: `${year}-${month}-${day}`,
                 ...data
             }
-            const response = await fetch('/ ', {
+            const response = await fetch('/api/recette', {
                 method: 'POST',
                 body: JSON.stringify(datas),
             })
@@ -69,14 +70,14 @@ export default function Page() {
             setIsOpenPopup(false)
         }, 5000);
     }
-    const [recette, setTrajet] = useState([])
+    const [recette, setRecette] = useState([])
 
     useEffect(() => {
         const getData = async () => {
-            const res = await fetch("/  ", { cache: "no-store" })
+            const res = await fetch("/api/recette", { method: "GET", cache: "no-store" })
 
             const data = await res.json();
-            setTrajet(data)
+            setRecette(data)
         };
         const getAgence = async () => {
             const res = await fetch("/api/agences", { cache: "no-store" })
@@ -92,7 +93,7 @@ export default function Page() {
 
     const deleteRecette = async (id: number) => {
         if (confirm("Voulez vous supprimé cette element ?")) {
-            const res = await fetch("/  /" + id, { method: "DELETE", cache: "no-store" })
+            const res = await fetch("/api/recette/" + id, { method: "DELETE", cache: "no-store" })
             if (res.ok) {
                 alert("Element supprimé!")
             }
@@ -113,14 +114,14 @@ export default function Page() {
                         <div className=" mx-auto p-4">
                             <div className="mt-4">
                                 <div className="flex gap-4 mb-1 items-start">
-                                    <label className="block mb-1 text-sm font-bold text-gray-900  ">Libellé</label>
+                                    <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Libellé</label>
                                     {((data?.nom && data?.nom != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null}
                                 </div>
                                 <input onChange={handleInputChange} required type="text" id="nom" placeholder="Nom" name="nom" className={`block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ${((data?.nom && data?.nom != "")) ? "bg-green-50 ring-green-400/30 ring-4" : ""} `} />
                             </div>
                             <div className="mt-4">
                                 <div className="flex gap-4 mb-1 items-start">
-                                    <label className="block mb-1 text-sm font-bold text-gray-900  ">Type de services</label>
+                                    <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Type de services</label>
                                     {((data?.typeService && data?.typeService != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null}
                                 </div>
                                 <input onChange={handleInputChange} required type="text" id="typeService" placeholder="" name="typeService" className={`block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ${((data?.typeService && data?.typeService != "")) ? "bg-green-50 ring-green-400/30 ring-4" : ""} `} />
@@ -139,7 +140,7 @@ export default function Page() {
 
                             <div className="mt-4">
                                 <div className="flex gap-4 mb-1 items-start">
-                                    <label className="block mb-1 text-sm font-bold text-gray-900  ">Montant</label>
+                                    <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Montant</label>
                                     {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null}
                                 </div>
                                 <input onChange={handleInputChange} required type="number" id="montant" name="montant" className={`"block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " ue-400   ${((data?.montant && data?.montant != "")) ? "bg-green-50 ring-green-400/30 ring-4" : ""} `} />
@@ -147,7 +148,7 @@ export default function Page() {
 
                             <div className="mt-4">
                                 <div className="flex gap-4 mb-1 items-start">
-                                    <label className="block mb-1 text-sm font-bold text-gray-900  ">Note</label>
+                                    <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Note</label>
                                     {((data?.note && data?.note != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null}
                                 </div>
                                 <textarea onChange={handleInputChange} required id="note" name="note" className={`"block h-44 resize-none w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " ue-400   ${((data?.note && data?.note != "")) ? "bg-green-50 ring-green-400/30 ring-4" : ""} `} ></textarea>
@@ -228,7 +229,7 @@ export default function Page() {
                                                     {item.montant}
                                                 </td>
                                                 <td className=" py-1 px-1 border">
-                                                    {item.dateTransaction}
+                                                    {getDateFormat(item.dateTransaction)}
                                                 </td>
                                                 <td className=" py-1 px-1 border">
                                                     {item.note}

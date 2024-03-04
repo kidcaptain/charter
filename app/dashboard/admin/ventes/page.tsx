@@ -19,8 +19,6 @@ import HelpPopup from "@/components/ui/helpPopup";
 
 export default function Page() {
 
-    const pathname = usePathname();
-    const classname = `text-sm p-2 text-center`
     const router = useRouter()
     const [tab, setTab] = useState<boolean>(false);
     const [tab2, setTab2] = useState<boolean>(false);
@@ -29,8 +27,11 @@ export default function Page() {
     const [avance, setAvance] = useState<number>(0)
     const { data: session, status } = useSession()
     const [typeClass, setTypeClass] = useState<string>("");
+    const [dateConfirmation, setDateConfirmation] = useState<string>("");
     const [typeVoyage, setTypeVoyage] = useState<string>("");
+    const [typePaiement, setTypePaiement] = useState<string>("");
     const [trajet, setTrajet] = useState<string>("");
+    const [agenceId, setAgenceId] = useState<string>("");
     const [item, setItem] = useState<any>(null);
     const [ticket, setTicket] = useState<any>(null);
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
@@ -59,7 +60,7 @@ export default function Page() {
     const HandleSubmit = () => {
         const tab: any[] = []
         voyages.map((item: any) => {
-            if ((item.bus.typeBus == typeClass) && (item.voyages?.typeVoyage == typeVoyage) && (item.voyages?.trajetId == parseInt(trajet))) {
+            if ((item.bus.typeBus == typeClass) && (item.voyages?.typeVoyage == typeVoyage) && (item.voyages?.trajetId == parseInt(trajet)) && (item.voyages?.agenceId == parseInt(agenceId))) {
                 tab.push(item)
             }
         })
@@ -109,6 +110,8 @@ export default function Page() {
             agenceId: agenceId,
             dateReservation: `${year}-${month}-${day}`,
             statutReservation: "en attente",
+            avance: avance,
+            dateConfirmation: dateConfirmation
         }
         try {
             const res = await fetch(`/api/reservations`, {
@@ -215,15 +218,56 @@ export default function Page() {
                     method: 'PUT', cache: 'no-store', body: JSON.stringify(updateData)
                 })
                 if (resupdate.ok) {
-                    document.getElementById("resetbtn")?.click()
+                    postRecette(voyage)
                 }
             } else {
                 const respost = await fetch(`/api/lignerecette`, {
                     method: 'POST', cache: 'no-store', body: JSON.stringify(data)
                 })
                 if (respost.ok) {
-                    document.getElementById("resetbtn")?.click()
+                    postRecette(voyage)
                 }
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    const postRecette = async (voyage: any) => {
+        const date = new Date()
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
+        const day = (date.getDate()) < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
+        let nom: string = "";
+        let typeService: string = "";
+        let montantRecette: number = 0;
+        
+        if (method == "payer") {
+            nom = "Achat de ticket de bus";
+            typeService = "ventes";
+            montantRecette = voyage.prixVoyage;
+        }
+        if (method == "reserver") {
+            nom = "reservation de ticket de bus";
+            typeService = "reservation";
+            montantRecette = avance;
+        }
+
+        const data = {
+            nom: nom,
+            typeService: typeService,
+            typePaiement: typePaiement,
+            montant: montantRecette,
+            dateTransaction: `${year}-${month}-${day}T00:00:00.000Z`,
+            note: "",
+            agenceId: voyage.agenceId,
+        }
+
+        try {
+            const respost = await fetch(`/api/recette`, {
+                method: 'POST', cache: 'no-store', body: JSON.stringify(data)
+            })
+            if (respost.ok) {
+                document.getElementById("resetbtn")?.click()
             }
         } catch (err) {
             console.log(err)
@@ -286,6 +330,23 @@ export default function Page() {
     }
     const HandlerItem = (value: any) => {
         setItem(value)
+    }
+    const compareDate = (value: string) => {
+        const date = new Date(value);
+        const date2 = new Date();
+        if (date.getFullYear() >= date2.getFullYear()) {
+            if (date.getMonth() >= date2.getMonth()) {
+                if (date.getDate() >= date2.getDate()) {
+                    return true
+                } else {
+                    return false
+                }
+            } else {
+                return false
+            }
+        } else {
+            return false
+        }
     }
     const HandlerChange = (value: any) => {
         // console.log(value)
@@ -371,7 +432,7 @@ export default function Page() {
                                     </p>
                                     <HelpPopup message="Vous retrouvez un formulaire de recherche et les différents voyages disponibles. " />
                                 </div>
-                                <div className="flex gap-4 justify-between">
+                                <div className="flex gap-4 justify-start">
                                     <div className="mt-2">
                                         <label className="block mb-1 text-sm font-bold text-gray-800">Type de voyages:</label>
                                         <select id="countries" onChange={e => setTypeVoyage(e.target.value)} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 ">
@@ -388,16 +449,16 @@ export default function Page() {
                                             <option value="vip">vip</option>
                                         </select>
                                     </div>
-                                    {/* <div className="mt-2">
+                                    <div className="mt-2">
                                         <label className="block mb-1 text-sm font-bold text-gray-800">Agences:</label>
-                                        <select id="agenceId" name="agenceId" onChange={handleInputChange} className="block  w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 ">
+                                        <select id="agenceId" name="agenceId" onChange={e => setAgenceId(e.target.value)} className="block  w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 ">
                                             <option></option>
                                             {
                                                 agences.map((i: any, index: number) => (
                                                     <option key={index + 1} value={i.id}>{i.nom}</option>
                                                 ))}
                                         </select>
-                                    </div> */}
+                                    </div>
                                     <div className="mt-2">
                                         <label className="block mb-1 text-sm font-bold text-gray-800">Trajet:</label>
                                         <select id="trajetId" name="trajetId" onChange={e => setTrajet(e.target.value)} className="block w-full p-2 text-sm font-bold text-gray-900 border shadow  border-gray-300  focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-green-400 ">
@@ -409,8 +470,8 @@ export default function Page() {
                                     </div>
                                 </div>
                                 <div className="mt-4">
-                                   
-                                    <button type="button" onClick={() => HandleSubmit()} disabled={voyages.length == 0} className={` p-2 px-3 rounded-md  hover:text-white border  text-sm ${voyages.length > 0 ? 'text-green-500 hover:bg-green-400 border-green-500' : "text-stone-500 hover:bg-stone-400 border-stone-500"}font-bold`}>Rechercher</button>
+
+                                    <button type="button" onClick={() => HandleSubmit()} disabled={voyages.length == 0} className={` p-2 px-3 rounded-md  hover:text-white border  text-sm ${voyages.length > 0 ? 'text-green-700 hover:bg-green-500 border-green-500' : "text-stone-500 hover:bg-stone-400 border-stone-500"}font-bold`}>Rechercher</button>
                                     {
                                         onSearched ? (
                                             <button type="button" onClick={reset} className=" mx-2 p-2 px-3 rounded-md hover:bg-blue-400 hover:text-white border border-blue-500 text-sm text-blue-500 font-bold">Tout afficher</button>
@@ -492,7 +553,7 @@ export default function Page() {
                                                         <label htmlFor="typePaiement" className="block mb-1 text-sm font-medium text-gray-900 ">Type De Paiement</label>
                                                         {/* {((data?.typePaiement && data?.typePaiement != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
                                                     </div>
-                                                    <select name="typePaiement" required autoComplete="off" className={`block w-full p-2 uppercase text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400  `} id="typePaiement">
+                                                    <select name="typePaiement" required onChange={(e) => setTypePaiement(e.target.value)} autoComplete="off" className={`block w-full p-2 uppercase text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400  `} id="typePaiement">
                                                         <option value="" ></option>
                                                         <option value="cash" >Cash</option>
                                                         <option value="mobile money" >Mobile money</option>
@@ -530,7 +591,7 @@ export default function Page() {
                                                         <label htmlFor="typePaiement" className="block mb-1 text-sm font-medium text-gray-900 ">Type De Paiement</label>
                                                         {/* {((data?.typePaiement && data?.typePaiement != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
                                                     </div>
-                                                    <select name="typePaiement" required autoComplete="off" className={`block w-full p-2 uppercase text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400  `} id="typePaiement">
+                                                    <select name="typePaiement" required autoComplete="off" onChange={(e) => setTypePaiement(e.target.value)} className={`block w-full p-2 uppercase text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400  `} id="typePaiement">
                                                         <option value="" ></option>
                                                         <option value="cash" >Cash</option>
                                                         <option value="mobile money" >Mobile money</option>
@@ -541,13 +602,13 @@ export default function Page() {
                                                         <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Date de confirmation de la reservation</label>
                                                         {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
                                                     </div>
-                                                    <input type="date" id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " ue-400  `} />
+                                                    <input type="date" id="dateConfirmation" name="dateConfirmation" onChange={(e) => setDateConfirmation(e.target.value)} className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " ue-400  `} />
                                                 </div>
                                             </>
                                         ) : null
                                     }
                                     <div className="mt-4">
-                                        <button type="button" onClick={() => { setTab(true); setTab2(false); setItem(null) }} className=" p-2 px-3 rounded-md hover:bg-stone-400 text-sm hover:text-white border border-stone-500 text-stone-500 font-bold">Retour</button>
+                                        <button type="button" onClick={() => { setTab(true); setTab2(false); setItem(null); setMethod("") }} className=" p-2 px-3 rounded-md hover:bg-stone-400 text-sm hover:text-white border border-stone-500 text-stone-500 font-bold">Retour</button>
                                         <button type="submit" onClick={validationTab} className=" mx-2 p-2 px-3 rounded-md hover:bg-blue-400 hover:text-white border border-blue-500 text-sm text-blue-500 font-bold">Valider</button>
                                     </div>
                                 </div>
@@ -599,17 +660,17 @@ export default function Page() {
                         {
                             !onSearched ? (
                                 <ul className=" grid grid-cols-4 gap-8 relative h-full ">
-                                    {voyages.map((item: any, i: number) => (item.voyages?.placeDisponible != 0 ?
+                                    {voyages.map((item: any, i: number) => (item.voyages?.placeDisponible != 0 || compareDate(getDateFormat(item.voyages?.dateDepart)) ?
                                         <li key={i} onClick={() => { setItem(item); handleItemOnclick() }} className="cursor-pointer" >
-                                            <CardVoyage isHidden={true} id={item.voyages?.id} isVip={true} agence="" date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
+                                            <CardVoyage isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
                                         </li> : null
                                     ))}
                                 </ul>
                             ) : (
                                 <ul className=" grid grid-cols-4 gap-8 relative h-full ">
-                                    {voyagesResult.map((item: any, i: number) => (item.voyages?.placeDisponible != 0 ?
+                                    {voyagesResult.map((item: any, i: number) => (item.voyages?.placeDisponible != 0 || compareDate(getDateFormat(item.voyages?.dateDepart))  ?
                                         <li key={i} onClick={() => { setItem(item); handleItemOnclick() }} className="cursor-pointer" >
-                                            <CardVoyage isHidden={true} id={item.voyages?.id} isVip={true} agence="" date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
+                                            <CardVoyage isHidden={true} id={item.voyages?.id}  isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
                                         </li> : null
                                     ))}
                                 </ul>
@@ -637,23 +698,7 @@ export default function Page() {
 
                                     </ul>
                                 </div>
-                                <div className="bg-white shadow-2xl w-96 rounded-md border overflow-hidden">
-                                    <h6 className="p-4 uppercase border-b font-bold">Voyage</h6>
-                                    <ul>
-                                        <li className="py-2 px-4 font-semibold flex text-gray-700  flex-row justify-between">
-                                            <span>Date de départ:</span> <span>{getDateFormat(item.voyages?.dateDepart)}</span>
-                                        </li>
-                                        <li className="py-2 px-4 font-semibold flex text-gray-700  flex-row justify-between">
-                                            <span>Prix:</span> <span>{item.voyages?.prixVoyage}</span>
-                                        </li>
-                                        <li className="py-2 px-4 font-semibold flex text-gray-700  flex-row justify-between">
-                                            <span>Trajet:</span> <span>{item.trajet?.lieuDepart} - {item.trajet?.lieuArrivee}</span>
-                                        </li>
-                                        <li className="py-2 px-4 font-semibold flex text-gray-700  flex-row justify-between">
-                                            <span>Heures:</span> <span>{item.trajet?.heureDepart} - {item.trajet?.heureArrivee}</span>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <CardVoyage isHidden={true} id={item.voyages?.id}  isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
                             </div>
                         ) : null}
                     </div>

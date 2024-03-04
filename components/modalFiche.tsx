@@ -104,7 +104,8 @@ export default function ModalFiche(props: { id?: string, isAdmin: string }) {
             label: data.label,
             description: data.description,
             dateUpdate: `${year}-${month}-${day}`,
-            employeId: parseInt(`${props.id}`)
+            employeId: parseInt(`${props.id}`),
+            montant: data.montant
         }
         console.log(item)
         try {
@@ -201,7 +202,7 @@ export default function ModalFiche(props: { id?: string, isAdmin: string }) {
                 <div className="bg-black/50 fixed z-40 h-full w-full top-0 left-0">
                     <form onSubmit={HandlerSubmitSanction} className="max-w-xl m-auto bg-white mt-20">
                         <h2 className="p-4 uppercase border-b">
-                            Sanction
+                            Retenue
                         </h2>
                         <div className="p-4">
                             <div className="mt-4  gap-4">
@@ -211,6 +212,10 @@ export default function ModalFiche(props: { id?: string, isAdmin: string }) {
                             <div className="mt-4  gap-4">
                                 <label className="block mb-1 text-sm  text-gray-900 font-bold">Description</label>
                                 <textarea id="nom" onChange={handleInputChang} name="description" className="block w-full p-2 h-52 resize-none text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-sm focus-visible:ring-blue-400 " ></textarea>
+                            </div>
+                            <div className="mt-4  gap-4">
+                                <label className="block mb-1 text-sm  text-gray-900 font-bold">Montant retenue</label>
+                                <input type="number" min={0}  onChange={handleInputChang} name="montant"  id="nom" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-sm focus-visible:ring-blue-400 " />
                             </div>
                             <button type="submit" className="text-white  py-2 hover:bg-blue-700 rounded-sm bg-blue-500 text-sm mt-4  p-2">
                                 Enregistrer

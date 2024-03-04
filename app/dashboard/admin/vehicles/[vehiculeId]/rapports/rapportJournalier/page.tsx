@@ -15,6 +15,7 @@ export default function Page({ params }: { params: IPrams }) {
     const [fiche, setFiche] = useState<any[]>([]);
     const [ficheRetour, setFicheRetour] = useState<any[]>([]);
     const [bus, setBus] = useState<any[]>([]);
+    const [chauffeur, setChauffeur] = useState<any[]>([]);
 
     const [date, setDate] = useState<string>("");
     const [total, setTotal] = useState<number>(0);
@@ -62,7 +63,8 @@ export default function Page({ params }: { params: IPrams }) {
         const t = 7 - date.getDay();
         const bus = await getBus();
         setBus(bus);
-        const chauffeur = await getEmploye(bus.employeId);
+        const chauffeurs = await getEmploye(bus.employeId);
+        setChauffeur(chauffeurs)
         const recette: any[] = await getLigneRecette(bus.id, `${year}-${month}-${day}`);
         const voyages: any[] = await getVoyage(bus.id, `${year}-${month}-${day}`);
         let compte: number = 0;
@@ -98,7 +100,7 @@ export default function Page({ params }: { params: IPrams }) {
                 </div>
             </div>
             <div className="p-4 w-full h-full min-h-full">
-                <RapportJourn item={{ simple: fiche, date: date, total: total, bus: bus }} />
+                <RapportJourn item={{ simple: fiche, date: date, total: total, bus: bus, chauffeur: chauffeur }} />
             </div>
         </div>
     )
