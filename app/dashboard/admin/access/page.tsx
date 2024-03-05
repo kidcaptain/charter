@@ -68,7 +68,7 @@ export default function Page() {
 
     return (
         <div className="p-10">
-            <h1 className="text-xl">Droits d'acces</h1>
+            <h1 className="text-xl">Droits d&apos;acces</h1>
             <form onSubmit={HandlerSubmit} className="col-span-1 bg-white max-w-md mt-10 shadow-xl border-2 rounded-sm  ">
                 <h2 className=" text-gray-100 p-4 bg-green-500  uppercase">
                     Ajouter un droit d&apos;acces
