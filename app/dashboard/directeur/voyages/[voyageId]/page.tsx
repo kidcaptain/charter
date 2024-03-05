@@ -105,7 +105,7 @@ export default function Voyage({ params }: { params: IPrams }) {
       <div className=" py-4 flex lowercase text-sm justify-between items-start mb-2">
         <h1 className=" text-gray-900"><Link className="hover:text-blue-600" href={"/dashboard/directeur/voyages"}>Voyages</Link> / <Link className="hover:text-blue-600" href="#">BORDEREAU DE ROUTE</Link></h1>
       </div>
-      <BordereauRoute item={{ bus: bus, trajet: trajet, voyage: voyage, passagers: passagers, chauffeur: chauffeur, agence: agence }} />
+      {/* <BordereauRoute item={{ bus: bus, trajet: trajet, voyage: voyage, passagers: passagers, chauffeur: chauffeur, agence: agence }} /> */}
     </div>
   )
 }
