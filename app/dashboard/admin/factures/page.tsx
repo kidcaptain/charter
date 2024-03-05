@@ -2,9 +2,7 @@
 
 import Popup from "@/components/ui/popup";
 import { useEffect, useState } from "react"
-import svg from "@/public/images/valide.svg"
-import Image from "next/image";
-import { analytics, storage } from "@/app/firebase/firebase-config";
+import { storage } from "@/app/firebase/firebase-config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 export default function Page() {
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -22,13 +20,7 @@ export default function Page() {
     const handleButtonClick = () => {
         setIsOpen(!isOpen);
     }
-    const handleInputChange = (event: any) => {
-        const target = event.target
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        setValue((oldValue: any) => {
-            return { ...oldValue, [target.name]: value }
-        })
-    }
+
     const configPopup = (message: string, color: string, title: string) => {
         setPopupData({ message: message, color: color, title: title })
         setIsOpenPopup(true)
@@ -67,40 +59,8 @@ export default function Page() {
         }
     }
 
-    const deleteFacture = async (id: number) => {
-        if (confirm("Confimer la suppression")) {
-            const res = await fetch(`/api/factures/${id}`, { method: "DELETE", cache: "no-store" })
-            if (!res.ok) {
-                configPopup("Impossible d'afficher les données. Veuillez actualiser la page!", "red", "Reservation");
-            } else {
-                configPopup("Facture supprimé", "green", "Reservation");
-            }
-        }
-    }
 
-    const HandlerSubmit = async (e: any) => {
-        e.preventDefault()
-        console.log(value)
-        if (value != null) {
-            try {
-                const res = await fetch('/api/factures', {
-                    method: 'POST',
-                    cache: 'no-store',
-                    body: JSON.stringify(value),
-                })
-                const data = await res.json();
-                if (res.ok) {
-                    setIsOpen(false);
-                    configPopup("Poste enregistré!", "green", "Reservation");
-                    setValue(null);
-                    document.getElementById('buttonReset')?.click();
-                }
-            } catch (err: any) {
-                console.log(err)
-                configPopup("Erreur!", "red", "Reservation");
-            }
-        }
-    }
+
     useEffect(() => {
         const getAgence = async () => {
             const res = await fetch("/api/agences", { cache: "no-store" })
@@ -161,32 +121,6 @@ export default function Page() {
         }
     }
 
-    const HandlerSubmitEdit = async (e: any) => {
-        e.preventDefault()
-        try {
-            const response = await fetch(`/api/Factures/${itemEdit.id}`, {
-                method: 'PUT',
-                body: JSON.stringify(itemEdit),
-            })
-            const a = await response.json()
-            console.log(a)
-            if (response.ok) {
-                setIsOpenFormEdit(false);
-                configPopup("Poste edité!", "green", "Reservation");
-                setItemEdit(null);
-            } else {
-                configPopup("Erreur", "red", "Reservation");
-            }
-        } catch (err) {
-            console.log(err)
-            configPopup("Erreur", "red", "Reservation");
-        }
-    }
-
-    const handleInputChangeInput = (e: any) => {
-        setItemEdit({ ...itemEdit, [e.target.name]: e.target.value });
-    };
-
     return (
         <div className="w-full p-10">
             <div className=" py-4 flex justify-between items-start mb-2">
@@ -225,7 +159,7 @@ export default function Page() {
                                     </td>
                        
                                     <td className="px-3 py-2 border">
-                                        <a  href={`${item.src}${item.ext}`} download={`${item.nom}${item.ext}`} className="text-white text-xs mt-4 hover:bg-red-700 rounded-sm bg-red-500  p-2">
+                                        <a  href={`${item.src}`} download={`${item.nom}${item.ext}`} className="text-white text-xs mt-4 hover:bg-red-700 rounded-sm bg-red-500  p-2">
                                             Telecharger
                                         </a>
 

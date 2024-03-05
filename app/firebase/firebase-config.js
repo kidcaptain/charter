@@ -19,7 +19,7 @@ const firebaseConfig = {
 // Initialize Firebase
 // const app = initializeApp(firebaseConfig);
 let app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
-export const analytics = getAnalytics(app);
+const analytics = getAnalytics(app);
 
 
 // const STORAGE_FOLDER_PATH = "charter-43c92.appspot.com";

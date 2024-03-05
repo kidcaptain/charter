@@ -6,7 +6,7 @@ import svg from '@/public/images/loader.svg'
 import { FormEvent, useState, useEffect } from "react"
 import Popup from "@/components/ui/popup";
 
-import { analytics, storage } from "@/app/firebase/firebase-config";
+import { storage } from "@/app/firebase/firebase-config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 interface IPrams {
