@@ -66,7 +66,7 @@ const RouterUser = (props: { session: string | null | undefined, id: string | nu
             
             switch (data.TypeDroits) {
                 case "administrateur":
-                    router.push('/dashboard/admin/home')
+                    router.push("/dashboard/admin/home")
                     break;
                 case "comptable":
                     router.push('/dashboard/comptable/home')

@@ -110,7 +110,7 @@ export default function Voyage({ params }: { params: IPrams }) {
         <h1 className=" text-gray-900"><Link className="hover:text-blue-600" href={"/dashboard/caisse/voyages"}>Voyages</Link> / <Link className="hover:text-blue-600" href="#">BORDEREAU DE ROUTE</Link></h1>
       </div>
          <div className="max-w-7xl m-auto">
-            <BordereauRoute item={{ bus: bus, trajet: trajet, voyage: voyage, passagers: passagers, chauffeur: chauffeur, agence: agence }} />
+            <BordereauRoute item={{ depense:{carburant: 0, peage: 0, ration: 0},  bus: bus, trajet: trajet, voyage: voyage, passagers: passagers, chauffeur: chauffeur, agence: agence }} />
           </div>
     </div>
   )
