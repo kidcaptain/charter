@@ -1,6 +1,6 @@
 
 import { getServerSession } from "next-auth"
-import { authOptions } from " @/app/lib/authOptions"
+import { authOptions } from "@/app/lib/authOptions";
 import GridDataComponent from "@/components/gridDataComponent";
 import GridDoughnut from "@/components/gridDoughnut";
 export default async function HomeDashboard() {
