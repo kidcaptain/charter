@@ -97,7 +97,11 @@ export default function CardBarChart(props: {title? : string}) {
         },
       },
     };
-    let ctx = document.getElementById("bar-chart").getContext("2d");
+    var doc: any = document.getElementById(`bar-chart`);
+    if (doc) {
+        var ctx = doc.getContext("2d");
+    }
+    // @ts-ignore 
     window.myBar = new Chart(ctx, config);
   }, []);
   return (

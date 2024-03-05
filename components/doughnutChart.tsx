@@ -79,6 +79,8 @@ export default function DoughnutChart(props: { val: number,back1: string, back2:
         if (doc) {
             var ctx = doc.getContext("2d");
         }
+       
+        // @ts-ignore
         window.myLine = new Chart(ctx, config);
     }, [props.val, props.val2]);
     return (

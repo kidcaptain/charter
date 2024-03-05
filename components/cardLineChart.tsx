@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Chart from "chart.js";
 
-export default function CardLineChart(props: {moisDepense: number[], moisRecette: number[]}) {
+export default function CardLineChart(props: { moisDepense: number[], moisRecette: number[] }) {
     React.useEffect(() => {
         console.log(props.moisDepense)
         var config = {
@@ -114,9 +114,9 @@ export default function CardLineChart(props: {moisDepense: number[], moisRecette
         if (doc) {
             var ctx = doc.getContext("2d");
         }
-    
+        // @ts-ignore 
         window.myLine = new Chart(ctx, config);
-     
+
     });
     return (
         <>
