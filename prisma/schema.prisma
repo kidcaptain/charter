@@ -11,7 +11,6 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
  
-
 model Passager {
   id            Int      @id @default(autoincrement())
   nom           String
@@ -55,6 +54,7 @@ model Voyage {
   busId           String
   trajetId        Int
   agenceId        Int
+  ready           String @default("non")
 }
 
 model Trajet {
@@ -97,6 +97,7 @@ model Agence {
   nom             String
   adresse         String
   numeroTelephone String
+  chef            String @default("")
 }
 
 model Poste {
@@ -233,25 +234,3 @@ model Facture {
   ext          String
   montant      Int
 }   
-
-model FicheSuivieVehicule {
-  id                    Int  @id @default(autoincrement())
-  immatriculation       String
-  typeVehicule          String
-  kilometrageInitial    Int
-  dateAchat             DateTime
-  dateMiseService       DateTime
-  busId                 Int
-  dateRevision          DateTime
-  detailRevision        String
-  vidange               String
-  reperationEffectuees  String
-  anomalies             String
-  carburant             String
-  pannes                String
-  vandalisme            String
-  accident              String
-  assurance             String
-  contratEntretien      String
-  garanties             String
-}

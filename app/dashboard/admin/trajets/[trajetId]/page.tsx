@@ -117,7 +117,7 @@ export default function Page({ params }: { params: IPrams }) {
                                     Editer un trajet de voyage
                                 </h2>
                                 <div className=" p-4">
-                                    {((data.lieudepart && data.lieudepart != "") && (data.lieuarrivee == data.lieudepart)) ? (<div className="text-xs bg-yellow-100 my-2 p-4">Le lieu de départ et le lieu d'arrivée sont pariels</div>) : null}
+                                    {((data.lieudepart && data.lieudepart != "") && (data.lieuarrivee == data.lieudepart)) ? (<div className="text-xs bg-yellow-100 my-2 p-4">Le lieu de départ et le lieu d&apos;arrivée sont les mêmes</div>) : null}
                                     <div className="mt-4">
                                         <div className="flex gap-4 mb-1 items-start">
                                             <label className="block text-sm font-bold text-gray-900 dark:text-white">Lieu de Départ</label>

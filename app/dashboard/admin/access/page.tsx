@@ -94,7 +94,7 @@ export default function Page() {
                 </div>
             </form>
             <div className="py-10">
-                <h2 className="text-xl my-4 uppercase">Les droits d'acces disponible</h2>
+                <h2 className="text-xl my-4 uppercase">Les droits d&apos;acces disponible</h2>
                 <ul className="flex flex-wrap gap-4">
                     {access.map((item: any, i: number) => (
                         <li key={i+1} className="border border-stone-600 hover:shadow-xl shadow-md cursor-pointer p-4">
