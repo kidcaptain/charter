@@ -124,7 +124,7 @@ export default function Page() {
                             </div>
                             <div className="mt-4">
                                 <label className="  text-sm font-bold text-gray-900 dark:text-white">Date de paiement</label>
-                                <input type="month" onChange={handleInputChange} required id="datePaiement" name="datePaiement" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
+                                <input type="date" onChange={handleInputChange} required id="datePaiement" name="datePaiement" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                             <div className="mt-4">
                                 <button type="submit" className="text-white text-xs hover:bg-blue-600 rounded-sm bg-blue-500 p-2">
