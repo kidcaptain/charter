@@ -48,7 +48,7 @@ export default function Page() {
     const HandlerSubmit = async (e: any) => {
         e.preventDefault()
         try {
-            const r = await fetch('/api/acces?TypeDroits=administrater', { method: 'GET', cache: "no-store" })
+            const r = await fetch('/api/acces?TypeDroits=administrateur', { method: 'GET', cache: "no-store" })
             const rep = await r.json();
             if (!r.ok) {
                 if (confirm("Une erreur c'est produite veuillez actualiser la page et reessayer!")) {
