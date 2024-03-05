@@ -193,7 +193,7 @@ export default function Page() {
 
                 </div>
                 <div className="mt-4 bg-white p-4">
-                    <SalaireEmploye  item={{ employes: employees, agence:agence }} />
+                    <SalaireEmploye  item={{ employes: employees, date: ""}} />
                 </div>
 
             </div>
