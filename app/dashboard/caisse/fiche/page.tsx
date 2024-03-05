@@ -13,7 +13,7 @@ export default function Page() {
     const [total, setTotal] = useState<number>(0)
     const [totalDepense, setTotalDepense] = useState<number>(0)
 
-    const agence = localStorage.getItem("agence")
+
 
     const getLigneRecette = async (date: string) => {
         const res = await fetch("/api/lignerecette?date=" + date, { cache: "no-store" })
@@ -57,6 +57,7 @@ export default function Page() {
         return data
     };
     const selecteFicheRecette = async (e: any) => {
+        const agence = localStorage.getItem("agence")
         setFicheRetour([])
         setFiche([])
         e.preventDefault();
