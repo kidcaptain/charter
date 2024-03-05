@@ -55,3 +55,40 @@ export const POST = async (req: Request) => {
   }
 }
 
+
+export const PUT = async (req: Request) => {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
+  const body = await req.json();
+  const { nomUtilisateur, motDePasse, dateCreationCompte, dateDerniereConnexion, blocke, numCNI, employeId, isConnected, droitsAccesId } = body;
+  const hashedPassword = await hash(motDePasse, 10);
+
+  try {
+    if (id) {
+      const utilisateur = await prisma.utilisateur.update({
+        where: { id: parseInt(id) },
+        data: {
+          nomUtilisateur: nomUtilisateur,
+          motDePasse: hashedPassword,
+          dateCreationCompte: `${dateCreationCompte}`,
+          dateDerniereConnexion: `${dateDerniereConnexion}`,
+          blocke: blocke,
+          numCNI: numCNI,
+          isConnected: isConnected,
+          droitsAccesId: parseInt(droitsAccesId),
+          employeId: parseInt(employeId)
+        }
+      });
+      return NextResponse.json({ message: utilisateur })
+
+    } else {
+      return NextResponse.json({ message: "no id" })
+    }
+  } catch (error) {
+    console.log(error);
+    return new NextResponse(
+      JSON.stringify({ message: "Error" }), { status: 500 }
+    )
+  }
+}
+

@@ -47,9 +47,11 @@ const RouterUser = (props: { session: string | null | undefined, id: string | nu
                     // alert("error d'authentification");
                     // router.back();
                     // return null
-                } else {    
+                } else { 
+                
                     getDroitAcces();
                 }
+
             }
 
         }
@@ -58,8 +60,10 @@ const RouterUser = (props: { session: string | null | undefined, id: string | nu
             if (!res.ok) {
                 console.log("error")
             }
+           
             const data = await res.json();
-            router.refresh();
+            // router.refresh();
+            
             switch (data.TypeDroits) {
                 case "administrateur":
                     router.push('/dashboard/admin/home')
@@ -78,6 +82,7 @@ const RouterUser = (props: { session: string | null | undefined, id: string | nu
                     break;
             }
         };
+
         updateUser();
 
     }, [])

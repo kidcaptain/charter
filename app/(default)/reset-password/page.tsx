@@ -55,7 +55,7 @@ export default function Home() {
         isConnected: user?.isConnected,
         droitsAccesId: parseInt(user?.droitsAccesId),
       }
-      const res = await fetch(`/api/utilisateurs/${user?.id}`, {
+      const res = await fetch(`/api/utilisateurs?id=${user?.id}`, {
         method: 'PUT',
         cache: 'no-store',
         body: JSON.stringify(data)
