@@ -37,7 +37,7 @@ const RouterUser = (props: { session: string | null | undefined, id: string | nu
                     employeId: user.employeId
                 }
              
-                const res = await fetch("/api/utilisateurs?id=" + props.id, {
+                const res = await fetch("/api/utilisateurs/" + props.id, {
                     method: 'PUT',
                     cache: "no-store",
                     body: JSON.stringify(datas),
