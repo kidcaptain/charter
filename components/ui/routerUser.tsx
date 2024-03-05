@@ -68,7 +68,7 @@ const RouterUser = (props: { session: string | null | undefined, id: string | nu
                     router.push('/dashboard/comptable/home')
                     break;
                 case "chefagence":
-                    router.push('/dashboard/directeur/home')
+                    router.push('/dashboard/admin/home')
                     break;
                 case "chauffeur":
                     router.push('/dashboard/chauffeur/vehicule')
