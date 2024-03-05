@@ -56,7 +56,8 @@ export default function Page({ params }: { params: IPrams }) {
             trajetId: data.trajetId,
             typeVoyage: data.typeVoyage,
             prixVoyage: data.prixVoyage,
-            placeDisponible: array[1]
+            placeDisponible: array[1],
+            ready: data.ready
         }
         try {
             const response = await fetch(`/api/voyages/${params.voyageId}`, {
@@ -69,7 +70,6 @@ export default function Page({ params }: { params: IPrams }) {
             }
         } catch (err) {
             console.log(err)
-            alert("Une erreur s'est produite!")
         }
     }
 
@@ -126,15 +126,15 @@ export default function Page({ params }: { params: IPrams }) {
                         </h2> 
                         <div className=" m-auto p-4">
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900  ">Date de Départ</label>
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Date de Départ</label>
                                 <input onChange={handleInputChange} value={getDateFormat(data.dateDepart)} required type="date" id="dateDepart" placeholder="Départ" name="dateDepart" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900  ">Date d&apos;arrivée</label>
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Date d&apos;arrivée</label>
                                 <input onChange={handleInputChange} required type="date" value={getDateFormat(data.dateArrivee)} id="dateArrivee" placeholder="Arrivée" name="dateArrivee" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900  ">Bus</label>
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Bus</label>
                                 <select id="busId" name="busId" value={data.busId} required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option></option>
                                     {bus.map((item: any, i: number) => (
@@ -143,7 +143,7 @@ export default function Page({ params }: { params: IPrams }) {
                                 </select>
                             </div>
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900  ">Trajet</label>
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Trajet</label>
                                 <select id="trajetId" value={data.trajetId} name="trajetId" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option></option>
                                     {trajet.map((item: any, i: number) => (
@@ -152,14 +152,14 @@ export default function Page({ params }: { params: IPrams }) {
                                 </select>
                             </div>
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900  ">Type de voyages:</label>
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Type de voyages:</label>
                                 <select id="typeVoyage" value={data.typeVoyage} name="typeVoyage" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option value="aller-retour">Aller-Retour</option>
                                     <option value="aller simple">Aller Simple</option>
                                 </select>
                             </div>
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900  ">Prix du voyage</label>
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Prix du voyage</label>
                                 <input onChange={handleInputChange} value={data.prixVoyage} required type="number" id="prixVoyage" name="prixVoyage" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                             <div className="mt-4 flex">

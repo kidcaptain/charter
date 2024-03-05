@@ -131,7 +131,8 @@ export default function ReservationTable() {
             prixVoyage: item.prixVoyage,
             busId: item.busId,
             trajetId: item.trajetId,
-            agenceId: item?.agenceId
+            agenceId: item?.agenceId,
+            ready: item.ready
         }
         try {
             const res = await fetch(`/api/voyages/${item.id}`, {
@@ -197,7 +198,7 @@ export default function ReservationTable() {
     return (
         <section className="w-full h-full">
             <div className="col-span-3  h-full  ">
-                <h2 className="p-4  font-bold text-gray-700 text-left">
+                <h2 className="p-4  text-gray-700 text-left">
                     Réservations
                 </h2>
                 <div className="p-4 text-left">
@@ -221,11 +222,11 @@ export default function ReservationTable() {
 
                                 </div>
                                 <div className={`flex border-t  p-2  gap-2  ${item.reservation.statutReservation === "annulé" ? "bg-red-400" : "bg-white"}`} >
-                                    
+                                    { }
                                     {
                                         item.reservation.statutReservation === "validé" ? (
                                             <div>
-                                                <Link href={"/dashboard/admin/ticket"} className="text-cyan-700 hover:text-white hover:bg-cyan-500 rounded-sm bg-cyan-100 text-xs  p-2">
+                                                <Link href={"/dashboard/caisse/ticket"} className="text-cyan-700 hover:text-white hover:bg-cyan-500 rounded-sm bg-cyan-100 text-xs  p-2">
                                                     Générer le ticket
                                                 </Link>
                                             </div>

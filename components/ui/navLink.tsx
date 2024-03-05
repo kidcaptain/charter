@@ -10,7 +10,7 @@ export default function NavLink(props: { items: { label: string, selected: boole
     // const className = "transition ease-linear p-2 flex items-center justify-start gap-4 font-bold "
     return (
         <div className="flex items-center" >
-            {props.items.map((item, i:number) => (
+            {props.items.map((item: any, i: number) => (
                 <span key={i+1} className="flex items-center">
                     <Link href={item.link} key={i} >
                         <DashboardLink label={item.label} selected={pathname === `${item.link}`} />

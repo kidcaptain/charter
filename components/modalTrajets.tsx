@@ -4,8 +4,8 @@ import CardVoyage from "./cardVoyage";
 import busSvg from "@/public/images/bus-logo.svg"
 import { useState, useEffect, useRef } from "react";
 import { getDateFormat, selectVoyage } from "@/functions/actionsClient";
-
-export default function ModalTrajet(props: { isOpen: boolean, childToParent: Function, setData: Function, slug: string, typeBus: string, typeVoyage: string }) {
+    
+export default function ModalTrajet(props: { isOpen: boolean, childToParent: Function, setData: Function, typeBus: string, typeVoyage: string, trajet: string}) {
 
     const [voyages, setVoyages] = useState<any[]>([]);
     const [voyagesResult, setVoyagesResult] = useState<any[]>([]);
@@ -120,7 +120,7 @@ export default function ModalTrajet(props: { isOpen: boolean, childToParent: Fun
                                             !onSearched ? (
                                                 <ul className="overflow-y-auto relative h-full p-4">
                                                     {voyages.map((item: any, i: number) => (
-                                                        ((item.bus.typeBus == props.typeBus) && (item.voyages?.typeVoyage == props.typeVoyage)) ? (
+                                                        ((item.bus.typeBus == props.typeBus) && (item.voyages?.typeVoyage == props.typeVoyage) && (item.voyages?.trajetId == parseInt(trajet))) ? (
                                                             <li key={i} className="my-2" onClick={() => { props.childToParent({ val: !props.isOpen, item: item }); props.setData(item); setOnsearched(false) }} >
                                                                 <CardVoyage isHidden={true} id={item.voyages?.id} isVip={true} agence="" date={getDate(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
                                                             </li>

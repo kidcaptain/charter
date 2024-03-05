@@ -4,6 +4,7 @@ import InputForm from '../ui/inputForm';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import flecheSvg from '@/public/images/fleche.svg'
+import { getDateFormat } from '@/functions/actionsClient';
 const VoyageTable = (props: { childToParent: Function }) => {
     const [voyages, setVoyage] = useState<any[]>([])
 
@@ -63,11 +64,36 @@ const VoyageTable = (props: { childToParent: Function }) => {
 
                 })
             })
+            tab.reverse()
             setVoyage(tab)
         }
         selectVoyage()
-    }, [])
-
+    }, [voyages])
+    const ready = async (item: any) => {
+        const voyage = {
+            dateDepart: getDateFormat(item.dateDepart),
+            dateArrivee: getDateFormat(item.dateArrivee),
+            busId: item.busId,
+            trajetId: item.trajetId,
+            typeVoyage: item.typeVoyage,
+            prixVoyage: item.prixVoyage,
+            placeDisponible: item.placeDisponible,
+            ready: "oui"
+        }
+        try {
+            const response = await fetch(`/api/voyages/${item.id}`, {
+                method: 'PUT',
+                cache: "no-store",
+                body: JSON.stringify(voyage),
+            })
+            if (response.ok) {
+                alert("Voyage confirmé")
+            }
+        } catch (err) {
+            console.log(err)
+           
+        }
+    }
     const getDate = (str: string) => {
         const date = new Date(str);
         const year = date.getFullYear();
@@ -82,6 +108,15 @@ const VoyageTable = (props: { childToParent: Function }) => {
     const view = (str: string) => {
         props.childToParent({id: str, action: "view"})
     }
+    const classVoyage = (numb: number, str: string) => {
+        if (numb == 0 && (str == "non" || str == "")) {
+            return `border-b border-gray-200 text-sm  bg-cyan-100 border-cyan-300 border-b-2 hover:bg-cyan-200  `
+        }else if (numb == 0 && str == "oui") {
+            return "cursor-not-allowed border-b border-gray-200 text-sm  bg-lime-100 border-lime-300 border-b-2 hover:bg-lime-200"
+        } else{
+            return 'bg-gray-50 border-b border-gray-200 text-sm   cursor-pointer hover:bg-gray-200'
+        }
+    } 
     return (
         <section className=" bg-white h-full w-full shadow-xl rounded-sm">
             <div className="relative overflow-x-auto">
@@ -149,7 +184,7 @@ const VoyageTable = (props: { childToParent: Function }) => {
                     </thead>
                     <tbody>
                         {voyages.map((item: any, i: number) => (
-                            <tr key={i} className="border-b hover:bg-gray-200  border-gray-200 text-sm bg-gray-50  dark:border-gray-700">
+                            <tr key={i} title={`${item.voyages?.placeDisponible == 0 ? 'Plein' : ''}`} className={classVoyage(item.voyages?.placeDisponible, item.voyages?.ready)}>
                                 <th className="p-2 border ">
                                     {item.voyages?.id}
                                 </th>
@@ -169,7 +204,7 @@ const VoyageTable = (props: { childToParent: Function }) => {
                                     {item.placeOccupees}
                                 </td>
                                 <td className="p-2 border">
-                                    {item.voyages?.prixVoyage}
+                                    {item.voyages?.prixVoyage} fcfa
                                 </td>
                                 <td className="p-2 border">
                                     {getDate(item.voyages?.dateDepart)}
@@ -178,8 +213,13 @@ const VoyageTable = (props: { childToParent: Function }) => {
                                     {getDate(item.voyages?.dateArrivee)}
                                 </td>
                                 <td>
-                                    <button type="button" onClick={() => view(item.voyages.id)} className='bg-cyan-400 p-2 text-white '>Bordereau de route</button>
-                                    <button type="button" onClick={() => edit(item.voyages.id)} className='bg-yellow-400 p-2 '>Editer</button>
+                                    <button type="button" onClick={() => view(item.voyages.id)} className='bg-cyan-400 hover:bg-cyan-500 p-2 text-white '>Bordereau de route</button>
+                                    <button type="button" onClick={() => edit(item.voyages.id)} className='bg-yellow-400 p-2 hover:bg-yellow-500'>Editer</button>
+                                    {
+                                        item.voyages?.placeDisponible == 0 && item.voyages?.ready != "oui" ? (
+                                            <button type="button" onClick={() => ready(item.voyages)} className='bg-green-400 p-2 hover:bg-green-500'>Confirmer</button>
+                                        ) : null
+                                    }
                                 </td>
                             </tr>
                         ))}

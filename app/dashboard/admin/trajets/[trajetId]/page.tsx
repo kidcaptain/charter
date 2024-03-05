@@ -117,28 +117,28 @@ export default function Page({ params }: { params: IPrams }) {
                                     Editer un trajet de voyage
                                 </h2>
                                 <div className=" p-4">
-                                    {((data.lieudepart && data.lieudepart != "") && (data.lieuarrivee == data.lieudepart)) ? (<div className="text-xs bg-yellow-100 my-2 p-4">Le lieu de départ et le lieu d&apos;arrivée sont pariels</div>) : null}
+                                    {((data.lieudepart && data.lieudepart != "") && (data.lieuarrivee == data.lieudepart)) ? (<div className="text-xs bg-yellow-100 my-2 p-4">Le lieu de départ et le lieu d'arrivée sont pariels</div>) : null}
                                     <div className="mt-4">
                                         <div className="flex gap-4 mb-1 items-start">
-                                            <label className="block text-sm font-bold text-gray-900  ">Lieu de Départ</label>
+                                            <label className="block text-sm font-bold text-gray-900 dark:text-white">Lieu de Départ</label>
                                             {((data.lieudepart && data.lieudepart != "") && (data.lieuarrivee != data.lieudepart)) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null}
                                         </div>
                                         <input onChange={handleInputChange} value={data.lieuDepart} type="text" id="large-input" placeholder="Départ" name="lieuDepart" className={className} />
                                     </div>
                                     <div className="mt-4">
-                                        <label className="block mb-1 text-sm font-bold text-gray-900  ">Lieu d&apos;arrivée</label>
+                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Lieu d&apos;arrivée</label>
                                         <input onChange={handleInputChange} value={data.lieuArrivee} type="text" id="large-input" placeholder="Arrivée" name="lieuArrivee" className={className} />
                                     </div>
                                     <div className="mt-4">
-                                        <label className="block mb-1 text-sm font-bold text-gray-900  ">Heure de Départ</label>
+                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Heure de Départ</label>
                                         <input onChange={handleInputChange} value={data.heureDepart} type="time" id="large-input" name="heureDepart" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                                     </div>
                                     <div className="mt-4">
-                                        <label className="block mb-1 text-sm font-bold text-gray-900  ">Heure d&apos;arrivée</label>
+                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Heure d&apos;arrivée</label>
                                         <input onChange={handleInputChange} value={data.heureArrivee} type="time" id="large-input" name="heureArrivee" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                                     </div>
                                     <div className="mt-4">
-                                        <label className="block mb-1 text-sm font-bold text-gray-900  ">Distance (en kilomètres)</label>
+                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Distance (en kilomètres)</label>
                                         <input onChange={handleInputChange} value={data.distance} type="number" id="large-input" name="distance" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                                     </div>
                                     <div className="mt-4 flex gap-4">

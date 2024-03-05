@@ -115,16 +115,16 @@ export default function Page() {
                         </h2>
                         <div className="p-4" >
                             <div className="mt-4">
-                                <label className=" text-sm font-bold text-gray-900  ">Titre</label>
+                                <label className=" text-sm font-bold text-gray-900 dark:text-white">Titre</label>
                                 <input type="text" onChange={handleInputChange} placeholder="Nommer le titre" required name="titre" id="titre" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                             <div className="mt-4">
-                                <label className="  text-sm font-bold text-gray-900  ">Salaire</label>
+                                <label className="  text-sm font-bold text-gray-900 dark:text-white">Salaire</label>
                                 <input type="number" onChange={handleInputChange} required id="salaire" name="salaire" placeholder="Salaire concernant le poste" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                             <div className="mt-4">
-                                <label className="  text-sm font-bold text-gray-900  ">Date de paiement</label>
-                                <input type="date" onChange={handleInputChange} required id="datePaiement" name="datePaiement" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
+                                <label className="  text-sm font-bold text-gray-900 dark:text-white">Date de paiement</label>
+                                <input type="month" onChange={handleInputChange} required id="datePaiement" name="datePaiement" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                             <div className="mt-4">
                                 <button type="submit" className="text-white text-xs hover:bg-blue-600 rounded-sm bg-blue-500 p-2">
@@ -153,15 +153,15 @@ export default function Page() {
                     </h2>
                     <div className="p-4" >
                         <div className="mt-4">
-                            <label className=" text-sm font-bold text-gray-900  ">Titre</label>
+                            <label className=" text-sm font-bold text-gray-900 dark:text-white">Titre</label>
                             <input type="text" onChange={handleInputChangeInput} value={itemEdit?.titre} placeholder="Nommer le titre" required name="titre" id="titre" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         </div>
                         <div className="mt-4">
-                            <label className="  text-sm font-bold text-gray-900  ">Salaire</label>
+                            <label className="  text-sm font-bold text-gray-900 dark:text-white">Salaire</label>
                             <input type="number" onChange={handleInputChangeInput} value={itemEdit?.salaire} required id="salaire" name="salaire" placeholder="Salaire concernant le poste" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         </div>
                         <div className="mt-4">
-                            <label className="  text-sm font-bold text-gray-900  ">Date de paiement</label>
+                            <label className="  text-sm font-bold text-gray-900 dark:text-white">Date de paiement</label>
                             <input type="date" onChange={handleInputChangeInput} value={getDateFormat(itemEdit?.datePaiement)} required id="datePaiement" name="datePaiement" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         </div>
                         <div className="mt-4">

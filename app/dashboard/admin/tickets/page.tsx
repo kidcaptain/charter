@@ -19,16 +19,16 @@ export default function Page() {
                         </h2>
                         <form>
                             <div className="mt-2">
-                                <label className="  text-xs font-medium text-gray-700  ">Nom</label>
+                                <label className="  text-xs font-medium text-gray-700 dark:text-white">Nom</label>
                                 <input type="text" required id="nom" className="block text-xs w-full p-1 text-gray-900 border border-gray-300 rounded-lg focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                             <div className="mt-2">
-                                <label className="  text-xs font-medium text-gray-700  ">Adresse</label>
+                                <label className="  text-xs font-medium text-gray-700 dark:text-white">Adresse</label>
                                 <input type="text" required id="prenom" className="block text-xs w-full p-1 text-gray-900 border border-gray-300 rounded-lg focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                             <div className="mt-2">
 
-                                <label className="  text-xs font-medium text-gray-700  ">Numéro</label>
+                                <label className="  text-xs font-medium text-gray-700 dark:text-white">Numéro</label>
                                 <input type="text" required id="prenom" className="block text-xs w-full p-1 text-gray-900 border border-gray-300 rounded-lg focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
 
                             </div>
@@ -88,7 +88,7 @@ export default function Page() {
                         </thead>
                         <tbody>
                             <tr className="border-b border-gray-200 dark:border-gray-700">
-                                <th scope="row" className="px-6 py-4 font-bold text-sm text-gray-900 whitespace-nowrap bg-gray-50   dark:bg-gray-800">
+                                <th scope="row" className="px-6 py-4 font-bold text-sm text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800">
                                     1
                                 </th>
                                 <td className="px-6 py-4">

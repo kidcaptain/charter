@@ -34,7 +34,6 @@ export default function Page() {
             setSession(JSON.parse(agence))
         }
         const getData = async () => {
-            
             if (agence) {
                 const s = JSON.parse(agence)
                 const res = await fetch("/api/passagers?agenceId="+ s.agenceId, { cache: "no-store" })
@@ -55,14 +54,14 @@ export default function Page() {
     return (
         <div className="w-full p-10">
             <div className=" py-4 flex justify-between items-start mb-2">
-                <h1 className="text-xl text-gray-900">Les Passagers et utilisateurs</h1>
+                <h1 className="text-xl text-gray-900">Les Passagers </h1>
             </div>
 
             <div className="mt-4 gap-4 grid items-start grid-cols-4 mx-auto ">
               
                 <section className={`  shadow-xl rounded-sm ${(isOpenEditForm || isOpenAddForm) ? " col-span-3 " : "col-span-full"} `}>
                     <div className="bg-white shadow-xl rounded-sm">
-                        <h1 className=" p-4 text-gray-900 uppercase border-b">Les Passagers et utilisateurs</h1>
+                        <h1 className=" p-4 text-gray-900 uppercase border-b">Les Passagers </h1>
                         <div className="relative overflow-x-auto">
                             <table className="w-full text-left text-sm rtl:text-right text-gray-900 dark:text-gray-400">
                                 <thead className="text-sm text-gray-900  dark:text-gray-400">
@@ -88,12 +87,8 @@ export default function Page() {
                                         <th scope="col" className="p-4 py-3 border-b-2">
                                             Téléphone
                                         </th>
-                                        <th scope="col" className="p-4 py-3 border-b-2">
-                                            Email
-                                        </th>
-                                        <th scope="col" className="p-4 py-3 border-b-2">
-                                            Actions
-                                        </th>
+                                       
+                                       
                                     </tr>
                                 </thead>
                                 <tbody className='text-xs'>
@@ -120,26 +115,9 @@ export default function Page() {
                                             <td className=" p-4 py-2">
                                                 {item.telephone}
                                             </td>
-                                            <td className=" p-4 py-2">
-                                                {item.email}
-                                            </td>
+                                       
 
-                                            <td className=" p-4 py-2 flex flex-row items-start">
-                                                <button onClick={() => {
-                                                    setData({
-                                                        id: item.id,
-                                                        nom: item.nom,
-                                                        prenom: item.prenom,
-                                                        adresse: item.adresse,
-                                                        dateNaissance: getDateFormat(item.dateNaissance),
-                                                        genre: item.genre,
-                                                        telephone: item.telephone,
-                                                        email: item.email,
-                                                        agenceId: item.agenceId
-                                                    });  setIsOpenEditForm(true)
-                                                }} className="bg-cyan-500 text-white text-xs text-center p-2">Editer</button>
-                                                {/* <button onClick={() => handleButtonClick()} className="bg-red-500 text-white text-xs text-center p-2">Supprimer</button> */}
-                                            </td>
+                                         
                                         </tr>
                                     ))}
                                 </tbody>
@@ -148,14 +126,14 @@ export default function Page() {
                     </div >
                     {/* <PassagerTable agenceId={session?.agenceId} childToParent={handleButtonClickEditForm} setData={getItem} /> */}
                 </section>
-                {isOpenEditForm ? (
+                {/* {isOpenEditForm ? (
                     <section className='bg-white col-span-1'>
                         <EditFormPassager item={data} />
                         <div className='p-4'>
                             <button onClick={() => { setIsOpenEditForm(false); setIsOpenAddForm(false) }} className="text-stone-500 font-bold text-xs text-center ">Fermer</button>
                         </div>
                     </section>
-                ) : ""}
+                ) : ""} */}
 
             </div>
         </div>

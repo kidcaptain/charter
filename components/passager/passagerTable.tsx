@@ -6,23 +6,15 @@ const PassagerTable = (props: { childToParent: Function, setData: Function, agen
 
     useEffect(() => {
         const getData = async () => {
-            if (props.agenceId) {
-                const res = await fetch("/api/passagers?agenceId="+props.agenceId, { cache: "no-store" })
-                if (!res.ok) {
-                    throw new Error("Failed")
-                }
-                const data = await res.json();
-                setPassagers(data)
-            } else {
-                const res = await fetch("/api/passagers", { cache: "no-store" })
-                if (!res.ok) {
-                    throw new Error("Failed")
-                }
-                const data = await res.json();
-            };
+            const res = await fetch("/api/passagers", { cache: "no-store" })
+            if (!res.ok) {
+                throw new Error("Failed")
+            }
+            const data = await res.json();
+            setPassagers(data)
         }
         getData();
-    }, [passagers])
+    }, [])
     const getDate = (str: string) => {
         const date = new Date(str);
         const year = date.getFullYear();
@@ -63,9 +55,9 @@ const PassagerTable = (props: { childToParent: Function, setData: Function, agen
                             <th scope="col" className="p-4 py-3 border-b-2">
                                 Email
                             </th>
-                            <th scope="col" className="p-4 py-3 border-b-2">
+                            {/* <th scope="col" className="p-4 py-3 border-b-2">
                                 Actions
-                            </th>
+                            </th> */}
                         </tr>
                     </thead>
                     <tbody className='text-xs'>
@@ -96,7 +88,7 @@ const PassagerTable = (props: { childToParent: Function, setData: Function, agen
                                     {item.email}
                                 </td>
 
-                                <td className=" p-4 py-2 flex flex-row items-start">
+                                {/* <td className=" p-4 py-2 flex flex-row items-start">
                                     <button onClick={() => {
                                         props.setData({
                                             id: item.id,
@@ -109,8 +101,8 @@ const PassagerTable = (props: { childToParent: Function, setData: Function, agen
                                             email: item.email
                                         }); props.childToParent(true)
                                     }} className="bg-cyan-500 text-white text-xs text-center p-2">Editer</button>
-                                    {/* <button onClick={() => handleButtonClick()} className="bg-red-500 text-white text-xs text-center p-2">Supprimer</button> */}
-                                </td>
+                                    <button onClick={() => handleButtonClick()} className="bg-red-500 text-white text-xs text-center p-2">Supprimer</button>
+                                </td> */}
                             </tr>
                         ))}
                     </tbody>

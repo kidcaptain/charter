@@ -22,9 +22,9 @@ const CardDepense = () => {
     }, [])
     
     return(
-        <div className="p-5 border rounded-md bg-purple-400 from-violet-700 bg-gradient-to-br">
+        <div className="p-10 border rounded-md bg-blue-400 text-xl">
             <h2 className="text-gray-100 font-bold">Total dépenses</h2>
-            <p className="text-white">{depense}</p>
+            <p className="text-white">{depense} fcfa</p>
         </div>
     )
 }

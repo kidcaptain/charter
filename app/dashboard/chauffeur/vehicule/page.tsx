@@ -1,5 +1,6 @@
 "use client"
 
+import HelpPopup from "@/components/ui/helpPopup";
 import Popup from "@/components/ui/popup";
 import AddFormVehicule from "@/components/vehicules/addFormVehicule";
 import VehiculeTable from "@/components/vehicules/vehiculesTable";
@@ -194,8 +195,8 @@ export default function Vehicules() {
             <div className=" col-span-3 w-full bg-white shadow-xl rounded-sm">
                 <div className="bg-white shadow-xl rounded-sm">
                     <h1 className=" p-4 text-gray-900 uppercase border-b">Nos véhicules</h1>
-                    <button onClick={reloadData} className="text-white bg-blue-600 hover:bg-blue-700 text-xs flex items-center p-2 rounded-sm">Actualiser</button>
-
+                    <button onClick={reloadData} className="text-white bg-blue-600 hover:bg-blue-700 text-xs flex gap-2 items-center p-3 rounded-sm">Actualiser   <HelpPopup message="Actualiser les données en cliquant ici" /></button>
+                  
                     <div className="p-4 relative overflow-x-auto">
                         <table className="w-full text-xs text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead className="text-xs text-gray-700 uppercase dark:text-gray-400">
@@ -290,7 +291,7 @@ export default function Vehicules() {
                         </h2>
                         <div className="p-4">
                             <div className="mt-2">
-                                <label className="  text-sm font-bold text-gray-800  ">Origine et description de la panne</label>
+                                <label className="  text-sm font-bold text-gray-800 dark:text-white">Origine et description de la panne</label>
                                 <textarea required id="panneVehicule" onChange={e => setPanne(e.target.value)} name="panneVehicule" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 "></textarea>
                             </div>
                         </div>

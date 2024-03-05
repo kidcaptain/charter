@@ -78,11 +78,11 @@ export default function Page({ params }: { params: IPrams }) {
                         </h2>
                         <div className="w-80 mx-auto p-4">
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900  ">Libellé</label>
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Libellé</label>
                                 <input onChange={handleInputChange} value={data.nom} required type="text" id="nom" placeholder="Nom" name="nom" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900  ">Type de services</label>
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Type de services</label>
                                 <input onChange={handleInputChange} value={data.typeService} required type="text" id="typeService" placeholder="" name="typeService" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                             <div className="mt-4">
@@ -94,12 +94,12 @@ export default function Page({ params }: { params: IPrams }) {
                             </div>
 
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900  ">Montant</label>
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Montant</label>
                                 <input onChange={handleInputChange} value={data.montant} required type="number" id="montant" name="montant" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                           
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900  ">Note</label>
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Note</label>
                                 <textarea onChange={handleInputChange} required value={data.note} id="note" name="note" className="block h-44 resize-none w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " ></textarea>
                             </div>
                             <div className="mt-4 flex">

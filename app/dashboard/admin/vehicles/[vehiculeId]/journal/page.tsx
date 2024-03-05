@@ -25,7 +25,7 @@ export default function Page({ params }: { params: IPrams }) {
                     <table className="border uppercase text-sm border-black w-full">
                         <thead>
                             <tr className="border">
-                                <td  className="border font-bold border-black">Numéro d&apos;immatriculation </td>
+                                <td  className="border font-bold border-black">Numéro d’immatriculation </td>
                                 <td  className="border border-black"></td>
                             </tr>
                         </thead>

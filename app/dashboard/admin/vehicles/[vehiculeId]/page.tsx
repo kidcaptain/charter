@@ -61,21 +61,20 @@ export default function Page({ params }: { params: IPrams }) {
                 <h1 className="lowercase text-sm  text-gray-900"><Link className="hover:text-blue-600" href={"/dashboard/admin/vehicles"}>Vehicules</Link> / <Link className="hover:text-blue-600" href="#">Fiche technique </Link></h1>
             </div>
             <div className="">
-                <h2 className="p-4  bg-white uppercase border-b">Fiche technique</h2>
-                <div className="border-b bg-white p-2">
-                   <Link className="bg-green-400 hover:bg-green-600 text-sm p-2 text-white" href={`/dashboard/admin/vehicles/${params.vehiculeId}/suivie`}>Fiche de suivie </Link>
-                </div>
+                <h2 className="p-4 rounded-md font-bold text-xl bg-white uppercase border-b shadow-2xl border">Fiche technique</h2>
 
-               <FicheTechnique item={{
-                marque: bus.marque,
-                modele: bus.modele,
-                typeBus: bus.typeBus,
-                anneeFabrication: bus.anneeFabrication,
-                capacite: bus.capacite,
-                placesDisponible: bus.placesDisponible,
-                placesTotal: bus.placesTotal,
-                panneVehicule: bus.panneVehicule
-                }} />
+                <div className="mt-4">
+                    <FicheTechnique item={{
+                        marque: bus.marque,
+                        modele: bus.modele,
+                        typeBus: bus.typeBus,
+                        anneeFabrication: bus.anneeFabrication,
+                        capacite: bus.capacite,
+                        placesDisponible: bus.placesDisponible,
+                        placesTotal: bus.placesTotal,
+                        panneVehicule: bus.panneVehicule
+                    }} />
+                </div>
             </div>
         </div>
     )

@@ -1,6 +1,6 @@
 
 import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/lib/authOptions"
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import GridDataComponent from "@/components/gridDataComponent";
 import GridDoughnut from "@/components/gridDoughnut";
 export default async function HomeDashboard() {
@@ -18,4 +18,3 @@ export default async function HomeDashboard() {
     }
     return <h2>Please login to see this admin page</h2>
 };  
-   

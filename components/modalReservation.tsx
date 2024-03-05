@@ -93,7 +93,7 @@ export default function ModalReservation(props: { childToParent: Function, voyag
                 ) : (
                     <div className="p-10">
                         <div className=" max-w-96 m-auto border">
-                            <AddFormPassager agenceId={0} childToParent={handleOnEmit} />
+                            <AddFormPassager childToParent={handleOnEmit} />
                         </div>
                     </div>
                 )}

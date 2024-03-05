@@ -30,12 +30,16 @@ export default function Page() {
         const minutes = (date.getMinutes()) < 10 ? `0${date.getMinutes()}` : `${date.getMinutes()}`;
         e.preventDefault()
         try {
+            let au: string = value.typeDepense;
+            if (value.autre) {
+                au = value.autre
+            }
             const datas = {
                 agenceId: value.agenceId,
                 description: value.description,
                 montant: value.montant,
                 date: `${year}-${month}-${day}T00:00:00.000Z`,
-                typeDepense: value.typeDepense,
+                typeDepense: au,
                 idTypeDepense: value.idTypeDepense ?? "0"
             }
             // console.log(datas)
@@ -48,6 +52,7 @@ export default function Page() {
             if (res.ok) {
                 setValue(null);
                 document.getElementById('buttonReset')?.click();
+                alert("Dépense enregistrée")
             }
         } catch (err: any) {
             console.log(err)
@@ -66,6 +71,33 @@ export default function Page() {
             console.log("error")
         }
     }
+    const getAgence = async () => {
+        const res = await fetch("/api/agences", { cache: "no-store" })
+        if (!res.ok) {
+            console.log("error")
+        }
+        const data = await res.json();
+        setAgences(data)
+        return data
+    };
+    const getDepense = async () => {
+        const res = await fetch("/api/depenses", { cache: "no-store" })
+        if (!res.ok) {
+            console.log("error")
+        }
+        const data = await res.json();
+        const tabAgence: any[] = await getAgence();
+        const tabDepense: any[] = await data;
+        const tab: any[] = [];
+        tabDepense.map((i) => {
+            tabAgence.map((j) => {
+                if (j.id == i.agenceId) {
+                    tab.push({ agence: j, depense: i })
+                }
+            })
+        })
+        setDepenses(tab.reverse())
+    };
     useEffect(() => {
         const getAgence = async () => {
             const res = await fetch("/api/agences", { cache: "no-store" })
@@ -92,6 +124,7 @@ export default function Page() {
             const data = await res.json();
             setvoyage(data)
         };
+        getVoyage()
         getEmploye()
         const getBus = async () => {
             const res = await fetch("/api/bus", { cache: "no-store" })
@@ -238,7 +271,8 @@ export default function Page() {
                     }
                 })
             })
-            setDepenses(tab)
+            
+            setDepenses(tab.reverse())
         };
         getAgence();
         getDepense()
@@ -250,6 +284,7 @@ export default function Page() {
                 <button onClick={e => setTabulation(false)} className={`${!tabulation ? " bg-white shadow-xl  " : ""} border uppercase overflow-hidden   rounded-md  hover:bg-stone-100 p-2  px-4`}>Dépenses</button>
                 {/* <button onClick={e => setTabulation(true)} className={`${tabulation ? " bg-white shadow-xl  " : ""} border uppercase overflow-hidden     rounded-md  hover:bg-stone-100 p-2  px-4`}>BILAN GÉNÉRAL ET STATISTIQUE DE PRODUCTION</button> */}
                 <Link href={"/dashboard/admin/production"} className={`border uppercase overflow-hidden     rounded-md  hover:bg-stone-100 p-2  px-4`}>PRODUCTION</Link>
+                {/* <Link href={"/dashboard/admin/journal"} className={`border uppercase overflow-hidden     rounded-md  hover:bg-stone-100 p-2  px-4`}>JOURNAL</Link> */}
 
             </div>
             {!tabulation ? (
@@ -295,15 +330,15 @@ export default function Page() {
                                 </select>
                             </div>
                             {
-                                typeDepense.current?.value == "autre" ? (
+                                value?.typeDepense == "autre" ? (
                                     <div className="mt-2">
                                         <label className="block mb-1 text-sm font-bold">Dépense liée à </label>
-                                        <input type="text" required name="typeDepense" onChange={handleInputChange} id="large-input" className="block w-full p-1.5 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
+                                        <input type="text" required name="autre" onChange={handleInputChange} id="large-input" className="block w-full p-1.5 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                                     </div>
                                 ) : null
                             }
                             {
-                                typeDepense.current?.value == "bus" ? (
+                                 value?.typeDepense == "bus" ? (
                                     <div className="mt-2">
                                         <label className="  text-sm font-bold">Bus</label>
                                         <select id="idTypeDepense" name="idTypeDepense" onChange={handleInputChange} className="block text-xs w-full p-2 uppercase text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
@@ -316,26 +351,29 @@ export default function Page() {
                                 ) : null
                             } 
                             {
-                                (typeDepense.current?.value == "employe") || (typeDepense.current?.value == "salaire")  ? (
+                                ( value?.typeDepense == "employe") || ( value?.typeDepense == "salaire")  ? (
                                     <div className="mt-2">
                                         <label className="  text-sm font-bold">Employé</label>
                                         <select id="idTypeDepense" name="idTypeDepense" onChange={handleInputChange} className="block text-xs w-full p-2 uppercase text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                             <option></option>
+                                            
                                             {employes.map((item: any, i: number) => (
-                                                <option key={i + 1} value={item.id}>{item.nom} {item.prenom}</option>
+                                                   (parseInt(item.agenceId) == parseInt(value?.agenceId) && value?.agenceId) ? (<option key={i + 1} value={item.id}>{item.nom} {item.prenom}</option>) : null
+                                               
                                             ))}
                                         </select>
                                     </div>
                                 ) : null
                             }
                              {
-                                (typeDepense.current?.value == "ration") || (typeDepense.current?.value == "carburant") || (typeDepense.current?.value == "peage") || (typeDepense.current?.value == "voyage")  ? (
+                                ( value?.typeDepense == "ration") || ( value?.typeDepense == "carburant") || ( value?.typeDepense == "peage") || ( value?.typeDepense == "voyage")  ? (
                                     <div className="mt-2">
-                                        <label className="  text-sm font-bold">Employé</label>
+                                        <label className="  text-sm font-bold">Voyage</label>
                                         <select id="idTypeDepense" name="idTypeDepense" onChange={handleInputChange} className="block text-xs w-full p-2 uppercase text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                             <option></option>
                                             {voyage.map((item: any, i: number) => (
-                                                <option key={i + 1} value={item.id}>N° Voyage {item.id} {item.dateDepart}</option>
+                                                (parseInt(item.agenceId) == parseInt(value?.agenceId) && value?.agenceId) ? (<option key={i + 1} value={item.id}>N° Voyage {item.id} Départ le {getDateFormat(item.dateDepart)}</option>) : null
+                                                
                                             ))}
                                         </select>
                                     </div>
@@ -345,7 +383,7 @@ export default function Page() {
                             <button type="submit" className="text-white mt-4 hover:bg-blue-700 rounded-sm bg-blue-500 text-sm p-2">
                                 Enregistrer
                             </button>
-                            <button id="buttonReset" type="reset" onClick={() => { typeDepense.current = null }} className="text-white mt-4 hover:bg-stone-700 rounded-sm bg-stone-500 text-sm p-2">Recommencer</button>
+                            <button id="buttonReset" type="reset"  className="text-white mt-4 hover:bg-stone-700 rounded-sm bg-stone-500 text-sm p-2">Recommencer</button>
                         </form>
                     </div>
                     <div className="w-full col-span-3 bg-white rounded-md overflow-hidden shadow-2xl border  row-span-2">
@@ -358,14 +396,15 @@ export default function Page() {
                         <div className="p-4">
                             <Link href="/dashboard/admin/depenses/hebdomadaires" className="text-stone-800 border bg-gray-100 hover:bg-gray-300 text-xs p-2 rounded-sm">Fiches de dépenses hebdomadaires</Link>
                             <Link href="/dashboard/admin/depenses/Journalieres" className="text-stone-800 border bg-gray-100 hover:bg-gray-300 text-xs p-2 rounded-sm">Fiches de dépenses Journalières</Link>
-                            <Link href="/dashboard/admin/depenses/statistiques" className="text-stone-800 border bg-gray-100 hover:bg-gray-300 text-xs p-2 rounded-sm">Rapport des dépenses</Link>
+                            {/* <Link href="/dashboard/admin/journal" className="text-stone-800 border bg-gray-100 hover:bg-gray-300 text-xs p-2 rounded-sm">Rapport des dépenses</Link> */}
+                            <button type="button" onClick={getDepense} className="text-stone-800 border bg-blue-400 hover:bg-blue-500 text-xs p-2 rounded-sm">Actualiser</button>
                         </div>
-                        <div className="p-4">
+                        <div className="p-4 overflow-y-auto" style={{maxHeight: 500 }}>
                             <table className="w-full text-sm text-left rtl:text-right text-black">
                                 <thead className="text-sm uppercase">
                                     <tr>
                                         <th scope="col" className="px-3 py-2 border  border-stone-500">
-                                            Id
+                                            DATE
                                         </th>
                                         <th scope="col" className="px-3 py-2 border  border-stone-500">
                                             Agence
@@ -375,6 +414,9 @@ export default function Page() {
                                         </th>
                                         <th scope="col" className="px-3 py-2 border  border-stone-500">
                                             Type de dépense
+                                        </th>
+                                        <th scope="col" className="px-3 py-2 border  border-stone-500">
+                                            Description
                                         </th>
                                         <th scope="col" className="px-3 py-2 border  border-stone-500">
                                             Enregistré le
@@ -388,7 +430,7 @@ export default function Page() {
                                     {depenses.map((item: any, i: number) => (
                                         <tr key={i + 1}>
                                             <th scope="row" className="px-3 py-2 border border-stone-400">
-                                                {i + 1}
+                                                {getDateFormat(item.depense.date)}
                                             </th>
                                             <td className="px-3 py-2 border border-stone-400">
                                                 {item.agence.nom}
@@ -398,6 +440,9 @@ export default function Page() {
                                             </td>
                                             <td className="px-3 py-2 border border-stone-400">
                                                 {item.depense.typeDepense}
+                                            </td>
+                                            <td className="px-3 py-2 border border-stone-400">
+                                                {item.depense.description}
                                             </td>
                                             <td className="px-3 py-2 border border-stone-400">
                                                 {getDateFormat(item.depense.date)}

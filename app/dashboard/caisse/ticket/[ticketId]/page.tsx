@@ -88,7 +88,7 @@ export default function Page({ params }: { params: { ticketId: string } }) {
                                 montant: ticket?.voyage?.prixVoyage,
                                 remboursement: 0,
                                 caisse: `GUICHET ${ticket?.user?.name}`,
-                                numticket: `${getDateFormat(ticket?.voyage?.dateDepart)}`,
+                                numticket: params.ticketId,
                                 type: ticket?.voyage?.typeVoyage,
                                 trajet: `${ticket?.trajet?.lieuDepart} / ${ticket?.trajet.lieuArrivee}`,
                                 siege: ticket?.voyage?.placeDisponible

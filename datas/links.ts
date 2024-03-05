@@ -61,12 +61,6 @@ export const LinkComptable : {label: string, selected: boolean, icon: string, li
         link: "/dashboard/comptable/depenses",
     },
     {
-        label: "Productions",
-        selected: false,
-        icon: recette,
-        link: "/dashboard/comptable/production",
-    },
-    {
         label: "Factures",
         selected: false,
         icon: recette,
@@ -82,16 +76,16 @@ export const LinksAdmin : {label: string, selected: boolean, icon: string, link:
         link: "/dashboard/admin/home",
     },
     {
+        label: "Ventes des tickets",
+        selected: false,
+        icon: svg1,
+        link: "/dashboard/admin/ventes",
+    },
+    {
         label: "Employés et utilisateurs",
         selected: false,
         icon: user,
         link: "/dashboard/admin/employees"
-    },
-    {
-        label: "Ventes des tickets",
-        selected: false,
-        icon: user,
-        link: "/dashboard/admin/ventes"
     },
     {
         label: "Véhicules",

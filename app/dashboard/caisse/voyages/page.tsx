@@ -23,7 +23,7 @@ export default function Page() {
         };
 
         const getData = async (id: number) => {
-            const res = await fetch("/api/voyages?agenceId="+id, { cache: "no-store" })
+            const res = await fetch("/api/voyages?agenceId=" + id, { cache: "no-store" })
             if (!res.ok) {
                 throw new Error("Failed")
             }
@@ -60,7 +60,7 @@ export default function Page() {
             }
         }
         selectVoyage()
-    }, [])
+    }, [voyages])
 
     const getDate = (str: string) => {
         const date = new Date(str);
@@ -69,9 +69,41 @@ export default function Page() {
         const day = (date.getDate()) < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
         return `${year}-${month}-${day}`
     }
+    const ready = async (item: any) => {
+        const voyage = {
+            dateDepart: getDateFormat(item.dateDepart),
+            dateArrivee: getDateFormat(item.dateArrivee),
+            busId: item.busId,
+            trajetId: item.trajetId,
+            typeVoyage: item.typeVoyage,
+            prixVoyage: item.prixVoyage,
+            placeDisponible: item.placeDisponible,
+            ready: "oui"
+        }
+        try {
+            const response = await fetch(`/api/voyages/${item.id}`, {
+                method: 'PUT',
+                cache: "no-store",
+                body: JSON.stringify(voyage),
+            })
+            if (response.ok) {
+                alert("Voyage confirmé")
+            }
+        } catch (err) {
+            console.log(err)
+           
+        }
+    }
 
-
-
+    const classVoyage = (numb: number, str: string) => {
+        if (numb == 0 && (str == "non" || str == "")) {
+            return `border-b border-gray-200 text-sm  bg-cyan-100 border-cyan-300 border-b-2 hover:bg-cyan-200  `
+        }else if (numb == 0 && str == "oui") {
+            return "cursor-not-allowed border-b border-gray-200 text-sm  bg-lime-100 border-lime-300 border-b-2 hover:bg-lime-200"
+        } else{
+            return 'bg-gray-50 border-b border-gray-200 text-sm   cursor-pointer hover:bg-gray-200'
+        }
+    } 
     return (
         <div className=" w-full p-10">
             <div className=" py-4 flex justify-between items-start mb-2">
@@ -149,7 +181,7 @@ export default function Page() {
                                 </thead>
                                 <tbody>
                                     {voyages.map((item: any, i: number) => (
-                                        <tr key={i} className="border-b hover:bg-gray-200  border-gray-200 text-sm bg-gray-50  dark:border-gray-700">
+                                        <tr key={i} title={`${item.voyages?.placeDisponible == 0 ? 'Plein' : ''}`} className={classVoyage(item.voyages?.placeDisponible, item.voyages?.ready)}>
                                             <th className="p-2 border ">
                                                 {item.voyages?.id}
                                             </th>
@@ -180,6 +212,11 @@ export default function Page() {
                                             <td className="flex">
                                                 <Link href={`/dashboard/caisse/voyages/${item.voyages.id}`} className='bg-cyan-200 hover:bg-cyan-600 hover:text-white p-1 block text-sm text-cyan-800'>Bordereau</Link>
                                                 <Link href={`/dashboard/caisse/voyages/${item.voyages.id}/editer`} className='bg-yellow-200 hover:bg-yellow-600 text-yelow-600 hover:text-white text-sm p-1 '>Editer</Link>
+                                                {
+                                                    item.voyages?.placeDisponible == 0 && item.voyages?.ready != "oui" ? (
+                                                        <button type="button" onClick={() => ready(item.voyages)} className='bg-green-400 p-2 hover:bg-green-500'>Confirmer</button>
+                                                    ) : null
+                                                }
                                             </td>
                                         </tr>
                                     ))}

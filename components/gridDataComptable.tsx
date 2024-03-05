@@ -91,7 +91,7 @@ const GridDataComptable = () => {
     }, [])
     return (
         <div className='grid grid-cols-4 gap-4'>
-            <div className={"bg-white text-gray-800 rounded-sm  border border-black p-4 shadow-lg overflow-hidden"}>
+            <div className={"bg-white text-gray-800 rounded-sm  border border-black p-8 shadow-lg overflow-hidden"}>
                 <div className="items-center flex gap-4 justify-start flex-row">
                     <Image src={svg} alt="svg" width={48} height={48} />
                     <div>
@@ -99,7 +99,7 @@ const GridDataComptable = () => {
                     </div>
                 </div>
             </div>
-            <div className={"bg-white text-gray-800 rounded-sm  border border-black p-4 shadow-lg overflow-hidden"}>
+            <div className={"bg-white text-gray-800 rounded-sm  border border-black p-8 shadow-lg overflow-hidden"}>
                 <div className="items-center flex gap-4 justify-start flex-row">
                     <Image src={svg} alt="svg" width={48} height={48} />
                     <div>
@@ -107,7 +107,7 @@ const GridDataComptable = () => {
                     </div>
                 </div>
             </div>
-            <div className={"bg-white text-gray-800 rounded-sm  border border-black p-4 shadow-lg overflow-hidden"}>
+            <div className={"bg-white text-gray-800 rounded-sm  border border-black p-8 shadow-lg overflow-hidden"}>
                 <div className="items-center flex gap-4 justify-start flex-row">
                     <Image src={bussvg} alt="svg" width={48} height={48} />
                     <div>
@@ -115,7 +115,7 @@ const GridDataComptable = () => {
                     </div>
                 </div>
             </div>
-            <div className={"bg-white text-gray-800 rounded-sm  border border-black p-4 shadow-lg overflow-hidden"}>
+            <div className={"bg-white text-gray-800 rounded-sm  border border-black p-8 shadow-lg overflow-hidden"}>
                 <div className="items-center flex gap-4 justify-start flex-row">
                     <Image src={agencesvg} alt="svg" width={48} height={48} />
                     <div>
@@ -123,7 +123,7 @@ const GridDataComptable = () => {
                     </div>
                 </div>
             </div>
-            <div className={"bg-white text-gray-800 rounded-sm  border border-black p-4 shadow-lg overflow-hidden"}>
+            <div className={"bg-white text-gray-800 rounded-sm  border border-black p-8 shadow-lg overflow-hidden"}>
                 <div className="items-center flex gap-4 justify-start flex-row">
                     <Image src={svg2} alt="svg" width={48} height={48} />
                     <div>
@@ -131,7 +131,7 @@ const GridDataComptable = () => {
                     </div>
                 </div>
             </div>
-            <div className={"bg-white text-gray-800 rounded-sm  border border-black p-4 shadow-lg overflow-hidden"}>
+            <div className={"bg-white text-gray-800 rounded-sm  border border-black p-8 shadow-lg overflow-hidden"}>
                 <div className="items-center flex gap-4 justify-start flex-row">
                     <Image src={svg4} alt="svg" width={48} height={48} />
                     <div>
@@ -139,7 +139,7 @@ const GridDataComptable = () => {
                     </div>
                 </div>
             </div>
-            <div className={"bg-white text-gray-800 rounded-sm  border border-black p-4 shadow-lg overflow-hidden"}>
+            <div className={"bg-white text-gray-800 rounded-sm  border border-black p-8 shadow-lg overflow-hidden"}>
                 <div className="items-center flex gap-4 justify-start flex-row">
                     <Image src={ticketsvg} alt="svg" width={48} height={48} />
                     <div>
@@ -147,7 +147,7 @@ const GridDataComptable = () => {
                     </div>
                 </div>
             </div>
-            <div className={"bg-white text-gray-800 rounded-sm  border border-black p-4 shadow-lg overflow-hidden"}>
+            <div className={"bg-white text-gray-800 rounded-sm  border border-black p-8 shadow-lg overflow-hidden"}>
                 <div className="items-center flex gap-4 justify-start flex-row">
                     <Image src={reservationsvg} alt="svg" width={48} height={48} />
                     <div>

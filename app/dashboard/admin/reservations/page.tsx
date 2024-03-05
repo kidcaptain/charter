@@ -26,6 +26,13 @@ export default function Page() {
     const handleButtonClickAddForm = (val: boolean) => {
         setIsOpenAddForm(val);
     }
+    const handleOnEmit = (val: boolean) => {
+        if (val) {
+            alert("Walter white")
+        } else {
+            alert("Better Call Saul")
+        }
+    }
 
     useEffect(() => {
 

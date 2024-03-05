@@ -51,12 +51,45 @@ export default function Voyage({ params }: { params: IPrams }) {
       setChauffeur(data)
     };
     const getDepense = async () => {
-      const res = await fetch("/api/depenses?typeDepense=carburant&typeDepense1=ration&typeDepense2=bus&typeDepense3=peage&typeDepense4=voyage&idTypeDepense="+ params.voyageId, { cache: "no-store" })
+      const res = await fetch("/api/depenses?typeDepense=carburant&typeDepense1=ration&typeDepense2=bus&typeDepense3=peage&typeDepense4=voyage&idTypeDepense=" + params.voyageId, { cache: "no-store" })
       if (!res.ok) {
         throw new Error("Failed")
       }
-      const data = await res.json();
-      setdepense(data)
+      const data: any[] = await res.json();
+      let car: number = 0;
+      let bus: number = 0;
+      let voyage: number = 0;
+      let ration: number = 0;
+      let peage: number = 0;
+      data.map((i) => {
+
+        switch (i.typeDepense) {
+          case "carburant":
+            car += i.montant
+            break;
+          case "ration":
+            bus += i.montant
+            break;
+          case "bus":
+            voyage += i.montant
+            break;
+          case "peage":
+            ration += i.montant
+            break;
+          case "voyage":
+            peage += i.montant
+            break;
+          default:
+            break;
+        }
+      })
+      setdepense({
+        carburant: car,
+        peage: peage,
+        ration: ration,
+        autre: voyage + bus
+      })
+
     };
     getDepense()
     const getBus = async (id: number) => {
@@ -106,7 +139,7 @@ export default function Voyage({ params }: { params: IPrams }) {
 
       })
       setPassagers(tab)
-     
+
     };
 
 
@@ -122,7 +155,7 @@ export default function Voyage({ params }: { params: IPrams }) {
         <h2 className="p-4 bg-white uppercase border-b font-bold">Bordereau de route </h2>
 
       </div>
-      <BordereauRoute item={{depense: {carburant: 0, peage: 0, ration: 0 }, bus: bus, trajet: trajet, voyage: voyage, passagers: passagers, chauffeur: chauffeur, agence: agence }} />
+      <BordereauRoute item={{ depense: { carburant: parseInt(depense?.carburant), peage: parseInt(depense?.peage), ration: parseInt(depense?.ration), autre: parseInt(depense?.autre)}, bus: bus, trajet: trajet, voyage: voyage, passagers: passagers, chauffeur: chauffeur, agence: agence }} />
     </div>
   )
 }

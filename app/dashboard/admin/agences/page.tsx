@@ -45,7 +45,7 @@ export default function Agences() {
 
     const HandlerSubmit = async (e: any) => {
         e.preventDefault()
-        console.log(value)
+
         if (value != null) {
             try {
                 const res = await fetch('/api/agences', {
@@ -168,6 +168,10 @@ export default function Agences() {
                             <input type="text" name="adresse" placeholder="Adresse" value={itemEdit?.adresse} onChange={handleInputChangeInput} id="adresse" className={`block text-xs w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 `} />
                         </div>
                         <div className="mt-4">
+                            <label className="  text-sm text-gray-900 font-bold ">Nom du chef d&apos;agence</label>
+                            <input type="text" name="chef" placeholder="Chef d'agence"  onChange={handleInputChangeInput} id="chef" className={`block text-xs w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 `} />
+                        </div>
+                        <div className="mt-4">
                             <label className="  text-sm text-gray-900 font-bold ">Téléphone</label>
                             <input type="number" name="numeroTelephone" placeholder="Numéro de téléphone" value={itemEdit?.numeroTelephone} onChange={handleInputChangeInput} id="numeroTelephone" className={`block text-xs w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 `} />
                         </div>
@@ -206,7 +210,9 @@ export default function Agences() {
                             <th scope="col" className="px-3 border py-2">
                                 Numéros de Téléphone
                             </th>
-
+                            <th scope="col" className="px-3 border py-2">
+                                Chef d&apos;agence
+                            </th>
                             <th scope="col" className="px-3 border py-2">
                                 Actions
                             </th>
@@ -227,6 +233,9 @@ export default function Agences() {
                                     </td>
                                     <td className="px-3 py-2 border">
                                         {item.numeroTelephone}
+                                    </td>
+                                    <td className="px-3 py-2 border">
+                                        {item.chef}
                                     </td>
                                     <td className="px-3 py-2 border">
                                         <button onClick={() => deleteAgence(item.id)} type="button" className="text-white text-xs mt-4 hover:bg-red-700 rounded-sm bg-red-500  p-2">

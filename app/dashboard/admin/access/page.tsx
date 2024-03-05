@@ -68,7 +68,7 @@ export default function Page() {
 
     return (
         <div className="p-10">
-            <h1 className="text-xl">Droits d&apos;acces</h1>
+            <h1 className="text-xl">Droits d'acces</h1>
             <form onSubmit={HandlerSubmit} className="col-span-1 bg-white max-w-md mt-10 shadow-xl border-2 rounded-sm  ">
                 <h2 className=" text-gray-100 p-4 bg-green-500  uppercase">
                     Ajouter un droit d&apos;acces
@@ -76,7 +76,7 @@ export default function Page() {
                 <div className=" m-auto  p-4">
 
                     <div className="mt-4  gap-4">
-                        <label className="block mb-1 text-sm font-medium text-gray-700  ">Nom d&apos;utilisateur</label>
+                        <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Nom d&apos;utilisateur</label>
                         <select name="TypeDroits" required autoComplete="off" onChange={handleInputChange} className="block w-full p-2 uppercase text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " id="droitsAccesId">
                             <option value="" ></option>
                             {droitAccesData.map((item: any, index: number) => (
@@ -94,7 +94,7 @@ export default function Page() {
                 </div>
             </form>
             <div className="py-10">
-                <h2 className="text-xl my-4 uppercase">Les droits d&apos;acces disponible</h2>
+                <h2 className="text-xl my-4 uppercase">Les droits d'acces disponible</h2>
                 <ul className="flex flex-wrap gap-4">
                     {access.map((item: any, i: number) => (
                         <li key={i+1} className="border border-stone-600 hover:shadow-xl shadow-md cursor-pointer p-4">

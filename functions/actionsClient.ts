@@ -135,7 +135,7 @@ export const selectVoyage = async () => {
     const tab: any[] = [];
     const tabTrajets: any[] = await getTrajet();
     const tabBus: any[] = await getBus();
-    tabVoyages.map((r) => {
+    tabVoyages.map((r: any) => {
         tabTrajets.map((i) => {
             tabBus.map((j) => {
                 if ((r.trajetId === i.id) && (parseInt(r.busId) === j.id)) {
@@ -143,6 +143,32 @@ export const selectVoyage = async () => {
                 }
             })
         })
+    })
+    return tab
+}
+
+export const selectVoyageByAgenceId = async (id: number) => {
+    const tabVoyages: any[] = await getVoyage();
+    const tab: any[] = [];
+    const tabTrajets: any[] = await getTrajet();
+    const tabBus: any[] = await getBus();
+    tabVoyages.map((r: any) => {
+        let trajet: any = null;
+        let bus: any = null;
+        if (r.agenceId == id) {
+            tabTrajets.map((i) => {
+                if ((r.trajetId === i.id)) {
+                    trajet = i
+                }
+            })
+            tabBus.map((j) => {
+                if (parseInt(r.busId) === j.id) {
+                   bus = j;
+                }
+            })
+            tab.push({trajet: trajet, voyages: r, bus: bus})
+        }
+       
     })
     return tab
 }

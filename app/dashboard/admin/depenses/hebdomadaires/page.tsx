@@ -28,8 +28,8 @@ export default function Page() {
 
         return data
     };
-    const getRecetteByDate = async (date: string, id: number) => {
-        const res = await fetch(`/api/recette?date=${date}&agenceId=${id}`, { cache: "no-store" })
+    const getRecetteByDate = async (date: string) => {
+        const res = await fetch(`/api/lignerecette?date=${date}T00:00:00.000Z`, { cache: "no-store" })
         if (!res.ok) {
             console.log("error")
         }
@@ -134,19 +134,25 @@ export default function Page() {
             let somme = 0;
             let sommeRec = 0;
             const de: any[] = await getDepenseByDate(element, agence);
-            const re: any[] = await getRecetteByDate(element, agence);
+            const re: any[] = await getRecetteByDate(element);
+            
             const g = await getAgenceById(agence);
-            setAgenceNom(g.nom)
+            setAgenceNom(g)
             if (de.length > 0) {
                 de.map((j) => {
                     somme = somme + parseInt(j.montant);
                 })
             }
+            console.log(re)
             if (re.length > 0) {
                 re.map((j) => {
-                    sommeRec = sommeRec + parseInt(j.montant);
+                    if (agence == j.agenceId) {
+                        sommeRec = sommeRec + parseInt(j.montant);
+                       
+                    }
                 })
             }
+            
 
             const k = new Date(element).getDay();
             switch (k) {

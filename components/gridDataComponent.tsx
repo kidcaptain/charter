@@ -33,6 +33,15 @@ const GridDataComponent = () => {
             setUser(data.length)
         };
         getUser()
+        const getAgence = async () => {
+            const res = await fetch("/api/agences", { cache: "no-store" })
+            if (!res.ok) {
+                throw new Error("Failed")
+            }
+            const data: any[] = await res.json();
+            setAgence(data.length)
+        };
+        getAgence()
         const getEmploye = async () => {
             const res = await fetch("/api/employes", { cache: "no-store" })
             if (!res.ok) {
@@ -111,13 +120,13 @@ const GridDataComponent = () => {
             </div >
             <div className="bg-purple-500 border-2 border-blue-300 ring-2 ring-blue-400 bg-gradient-to-bl from-red-400 p-4 rounded-md overflow-hidden">
                 <div className='bg-white w-14 h-14 items-center justify-center flex rounded-2xl shadow-2xl'>
-                    <Image src={agencesvg} width={45} height={45} alt='User Image' />
+                    <Image src={svg2} width={45} height={45} alt='User Image' />
                 </div>
-                <h1 className=" pt-4 text-sm text-white font-bold uppercase">Agences ({trajet})</h1>
+                <h1 className=" pt-4 text-sm text-white font-bold uppercase">Trajet ({trajet})</h1>
             </div >
             <div className="bg-emerald-500 border-2 border-blue-300 ring-2 ring-blue-400 bg-gradient-to-bl from-green-700 p-4 rounded-md overflow-hidden">
                 <div className='bg-white w-14 h-14 items-center justify-center flex rounded-2xl shadow-2xl'>
-                    <Image src={svg2} width={45} height={45} alt='User Image' />
+                    <Image src={agencesvg} width={45} height={45} alt='User Image' />
                 </div>
                 <h1 className=" pt-4 text-sm text-white font-bold uppercase">Agences ({agence})</h1>
             </div >

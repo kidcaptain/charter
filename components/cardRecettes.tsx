@@ -7,7 +7,7 @@ const CardRecettes = () => {
     const [depense, setDepense] = useState<number>(0)
     useEffect(() => {
         const getDepense = async () => {
-            const res = await fetch("/api/recette", { cache: "no-store" })
+            const res = await fetch("/api/lignerecette", { method: "GET", cache: "no-store" })
             if (!res.ok) {
                 throw new Error("Failed")
             }
@@ -22,9 +22,9 @@ const CardRecettes = () => {
     }, [])
     
     return(
-        <div className="p-5 border rounded-md bg-blue-800 from-blue-500 bg-gradient-to-br">
+        <div className="p-10 border rounded-md bg-blue-800 text-xl from-blue-500 bg-gradient-to-br">
             <h2 className="text-gray-100 font-bold">Total recettes</h2>
-            <p className="text-white">{depense}</p>
+            <p className="text-white">{depense} fcfa</p>
         </div>
     )
 }

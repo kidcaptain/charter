@@ -1,4 +1,5 @@
 
+import { getDateFormat } from "@/functions/actionsClient";
 import React, { useRef } from "react";
 import ReactToPrint from "react-to-print";
 
@@ -15,7 +16,7 @@ export default function FicheJournal(props: { item: DataFicheJournal }) {
                 />
 
                 {/* component to be printed */}
-                <ComponentToPrint depenses={props.item.depenses} semaine={props.item.semaine} recettes={props.item.recettes} ref={(el) => (componentRef = el)} />
+                <ComponentToPrint depenses={props.item.depenses} semaine={props.item.semaine} date1={props.item.date1} date2={props.item.date2} totalRecette={props.item.totalRecette} totalRecette2={props.item.totalRecette2} recettes={props.item.recettes} ref={(el) => (componentRef = el)} />
             </div>
         </>
     );
@@ -23,15 +24,11 @@ export default function FicheJournal(props: { item: DataFicheJournal }) {
 interface DataFicheJournal {
     depenses: any[],
     recettes: any[],
-    semaine: {
-        lundi: any[],
-        mardi: any[],
-        mercredi: any[],
-        jeudi: any[],
-        vendredi: any[],
-        samedi: any[],
-        dimanche: any[]
-    }
+    date1: string,
+    date2: string,
+    totalRecette: number,
+    totalRecette2: number
+    semaine: string[]
 }
 class ComponentToPrint extends React.Component<DataFicheJournal> {
 
@@ -59,280 +56,92 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                     <div className="text-xl p-4 text-center">
                         <span>Semaine du </span> {this.props.depenses[0]?.date} <span>au {this.props.depenses[6]?.date}</span>
                     </div>
-                    <div className="p-4">
-                        <table className="w-full text-sm font-mono text-left rtl:text-right text-gray-800 ">
-                            <thead className="text-sm text-gray-900  ">
-                                <tr className="text-center">
+                    {/* <div className="p-4">
+                        <table className="w-full text-sm text-left rtl:text-right text-black">
+                            <thead className="text-sm uppercase">
+                                <tr className="bg-stone-400">
+                                    <th scope="col" colSpan={5} className=" py-3 px-1 ">
+                                        Semaine du
+                                    </th>
                                     <th scope="col" className=" py-3 px-1  ">
-
+                                        {this.props.date1}
                                     </th>
-                                    <th scope="col" className=" py-3 px-1 border border-stone-800">
-                                        Lun
+                                    <th scope="col" colSpan={4} className=" py-3 px-1  ">
+                                        au
                                     </th>
-                                    <th scope="col" className=" py-3 px-1 border border-stone-800">
-                                        Mar
-                                    </th>
-                                    <th scope="col" className=" py-3 px-1 border border-stone-800">
-                                        Mer
-                                    </th>
-                                    <th scope="col" className=" py-3 px-1 border border-stone-800 ">
-                                        Jeu
-                                    </th>
-                                    <th scope="col" className=" py-3 px-1 border border-stone-800">
-                                        Ven
-                                    </th>
-                                    <th scope="col" className=" py-3 px-1 border border-stone-800">
-                                        Sam
-                                    </th>
-
-                                    <th scope="col" className=" py-3 px-1 border border-stone-800">
-                                        Total recettes
+                                    <th scope="col" colSpan={5} className=" py-3 px-1  ">
+                                        {this.props.date2}
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th scope="col" className=" py-4 px-2 border uppercase border-stone-800 ">
-                                        Recettes
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
-
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800 ">
-
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
-
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
-
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
-
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
-
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
-
-                                    </th>
+                                    <th></th>
+                                    {
+                                        days.map((r: any, index: number) => (
+                                            <th key={index} colSpan={2} scope="col" className=" py-3 px-1 border border-black  bg-stone-200">
+                                                {r} {this.props.semaine[index]}
+                                            </th>
+                                        ))
+                                    }
                                 </tr>
                                 <tr>
-                                    <th scope="col" className=" py-4 px-2 border uppercase border-stone-800 ">
-                                        Retenues
+                                    <th scope="col" className="px-3 py-2 border  border-stone-500">
+                                        Dépenses
                                     </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
+                                    {
+                                        days.map(() => (
+                                            <>
+                                                <th scope="col" className="px-3 py-2 border  border-stone-500">
+                                                    INTITULE
+                                                </th>
+                                                <th scope="col" className="px-3 py-2 border  border-stone-500">
+                                                    MONTANT
+                                                </th>
+                                            </>
+                                        ))
+                                    }
 
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800 ">
 
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
 
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
-
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
-
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
-
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
-
-                                    </th>
-                                </tr>
-                                <tr >
-                                    <th colSpan={8} className=" py-4 px-2 border border-stone-800"></th>
-                                </tr>
-                                <tr>
-                                    <th scope="col" className=" py-4 px-2 border uppercase border-stone-800 ">
-                                        Depenses
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
-
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800 ">
-
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
-
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
-
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
-
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
-
-                                    </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
-
-                                    </th>
                                 </tr>
                             </thead>
-                            <tbody >
-                                <th className="py-4 px-2 border border-stone-800">
-                                    HB
-                                </th>
-                                <th scope="col" className="border p-0 text-right">
-                                    {
-                                        this.props.semaine.lundi.map((i: any, index: number) => {
-                                            return (
-                                                (
-                                                    <div key={index + 1} className={`${index % 2 == 0 ? 'bg-stone-300' : 'bg-white'} " grid grid-cols-2 "`}>
-                                                        <div className="border py-3 px-1 border-stone-900  ">
-                                                            {i?.description}
-                                                        </div>
-                                                        <div className="border py-3 px-1  border-stone-900 ">
-                                                            {parseInt(i?.montant).toString() == "NaN" ? 0 : parseInt(i?.montant).toString()}
-                                                        </div>
-                                                    </div>
-                                                ))
-                                        })
-                                    }
-                                </th>
-                                <th scope="col" className=" p-0 ">
-                                    {
-                                        this.props.semaine.mardi.map((i: any, index: number) => {
-                                            return (
-                                                (
-                                                    <div key={index + 1} className={`grid text-right grid-cols-2 ${index % 2 == 0 ? 'bg-stone-300' : 'bg-white'}`}>
-                                                        <div className="border py-3 px-1  border-stone-900  ">
-                                                            {i?.description}
-                                                        </div>
-                                                        <div className="border py-3 px-1  border-stone-900 ">
-                                                            {parseInt(i?.montant).toString() == "NaN" ? 0 : parseInt(i?.montant).toString()}
-                                                        </div>
-                                                    </div>
-                                                ))
-                                        })
-                                    }
-                                </th>
-                                <th scope="col" className="  p-0">
-                                    {
-                                        this.props.semaine.mercredi.map((i: any, index: number) => {
-                                            return (
-                                                (
-                                                    <div key={index + 1} className={`grid text-right grid-cols-2 ${index % 2 == 0 ? 'bg-stone-300' : 'bg-white'}`}>
-                                                        <div className="border py-3 px-1  border-stone-900  ">
-                                                            {i?.description}
-                                                        </div>
-                                                        <div className="border py-3 px-1  border-stone-900 ">
-                                                            {parseInt(i?.montant).toString() == "NaN" ? 0 : parseInt(i?.montant).toString()}
-                                                        </div>
-                                                    </div>
-                                                ))
-                                        })
-                                    }
-                                </th>
-                                <th scope="col" className="  p-0">
-                                    {
-                                        this.props.semaine.jeudi.map((i: any, index: number) => {
-                                            return (
-                                                (
-                                                    <div key={index + 1} className={`grid text-right grid-cols-2 ${index % 2 == 0 ? 'bg-stone-300' : 'bg-white'}`}>
-                                                        <div className="border py-3 px-1  border-stone-900  ">
-                                                            {i?.description}
-                                                        </div>
-                                                        <div className="border py-3 px-1  border-stone-900 ">
-                                                            {parseInt(i?.montant).toString() == "NaN" ? 0 : parseInt(i?.montant).toString()} Fcfa
-                                                        </div>
-                                                    </div>
-                                                ))
-                                        })
-                                    }
-                                </th>
-                                <th scope="col" className="  p-0">
-                                    {
-                                        this.props.semaine.vendredi.map((i: any, index: number) => {
-                                            return (
-                                                (
-                                                    <div key={index + 1} className={`grid text-right grid-cols-2 ${index % 2 == 0 ? 'bg-stone-300' : 'bg-white'}`}>
-                                                        <div className="border py-3 px-1  border-stone-900  ">
-                                                            {i?.description}
-                                                        </div>
-                                                        <div className="border py-3 px-1  border-stone-900 ">
-                                                            {parseInt(i?.montant).toString() == "NaN" ? 0 : parseInt(i?.montant).toString()}
-                                                        </div>
-                                                    </div>
-                                                ))
-                                        })
-                                    }
-                                </th>
-                                <th scope="col" className="  p-0">
-                                    {
-                                        this.props.semaine.samedi.map((i: any, index: number) => {
-                                            return (
-                                                (
-                                                    <div key={index + 1} className={`grid text-right grid-cols-2 ${index % 2 == 0 ? 'bg-stone-300' : 'bg-white'}`}>
-                                                        <div className="border py-3 px-1  border-stone-900  ">
-                                                            {i?.description}
-                                                        </div>
-                                                        <div className="border py-3 px-1  border-stone-900 ">
-                                                            {parseInt(i?.montant).toString() == "NaN" ? 0 : parseInt(i?.montant).toString()}
-                                                        </div>
-                                                    </div>
-                                                ))
-                                        })
-                                    }
-                                </th>
-                                    <th>
+                            <tbody className="bg-stone-100 ">
+                                    <tr>
+                                        
+                                    </tr>
+                                {
+                                    days.map((e, index: number) => (
+                                        <tr key={index + 1}>
+                                            {this.props.depenses.map((item: any, j: number) => (
+                                                item.jour == e ?
 
-                                    </th>
+                                                    <>
+                                                        <td className="px-3 py-2 border border-stone-400">
+                                                            {item.typeVoyage}
+                                                        </td>
+                                                        <td className="px-3 py-2 border border-stone-400">
+                                                            {item.montant}
+                                                        </td>
+                                                    </>
+                                                    :
+                                                    <>
+
+                                                        <td className="px-3 py-2 border border-stone-400">
+                                                            {item.typeVoyage}
+                                                        </td>
+                                                        <td className="px-3 py-2 border border-stone-400">
+                                                            {item.montant}
+                                                        </td>
+                                                    </>
+
+                                            ))}
+                                        </tr>
+                                    ))
+                                }
+
+
                             </tbody>
-                            <tfoot>
-                                <tr className="font-normal" >
-                                    <th className="px-3 py-4 border border-stone-800 uppercase">
-                                        Totaux
-                                    </th>
-                                    <th className="border  px-3 py-4 border-stone-800">
-                                        {totalBrut}
-                                    </th>
-                                    <th className="border px-3 py-4 border-stone-800">
-                                        {totalDepense}
-                                    </th>
-                                    <th className="border border-stone-800">
-                                        <input type="text" className="w-full h-full px-3 py-4 focus-within:outline-none bg-stone-50" />
-                                    </th>
-                                    <th className="border border-stone-800">
-                                        <input type="text" className="w-full h-full px-3 py-4 focus-within:outline-none bg-stone-50" />
-                                    </th>
-                                    <th className="border border-stone-800">
-                                        <input type="text" className="w-full h-full px-3 py-4 focus-within:outline-none bg-stone-50" />
-                                    </th>
-                                </tr>
-                            </tfoot>
                         </table>
-                        {/* <div className="mt-5">
-                            <table className="w-1/2 text-sm text-left rtl:text-right text-gray-800 ">
-                                <tr>
-                                    <th className="py-4 px-2 border border-stone-800">Banque</th>
-                                    <th className="py-4 px-2 border border-stone-800"></th>
-                                </tr>
-                                <tr>
-                                    <th className="py-4 px-2 border border-stone-800">Autres dépenses</th>
-                                    <th className="py-4 px-2 border border-stone-800"></th>
-                                </tr>
-                                <tr>
-                                    <th className="py-4 px-2 border border-stone-800"></th>
-                                    <th className="py-4 px-2 border border-stone-800"></th>
-                                </tr>
-                            </table>
-                        </div> */}
-                        <div className="mt-5 flex justify-between">
-                            <div>
-                                <label className="font-bold">Chef d&apos;agence: </label>
-                                <input type="text" className="  p-2 border-stone-800 border focus-within:outline-none bg-stone-50" />
-                            </div>
-                            <div className="flex items-center gap-4">
-                                <span className="font-bold">Solde</span>
-                                <div className="border  w-52">
-                                    <input type="text" className="w-full h-full p-2 focus-within:outline-none bg-stone-50" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 

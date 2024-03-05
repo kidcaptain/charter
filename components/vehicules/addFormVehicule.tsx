@@ -11,7 +11,7 @@ const AddFormVehicule = (props: { childToParent: Function }) => {
     const [value, setValue] = useState<any>()
     const [chauffeurs, setChauffeurs] = useState<any[]>([]);
 
-    const className: string = "text-sm font-bold text-gray-800  ";
+    const className: string = "text-sm font-bold text-gray-800 dark:text-white";
     const className2: string = "block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400";
 
     const [popupData, setPopupData] = useState<{ message: string, title?: string, color: string }>({ message: "", title: "", color: "" })
@@ -153,7 +153,7 @@ const AddFormVehicule = (props: { childToParent: Function }) => {
                         <input type="number" required onChange={handleInputChange} id="placesTotal" name="placesTotal" className={`block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2 ${(value?.placesTotal && (parseInt(value?.placesTotal) > 0)) ? "bg-green-50 ring-green-400/50 ring-4" : null} focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400`} />
                     </div>
                     <div className="mt-4">
-                        <label htmlFor="" className="text-sm font-bold text-gray-800   ">Chauffeur</label>
+                        <label htmlFor="" className="text-sm font-bold text-gray-800 dark:text-white ">Chauffeur</label>
                         <select name="employeId" required autoComplete="off" onChange={handleInputChange} className={`block w-full p-2  text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ${value?.employeId ? "bg-green-50 ring-green-400/50 ring-4" : null}`} id="">
                             <option value="0" >Aucun</option>
                             {chauffeurs.map((item: any, index: number) => (

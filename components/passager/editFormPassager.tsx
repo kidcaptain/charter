@@ -56,27 +56,27 @@ const EditFormPassager = (props: { item: Passager }) => {
             <h1 className=" p-4 text-white bg-cyan-600 uppercase border-b">Editer</h1>
             <div className=" p-4">
                 <div className="mt-4  gap-4">
-                    <label className="block mb-1 text-sm font-bold text-gray-700  ">Nom</label>
+                    <label className="block mb-1 text-sm font-bold text-gray-700 dark:text-white">Nom</label>
                     <input type="text" value={data.nom} onChange={handleInputChange} id="nom" name="nom" className="block w-full p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                 </div>
                 <div className="mt-4">
-                    <label className="block mb-1 text-sm font-bold text-gray-700  ">Prénom</label>
+                    <label className="block mb-1 text-sm font-bold text-gray-700 dark:text-white">Prénom</label>
                     <input type="text" value={data.prenom} onChange={handleInputChange} id="prenom" name="prenom" className="block w-full p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                 </div>
                 <div className="mt-4">
-                    <label className="block mb-1 text-sm font-bold text-gray-700  ">Adresse</label>
+                    <label className="block mb-1 text-sm font-bold text-gray-700 dark:text-white">Adresse</label>
                     <input type="text" value={data.adresse} onChange={handleInputChange} id="adresse" name="adresse" className="block w-full p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                 </div>
                 {/* <div className="mt-4">
-                    <label className="block mb-1 text-sm font-bold text-gray-700  ">Numéro de Carte d&apos;identité</label>
+                    <label className="block mb-1 text-sm font-bold text-gray-700 dark:text-white">Numéro de Carte d&apos;identité</label>
                     <input type="text" value={data.nom} id="prenom" className="block w-full p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                 </div> */}
                 <div className="mt-4">
-                    <label className="block mb-1 text-sm font-bold text-gray-700  ">Date de naissance</label>
+                    <label className="block mb-1 text-sm font-bold text-gray-700 dark:text-white">Date de naissance</label>
                     <input type="date" value={data.dateNaissance} onChange={handleInputChange} id="dateNaissance" name="dateNaissance" className="block w-full p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                 </div>
                 <div className="mt-4">
-                    <label className="block mb-1 text-sm font-bold text-gray-700  ">Genres</label>
+                    <label className="block mb-1 text-sm font-bold text-gray-700 dark:text-white">Genres</label>
                     <div className="flex gap-4">
                         <input type="checkbox" id="genrem" value="m" onChange={handleInputChange} checked={data.genre === "m"} name="genre" className="block p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         <label htmlFor="genrem" className="text-xs font-bold text-gray-700">Homme</label>
@@ -85,7 +85,7 @@ const EditFormPassager = (props: { item: Passager }) => {
                     </div>
                 </div>
                 <div className="mt-4">
-                    <label className="block mb-1 text-sm font-bold text-gray-700  ">Numèro de téléphone:</label>
+                    <label className="block mb-1 text-sm font-bold text-gray-700 dark:text-white">Numèro de téléphone:</label>
                     <input type="tel" id="telephone" value={data.telephone} onChange={handleInputChange} name="telephone" aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none sm:text-md focus-visible:ring-blue-400" placeholder="620456789" />
                 </div>
                 <div className="mt-4">

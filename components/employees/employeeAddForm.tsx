@@ -8,7 +8,7 @@ const EmployeeAddForm = (props: { childToParent: Function }) => {
     const [poste, setPoste] = useState<any[]>([])
     const [agence, setAgence] = useState<any[]>([]);
     const [agenceId, setAgenceId] = useState<number | undefined>()
-    const classNameLabel: string = "block mb-1 text-sm font-bold text-gray-900  ";
+    const classNameLabel: string = "block mb-1 text-sm font-bold text-gray-900 dark:text-white";
     const classNameInput: string = "block w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ";
     const HandlerSubmit = async (e: any) => {
 
@@ -173,17 +173,14 @@ const EmployeeAddForm = (props: { childToParent: Function }) => {
                             </select>
                         </div>
                     ) : (
-                        <input type="text" name="agenceId" value={agenceId} className="opacity-0" autoComplete="off" onChange={handleInputChange} id="v" />
+                        <input type="text" name="agenceId" disabled={!agenceId} value={agenceId} className="opacity-0" autoComplete="off" onChange={handleInputChange} id="v" />
                     )
                 }
-                
-
-
             </div>
-            <button type="submit" className="text-white hover:shadow-md float-start hover:bg-blue-700 rounded-sm bg-blue-500 text-xs mt-4 p-2">
+            <button type="submit" className="text-white hover:shadow-md float-start hover:bg-blue-700 rounded-md bg-blue-500 text-sm mt-4 p-2">
                 Enregistrer
             </button>
-            <button type="reset" id="buttonReset" className="text-white hover:shadow-md float-start hover:bg-stone-700 rounded-sm bg-stone-500 text-xs mt-4 p-2">
+            <button type="reset" id="buttonReset" className="text-white hover:shadow-md float-start hover:bg-stone-700 rounded-md mx-3 bg-stone-500 text-sm mt-4 p-2">
                 Recommencer
             </button>
         </form>

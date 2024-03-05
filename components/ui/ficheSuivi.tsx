@@ -388,7 +388,7 @@ class ComponentToPrint extends React.Component<DataFicheSuivie> {
                                             return (
                                                 (
 
-                                                    <th key={index + 1} className="text-xs uppercase border border-stone-800 text-black text-right py-2 px-1 " >
+                                                    <th key={index} className="text-xs uppercase border border-stone-800 text-black text-right py-2 px-1 " >
                                                         {parseInt(this.props?.production[index]?.montant).toString() == "NaN" ? 0 : parseInt(this.props?.production[index]?.montant).toString()} fcfa
                                                     </th>
 

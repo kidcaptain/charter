@@ -270,7 +270,7 @@ export default function Page({ params }: { params: IPrams }) {
                 const de: any[] = await getDepenseByDate(element);
                 const re: any[] = await getRecetteByDate(element);
                 // const g = await getAgenceById(agence);
-                // setAgenceNom(g.nom)
+                // setAgenceNom(g)
                 const k = new Date(element).getDay();
                 if (de.length > 0) {
                     de.map((j) => {

@@ -22,6 +22,7 @@ export const GET = async (req: Request) => {
     const date = searchParams.get("date");
     const voyageId = searchParams.get("voyageId");
     const busId = searchParams.get("busId");
+    const agenceId = searchParams.get("agenceId");
     try {
         if (date && voyageId && busId) {
             const existingLigne = await prisma.ligneFicheRecette.findMany({ where: { date: date, voyageId: parseInt(voyageId), busId: parseInt(busId) } })
@@ -30,6 +31,9 @@ export const GET = async (req: Request) => {
             }
         } else if (date && busId) {
             const ligneFicheRecettes = await prisma.ligneFicheRecette.findMany({ where: { date: `${date}T00:00:00.000Z`, busId: parseInt(busId) } });
+            return new NextResponse(JSON.stringify(ligneFicheRecettes), { status: 200 });
+        } else if (date && agenceId) {
+            const ligneFicheRecettes = await prisma.ligneFicheRecette.findMany({ where: { date: `${date}T00:00:00.000Z`, agenceId: parseInt(agenceId) } });
             return new NextResponse(JSON.stringify(ligneFicheRecettes), { status: 200 });
         } else if (date) {
             const ligneFicheRecettes = await prisma.ligneFicheRecette.findMany({ where: { date: date } });

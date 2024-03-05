@@ -48,7 +48,7 @@ export default function Page() {
     const [agence, setAgence] = useState<any>(null);
     const [numTicket, setNumTicket] = useState<number>(0);
     const [trajets, setTrajets] = useState<any[]>([]);
-
+    const [isReady, setIsReady] = useState<boolean>(false);
     if (status === "unauthenticated") {
         router.push("/signin");
     }
@@ -136,7 +136,8 @@ export default function Page() {
             prixVoyage: item.prixVoyage,
             busId: item.busId,
             trajetId: item.trajetId,
-            agenceId: item.agenceId
+            agenceId: item.agenceId,
+            ready: item.ready
         }
         // console.log(voyageData)
         try {
@@ -176,7 +177,9 @@ export default function Page() {
                 method: 'POST', cache: 'no-store', body: JSON.stringify(data)
             })
             if (res.ok) {
-
+                const t = await res.json();
+                setNumTicket(t.id)
+                setIsReady(true)
                 editVoyage(item.voyages);
                 configPopup("Ticket payé", "green", "Reservation")
             }
@@ -378,14 +381,14 @@ export default function Page() {
             const data = await selectVoyage();
             setVoyage(data);
         }
-        const getLenghtTicket = async () => {
-            const res = await fetch("/api/ticket", { cache: "no-store" })
-            if (!res.ok) {
-                return null
-            }
-            const data: any[] = await res.json();
-            setNumTicket(data.length)
-        }
+        // const getLenghtTicket = async () => {
+        //     const res = await fetch("/api/ticket", { cache: "no-store" })
+        //     if (!res.ok) {
+        //         return null
+        //     }
+        //     const data: any[] = await res.json();
+        //     setNumTicket(data.length)
+        // }
         const getTrajet = async () => {
             const res = await fetch("/api/trajets", { cache: "no-store" })
             if (!res.ok) {
@@ -395,7 +398,6 @@ export default function Page() {
             setTrajets(data)
         };
         getTrajet()
-        getLenghtTicket()
         const getAgences = async () => {
             const res = await fetch("/api/agences", { cache: "no-store" })
             if (!res.ok) {
@@ -608,7 +610,7 @@ export default function Page() {
                                         ) : null
                                     }
                                     <div className="mt-4">
-                                        <button type="button" onClick={() => { setTab(true); setTab2(false); setItem(null); setMethod("") }} className=" p-2 px-3 rounded-md hover:bg-stone-400 text-sm hover:text-white border border-stone-500 text-stone-500 font-bold">Retour</button>
+                                        <button type="button" onClick={() => { setTab(true); setTab2(false); setMethod("") }} className=" p-2 px-3 rounded-md hover:bg-stone-400 text-sm hover:text-white border border-stone-500 text-stone-500 font-bold">Retour</button>
                                         <button type="submit" onClick={validationTab} className=" mx-2 p-2 px-3 rounded-md hover:bg-blue-400 hover:text-white border border-blue-500 text-sm text-blue-500 font-bold">Valider</button>
                                     </div>
                                 </div>
@@ -617,7 +619,7 @@ export default function Page() {
                                 <div className="my-4">
                                     <button type="reset" onClick={() => { window.location.reload() }} className=" p-2 px-3 rounded-md hover:bg-stone-400 text-sm hover:text-white border border-stone-500 text-stone-500 font-bold">Nouvelle vente</button>
                                 </div>
-                                {(passager != null) ? (
+                                {(isReady) ? (
                                     <ComponentTicketPrint item={{
                                         client: `${passager?.passager?.nom} ${passager?.passager?.prenom}`,
                                         tel: passager?.passager?.telephone,
@@ -626,7 +628,7 @@ export default function Page() {
                                         montant: ticket?.voyage?.prixVoyage,
                                         remboursement: 0,
                                         caisse: `GUICHET ${session?.user?.name}`,
-                                        numticket: (numTicket + 1).toString(),
+                                        numticket: numTicket.toString(),
                                         type: ticket?.voyage?.typeVoyage,
                                         trajet: `${ticket?.trajet?.lieuDepart} / ${ticket?.trajet.lieuArrivee}`,
                                         siege: ticket?.voyages?.placeDisponible
@@ -660,7 +662,7 @@ export default function Page() {
                         {
                             !onSearched ? (
                                 <ul className=" grid grid-cols-4 gap-8 relative h-full ">
-                                    {voyages.map((item: any, i: number) => (item.voyages?.placeDisponible != 0 || compareDate(getDateFormat(item.voyages?.dateDepart)) ?
+                                    {voyages.map((item: any, i: number) => (item.voyages?.placeDisponible != 0 && compareDate(getDateFormat(item.voyages?.dateDepart)) ?
                                         <li key={i} onClick={() => { setItem(item); handleItemOnclick() }} className="cursor-pointer" >
                                             <CardVoyage isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
                                         </li> : null
@@ -668,7 +670,7 @@ export default function Page() {
                                 </ul>
                             ) : (
                                 <ul className=" grid grid-cols-4 gap-8 relative h-full ">
-                                    {voyagesResult.map((item: any, i: number) => (item.voyages?.placeDisponible != 0 || compareDate(getDateFormat(item.voyages?.dateDepart))  ?
+                                    {voyagesResult.map((item: any, i: number) => (item.voyages?.placeDisponible != 0 && compareDate(getDateFormat(item.voyages?.dateDepart))  ?
                                         <li key={i} onClick={() => { setItem(item); handleItemOnclick() }} className="cursor-pointer" >
                                             <CardVoyage isHidden={true} id={item.voyages?.id}  isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
                                         </li> : null

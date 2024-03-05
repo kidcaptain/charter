@@ -24,7 +24,7 @@ export default function PrintComponent(props: { item: DataPrintComponent }) {
 interface DataPrintComponent {
     depenses: any[],
     recettes: any[],
-    agence: string
+    agence: any
 }
 class ComponentToPrint extends React.Component<DataPrintComponent> {
 
@@ -48,7 +48,7 @@ class ComponentToPrint extends React.Component<DataPrintComponent> {
                     <div className="text-center font-bold my-8">
                         <h2 className="underline">CHARTER EXPRESS VOYAGES</h2>
                         <h4>Fiche Hebdomadaire des dépenses</h4>
-                        <h4>Agence de {this.props.agence}</h4>
+                        <h4>Agence de {this.props.agence?.nom}</h4>
                     </div>
                     <Image src={"/images/logo.jpeg"} width={80} height={80} alt="" className="m-auto" />
                     <div className="text-xl p-4 text-center">
@@ -132,30 +132,43 @@ class ComponentToPrint extends React.Component<DataPrintComponent> {
                                 </tr>
                             </tfoot>
                         </table>
-                        {/* <div className="mt-5">
-                            <table className="w-1/2 text-sm text-left rtl:text-right text-gray-800 ">
-                                <tr>
-                                    <th className="py-4 px-2 border border-stone-800">Banque</th>
-                                    <th className="py-4 px-2 border border-stone-800"></th>
-                                </tr>
-                                <tr>
-                                    <th className="py-4 px-2 border border-stone-800">Autres dépenses</th>
-                                    <th className="py-4 px-2 border border-stone-800"></th>
-                                </tr>
-                                <tr>
-                                    <th className="py-4 px-2 border border-stone-800"></th>
-                                    <th className="py-4 px-2 border border-stone-800"></th>
-                                </tr>
-                            </table>
-                        </div> */}
+                        <div className="mt-5">
+                            <div className="w-1/2 text-sm text-left rtl:text-right text-gray-800 ">
+                                <div className="grid grid-cols-2">
+                                    <div className=" p-1 border border-stone-800">Banque</div>
+                                    <div className=" p-1 border border-stone-800"><input type="text" className="w-full h-full p-1 focus-within:outline-none bg-stone-50" /></div>
+                                </div>
+                                <div className="grid grid-cols-2">
+                                    <div className=" p-1 border border-stone-800">Audives dépenses</div>
+                                    <div className=" p-1 border border-stone-800"><input type="text" className="w-full h-full p-1 focus-within:outline-none bg-stone-50" /></div>
+                                </div>
+                                <div className="grid grid-cols-2">
+                                    <div className=" p-1 border border-stone-800"></div>
+                                    <div className=" p-1 border border-stone-800"><input type="text" className="w-full h-full p-1 focus-within:outline-none bg-stone-50" /></div>
+                                </div>
+                                <div className="grid grid-cols-2">
+                                    <div className=" p-1 border border-stone-800"></div>
+                                    <div className=" p-1 border border-stone-800"><input type="text" className="w-full h-full p-1 focus-within:outline-none bg-stone-50" /></div>
+                                </div>
+                                <div className="grid grid-cols-2">
+                                    <div className=" p-1 border border-stone-800"></div>
+                                    <div className=" p-1 border border-stone-800"><input type="text" className="w-full h-full p-1 focus-within:outline-none bg-stone-50" /></div>
+                                </div>
+                                <div className="grid grid-cols-2">
+                                    <div className=" p-1 border border-stone-800"></div>
+                                    <div className=" p-1 border border-stone-800"><input type="text" className="w-full h-full p-1 focus-within:outline-none bg-stone-50" /></div>
+                                </div>
+                            </div>
+                        </div>
                         <div className="mt-5 flex justify-between">
                             <div>
-                                <label className="font-bold">Chef d&apos;agence: </label>
-                                <input type="text" className="  p-2 border-stone-800 border focus-within:outline-none bg-stone-50" />
+                                <label className="font-bold">Chef d&apos;agence: {this.props.agence?.chef}</label>
+                              
+                            
                             </div>
                             <div className="flex items-center gap-4">
                                 <span className="font-bold">Solde</span>
-                                <div className="border  w-52">
+                                <div className="border border-black w-52">
                                     <input type="text" className="w-full h-full p-2 focus-within:outline-none bg-stone-50" />
                                 </div>
                             </div>

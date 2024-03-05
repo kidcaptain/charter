@@ -1,7 +1,8 @@
 
+import Image from "next/image";
 import React, { useRef } from "react";
 import ReactToPrint from "react-to-print";
-
+import logo from "@/public/images/logo.jpeg"
 export default function FicheTechnique(props: { item: DataFicheTechnique }) {
     let componentRef: any = useRef();
 
@@ -54,6 +55,7 @@ class ComponentToPrint extends React.Component<DataFicheTechnique> {
             <div className="p-10 max-w-5xl m-auto mt-4 min-h-screen bg-white">
                 <div>
                     <div className="text-center font-bold my-8">
+                        <Image src={logo} width={100} height={100} alt="Logo" className="m-auto" />
                         <h2 className="text-3xl">CHARTER EXPRESS VOYAGES</h2>
                         <ul>
                             <li>  ENTREPRISE DE TRANSPORT INTER-URBAIN</li>

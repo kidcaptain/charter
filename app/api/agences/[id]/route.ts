@@ -23,7 +23,7 @@ export const PUT = async (req: Request, { params }: { params: { id: string } }) 
     const { id } = params;
 
     const body = await req.json();
-    const { nom, adresse, numeroTelephone } = body;
+    const { nom, adresse, numeroTelephone, chef } = body;
     try {
         const agence = await prisma.agence.update({
             where: { id: parseInt(id) },
@@ -31,6 +31,7 @@ export const PUT = async (req: Request, { params }: { params: { id: string } }) 
                 nom: nom,
                 adresse: adresse,
                 numeroTelephone: numeroTelephone,
+                chef: chef
             }
         });
         return NextResponse.json(agence)

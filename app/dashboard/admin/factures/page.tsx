@@ -1,11 +1,9 @@
 "use client"
 
 import Popup from "@/components/ui/popup";
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import svg from "@/public/images/valide.svg"
 import Image from "next/image";
-
-import type { PutBlobResult } from '@vercel/blob';
 
 export default function Page() {
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -19,8 +17,7 @@ export default function Page() {
     const [agenceId, setAgenceId] = useState<any>()
     const [nom, setNom] = useState<any>()
     const [isOpenFormEdit, setIsOpenFormEdit] = useState<boolean>(false);
-    const inputFileRef = useRef<HTMLInputElement>(null);
-    const [blob, setBlob] = useState<PutBlobResult | null>(null);
+    
     const handleButtonClick = () => {
         setIsOpen(!isOpen);
     }
@@ -41,23 +38,40 @@ export default function Page() {
 
     const onSubmitVerso = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (!inputFileRef.current?.files) {
-            throw new Error("No file selected");
-        }
-
-        const file = inputFileRef.current.files[0];
-
-        const response = await fetch(
-            `/api/other?filename=${file.name}`,
-            {
+        if (!file) return;
+        try {
+            const dataImg = new FormData();
+            dataImg.append("files", file);
+            const res = await fetch('/api/other', {
                 method: 'POST',
-                body: file,
-            },
-        );
+                body: dataImg
+            })
+            const p = await res.json()
+            console.log(p)
+            if (!res.ok) {
+                alert("Impossible de télécharger le fichier!")
+                return;
+            }
 
-        const newBlob = (await response.json()) as PutBlobResult;
+            const datas = {
+                src: p.fileUrl,
+                agenceId: agenceId,
+                nom: nom,
+                ext: file.name.slice((file.name.lastIndexOf(".") - 1 >>> 0) + 2),
+                montant: 0
+            }
 
-        setBlob(newBlob);
+
+            const reps = await fetch("/api/factures", { method: 'POST', cache: "no-store", body: JSON.stringify(datas) })
+            if (!reps.ok) {
+                configPopup("Impossible de modifier ces données veuillez. Veuillez actualiser la page!", "red", "Reservation");
+                return;
+            }
+            configPopup("Facture enregistrée!", "green", "");
+
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     const deleteFacture = async (id: number) => {
@@ -125,8 +139,8 @@ export default function Page() {
                         </h2>
                         <div className="p-4">
                             <label htmlFor="" className="block mb-1 text-sm  text-gray-900 font-bold">Fichier</label>
-                            <input type="file" required ref={inputFileRef} name="file" id="file" />
-                            {/* <label htmlFor="" className="block mb-1 text-sm  text-gray-900 font-bold">Nom</label>
+                            <input type="file" required onChange={(e) => setFile(e.target.files?.[0])} name="file" id="file"/>
+                            <label htmlFor="" className="block mb-1 text-sm  text-gray-900 font-bold">Nom</label>
                             <input type="text" required onChange={(e) => setNom(e.target.value)}  name="file" id="file"/>
                             <div className="mt-2">
                                 <label className="  text-sm font-bold">Agence</label>
@@ -136,19 +150,16 @@ export default function Page() {
                                         <option key={i + 1} value={item.id}>{item.nom}</option>
                                     ))}
                                 </select>
-                            </div> */}
+                            </div>
 
                             {/* <button className="bg-orange-400 text-xs uppercase text-white p-2 font-bold">Uploader</button> */}
                             <button type="submit" className="text-white text-xs mt-4 uppercase font-bold hover:bg-blue-700 rounded-sm bg-blue-500  p-2">
                                 Enregistrer
                             </button>
-                            {blob && (
-                                <div>
-                                    Blob url: <a href={blob.url}>{blob.url}</a>
-                                </div>
-                            )}
                             <button onClick={handleButtonClick} className="hover:bg-stone-800 uppercase font-bold bg-stone-700 text-white text-xs p-2">Fermer</button>
                         </div>
+
+
                     </form>
                 </div>
             )
@@ -203,7 +214,7 @@ export default function Page() {
                             <th scope="col" className="px-3 border py-2">
                                 fichier
                             </th>
-
+                          
                             <th scope="col" className="px-3 border py-2">
                                 Actions
                             </th>
@@ -219,9 +230,9 @@ export default function Page() {
                                     <td className="px-3 py-2 border">
                                         {item.nom}
                                     </td>
-
+                       
                                     <td className="px-3 py-2 border">
-                                        <a href={`${item.src}${item.ext}`} download={`${item.nom}${item.ext}`} className="text-white text-xs mt-4 hover:bg-red-700 rounded-sm bg-red-500  p-2">
+                                        <a  href={`${item.src}${item.ext}`} download={`${item.nom}${item.ext}`} className="text-white text-xs mt-4 hover:bg-red-700 rounded-sm bg-red-500  p-2">
                                             Telecharger
                                         </a>
 

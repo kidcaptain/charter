@@ -88,9 +88,6 @@ export default function Page({ params }: { params: { ticketId: string } }) {
 
     return (
         <div className="w-full p-10">
-              <div className=" py-4 flex lowercase text-sm justify-between items-start mb-2">
-                <h1 className=" text-gray-900"><Link className="hover:text-blue-600" href={"/dashboard/admin/ticket"}>Tickets</Link> / <Link className="hover:text-blue-600" href="#">N°{params.ticketId}</Link></h1>
-            </div>
             <div className=" py-4 flex justify-between items-start mb-2">
                 <h1 className="text-xl text-gray-900 uppercase">Ticket de bus </h1>
             </div>
@@ -106,7 +103,7 @@ export default function Page({ params }: { params: { ticketId: string } }) {
                                 montant: ticket?.voyage?.prixVoyage,
                                 remboursement: 0,
                                 caisse: `GUICHET ${session?.user?.name}`,
-                                numticket: (numTicket + 1).toString() + replace(getDateFormat(ticket?.voyage?.dateDepart)),
+                                numticket: params.ticketId,
                                 type: ticket?.voyage?.typeVoyage,
                                 trajet: `${ticket?.trajet?.lieuDepart} / ${ticket?.trajet.lieuArrivee}`,
                                 siege: ticket?.ticket?.numeroSiege

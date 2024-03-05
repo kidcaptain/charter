@@ -188,6 +188,28 @@ export default function Page({ params }: { params: IPrams }) {
 
     }, [])
 
+    // const onSubmit = async () => {
+    //     const res = await fetch("/api/depenses?date=" + dateUpdate, { cache: "no-store" })
+    //     if (!res.ok) {
+    //         console.log("error")
+    //     }
+    //     const data = await res.json();
+    //     const tabDepense: any[] = await data;
+    //     const tab: any[] = [];
+    //     const tabBus: any[] = [];
+    //     console.log(tabDepense)
+    //     tabDepense.map((i) => {
+    //         if (i.typeDepense === "bus") {
+    //             tabBus.push(i)
+    //         } else {
+    //             tab.push(i)
+    //         }
+    //     })
+
+    //     setDate(dateUpdate)
+    //     setDepenses(tab)
+    //     setDepensesBus(tabBus)
+    // }
     return (
         <div className="p-10 h-full">
             <div className=" py-4 flex lowercase text-sm justify-between items-start mb-2">

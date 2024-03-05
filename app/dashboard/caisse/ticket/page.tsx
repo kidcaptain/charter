@@ -38,14 +38,18 @@ export default function Page() {
     useEffect(() => {
 
         const selectTicker = async () => {
-            const response = await fetch(`/api/ticket`, {
-                method: 'GET',
-                body: JSON.stringify(data),
-            })
-            const a = await response.json()
+            const agence = localStorage.getItem("agence")
+            if (agence) {
+                const s = JSON.parse(agence)
+                const response = await fetch(`/api/ticket?agenceId=${s.agenceId}`, {
+                    method: 'GET',
+                    body: JSON.stringify(data),
+                })
+                const a = await response.json()
 
-            if (response.ok) {
-                setTicket(a)
+                if (response.ok) {
+                    setTicket(a)
+                }
             }
         }
         selectTicker()
@@ -119,7 +123,7 @@ export default function Page() {
                                         {getDateFormat(item.dateCreation)}
                                     </td>
                                     <td className="p-2 border" >
-                                        <Link href={"/dashboard/caisse/ticket/"+item.id} className="hover:text-stone-900 hover:font-medium">Imprimer</Link>
+                                        <Link href={"/dashboard/caisse/ticket/" + item.id} className="hover:text-stone-900 hover:font-medium">Imprimer</Link>
                                     </td>
                                 </tr>
                             ))}

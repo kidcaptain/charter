@@ -2,9 +2,10 @@
 import React, { useState } from "react";
 import Chart from "chart.js";
 
-export default function CardLineChart(props: { moisDepense: number[], moisRecette: number[] }) {
+export default function CardLineChart(props: {moisDepense: number[], moisRecette: number[]}) {
     React.useEffect(() => {
-        var config : any = {
+        console.log(props.moisDepense)
+        var config = {
             type: "line",
             data: {
                 labels: [
@@ -112,12 +113,11 @@ export default function CardLineChart(props: { moisDepense: number[], moisRecett
         var doc: any = document.getElementById("line-chart");
         if (doc) {
             var ctx = doc.getContext("2d");
-            let charts = new Chart(ctx, config);
-
         }
-
-
-    }, [props.moisDepense]);
+    
+        window.myLine = new Chart(ctx, config);
+     
+    });
     return (
         <>
             <div className="relative h-full flex flex-col min-w-0 break-words w-full shadow-lg rounded bg-red-500 from-orange-700 bg-gradient-to-t ">
@@ -125,7 +125,7 @@ export default function CardLineChart(props: { moisDepense: number[], moisRecett
                     <div className="flex flex-wrap items-center">
                         <div className="relative w-full max-w-full flex-grow flex-1">
                             <h6 className="uppercase text-white mb-1 text-xs font-semibold">
-                                Dépenses et Recettes sur l&apos;année
+                                Dépenses et Recettes de l&apos;année en cour
                             </h6>
 
                         </div>

@@ -91,12 +91,12 @@ export default function Page() {
                                     <label htmlFor="" className="block mb-1 text-sm  text-gray-700 ">Employé</label>
                                     <select className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " id="">
                                         {employees.map((item: any, i : number) => (
-                                            <option key={i+1} value="1">{item.nom}</option>
+                                            <option value="1">{item.nom}</option>
                                         ))}
                                     </select>
                                 </div>
                                 <div className="mt-4">
-                                    <label className="block mb-1 text-sm font-medium text-gray-700  ">Email</label>
+                                    <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Email</label>
                                     <input type="text" required id="prenom" className="block w-full p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                                 </div>
                                 <div className="mt-4">
@@ -118,7 +118,7 @@ export default function Page() {
                                     </select>
                                 </div>
                                 <div className="mt-4">
-                                    <label className="block mb-1 text-sm font-medium text-gray-700  ">Genres</label>
+                                    <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Genres</label>
                                     <div className="flex gap-4">
                                         <input type="checkbox" required id="genrem" value="m" className="block p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                                         <label htmlFor="genrem" className="text-xs font-bold text-gray-700">Homme</label>
@@ -127,7 +127,7 @@ export default function Page() {
                                     </div>
                                 </div>
                                 <div className="mt-4">
-                                    <label className="block mb-1 text-sm font-medium text-gray-700  ">Numèro de téléphone:</label>
+                                    <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-white">Numèro de téléphone:</label>
                                     <input type="tel" id="tel" aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none sm:text-md focus-visible:ring-blue-400" pattern="[0-9]{9}" placeholder="620456789" required />
                                 </div>
                             </form>
@@ -154,7 +154,7 @@ export default function Page() {
                             </button>
                         </div>
                     </div>
-                    <PassagerTable agenceId={0} childToParent={handleButtonClickEditForm} setData={getItem} />
+                    <PassagerTable childToParent={handleButtonClickEditForm} setData={getItem} />
                 </section>
                 {isOpenEditForm ? (
                     <section className='bg-white col-span-1'>
