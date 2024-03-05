@@ -5,6 +5,10 @@ import Link from "next/link";
 import svg from '@/public/images/loader.svg'
 import { FormEvent, useState, useEffect } from "react"
 import Popup from "@/components/ui/popup";
+
+import { analytics, storage } from "@/app/firebase/firebase-config";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 interface IPrams {
     employeId?: string
 }
@@ -98,103 +102,94 @@ export default function Page({ params }: { params: IPrams }) {
             setIsOpenPopup(false)
         }, 5000);
     }
+    const onSubmitVerso = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        if (!file) return;
+        try {
+            
+            let url: string = "";
+            const dataImg = ref(storage, 'uploads/');
+            uploadBytes(dataImg, file).then((datas) => {
+                getDownloadURL(datas.ref).then(async (urls) => {
+                    url = urls;
+                    const datas = {
+                        adresse: data.adresse,
+                        agenceId: data.agenceId,
+                        anciennete: data.anciennete,
+                        dateEmbauche: data.dateEmbauche,
+                        dateNaissance: data.dateNaissance,
+                        email: data.email,
+                        genre: data.genre,
+                        imageCNIRecto: data.imageCNIRecto,
+                        imageCNIVerso: url,
+                        matricule: data.matricule,
+                        natureContrat: data.natureContrat,
+                        nom: data.nom,
+                        numCNI: data.numCNI,
+                        posteId: data.posteId,
+                        prenom: data.prenom,
+                        telephone: data.telephone,
+                    }
+                    setFile3(url)
+                    console.log(data)
+                    const reps = await fetch("/api/employes/" + params.employeId, { method: 'PUT', cache: "no-store", body: JSON.stringify(datas) })
+                    if (!reps.ok) {
+                        configPopup("Impossible de modifier ces données veuillez. Veuillez actualiser la page!", "red", "Reservation");
+                        return;
+                    }
+                    configPopup("Informations modifiées!", "green", "");
+                })
+            })
+        
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     const onSubmitRecto = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (!file) return;
         try {
-            const dataImg = new FormData();
-            dataImg.append("files", file);
-            const res = await fetch('/api/other', {
-                method: 'POST',
-                body: dataImg
-            })
-            const p = await res.json()
-            if (!res.ok) {
-                alert("Impossible de télécharger le fichier!")
-                return;
-            }
             
-            const datas = {
-                adresse: data.adresse,
-                agenceId: data.agenceId,
-                anciennete: data.anciennete,
-                dateEmbauche: data.dateEmbauche,
-                dateNaissance: data.dateNaissance,
-                email: data.email,
-                genre: data.genre,
-                imageCNIRecto: p.fileUrl,
-                imageCNIVerso: data.imageCNIVerso,
-                matricule: data.matricule,
-                natureContrat: data.natureContrat,
-                nom: data.nom,
-                numCNI: data.numCNI,
-                posteId: data.posteId,
-                prenom: data.prenom,
-                telephone: data.telephone,
-            }
-            setFile3(p.fileUrl)
-            console.log(data)
-            const reps = await fetch("/api/employes/" + params.employeId, { method: 'PUT', cache: "no-store", body: JSON.stringify(datas) })
-            if (!reps.ok) {
-                configPopup("Impossible de modifier ces données veuillez. Veuillez actualiser la page!", "red", "Reservation");
-                return;
-            }
-            configPopup("Informations modifiées!", "green", "");
-
+            let url: string = "";
+            const dataImg = ref(storage, 'uploads/');
+            uploadBytes(dataImg, file).then((datas) => {
+                getDownloadURL(datas.ref).then(async (urls) => {
+                    url = urls;
+                    const datas = {
+                        adresse: data.adresse,
+                        agenceId: data.agenceId,
+                        anciennete: data.anciennete,
+                        dateEmbauche: data.dateEmbauche,
+                        dateNaissance: data.dateNaissance,
+                        email: data.email,
+                        genre: data.genre,
+                        imageCNIRecto: url,
+                        imageCNIVerso: data.imageCNIVerso,
+                        matricule: data.matricule,
+                        natureContrat: data.natureContrat,
+                        nom: data.nom,
+                        numCNI: data.numCNI,
+                        posteId: data.posteId,
+                        prenom: data.prenom,
+                        telephone: data.telephone,
+                    }
+                    setFile3(url)
+                    console.log(data)
+                    const reps = await fetch("/api/employes/" + params.employeId, { method: 'PUT', cache: "no-store", body: JSON.stringify(datas) })
+                    if (!reps.ok) {
+                        configPopup("Impossible de modifier ces données veuillez. Veuillez actualiser la page!", "red", "Reservation");
+                        return;
+                    }
+                    configPopup("Informations modifiées!", "green", "");
+                })
+            })
+        
         } catch (error) {
             console.error(error)
         }
     }
-    const onSubmitVerso = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        if (!file) return;
-        try {
-            const dataImg = new FormData();
-            dataImg.append("files", file);
-            const res = await fetch('/api/other', {
-                method: 'POST',
-                body: dataImg
-            })
-            const p = await res.json()
-            if (!res.ok) {
-                alert("Impossible de télécharger le fichier!")
-                return;
-            }
-            
-            const datas = {
-                adresse: data.adresse,
-                agenceId: data.agenceId,
-                anciennete: data.anciennete,
-                dateEmbauche: data.dateEmbauche,
-                dateNaissance: data.dateNaissance,
-                email: data.email,
-                genre: data.genre,
-                id: data.id,
-                imageCNIRecto: data.imageCNIRecto,
-                imageCNIVerso: p.fileUrl,
-                matricule: data.matricule,
-                natureContrat: data.natureContrat,
-                nom: data.nom,
-                numCNI: data.numCNI,
-                posteId: data.posteId,
-                prenom: data.prenom,
-                telephone: data.telephone,
-
-            }
-            setFile2(p.fileUrl)
-            console.log(data)
-            const reps = await fetch("/api/employes/" + params.employeId, { method: 'PUT', cache: "no-store", body: JSON.stringify(datas) })
-            if (!reps.ok) {
-                configPopup("Impossible de modifier ces données veuillez. Veuillez actualiser la page!", "red", "Reservation");
-                return;
-            }
-            configPopup("Informations modifiées!", "green", "");
-
-        } catch (error) {
-            console.error(error)
-        }
-    }
+ 
 
 
 

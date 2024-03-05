@@ -4,7 +4,8 @@ import Popup from "@/components/ui/popup";
 import { useEffect, useState } from "react"
 import svg from "@/public/images/valide.svg"
 import Image from "next/image";
-
+import { analytics, storage } from "@/app/firebase/firebase-config";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 export default function Page() {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [popupData, setPopupData] = useState<{ message: string, title?: string, color: string }>({ message: "", title: "", color: "" })
@@ -40,35 +41,27 @@ export default function Page() {
         e.preventDefault()
         if (!file) return;
         try {
-            const dataImg = new FormData();
-            dataImg.append("files", file);
-            const res = await fetch('/api/other', {
-                method: 'POST',
-                body: dataImg
+            let url: string = "";
+            const dataImg = ref(storage, 'uploads/');
+            uploadBytes(dataImg, file).then((data) => {
+                getDownloadURL(data.ref).then(async (urls) => {
+                    url = urls;
+                    const datas = {
+                        src: url,
+                        agenceId: agenceId,
+                        nom: nom,
+                        ext: file.name.slice((file.name.lastIndexOf(".") - 1 >>> 0) + 2),
+                        montant: 0
+                    }        
+                    const reps = await fetch("/api/factures", { method: 'POST', cache: "no-store", body: JSON.stringify(datas) })
+                    if (!reps.ok) {
+                        configPopup("Impossible de modifier ces données veuillez. Veuillez actualiser la page!", "red", "Reservation");
+                        return;
+                    }
+                    configPopup("Facture enregistrée!", "green", "");
+                })
             })
-            const p = await res.json()
-            console.log(p)
-            if (!res.ok) {
-                alert("Impossible de télécharger le fichier!")
-                return;
-            }
-
-            const datas = {
-                src: p.fileUrl,
-                agenceId: agenceId,
-                nom: nom,
-                ext: file.name.slice((file.name.lastIndexOf(".") - 1 >>> 0) + 2),
-                montant: 0
-            }
-
-
-            const reps = await fetch("/api/factures", { method: 'POST', cache: "no-store", body: JSON.stringify(datas) })
-            if (!reps.ok) {
-                configPopup("Impossible de modifier ces données veuillez. Veuillez actualiser la page!", "red", "Reservation");
-                return;
-            }
-            configPopup("Facture enregistrée!", "green", "");
-
+        
         } catch (error) {
             console.error(error)
         }
