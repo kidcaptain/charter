@@ -54,7 +54,7 @@ const RouterUser = (props: { session: string | null | undefined, id: string | nu
 
         }
         const getDroitAcces = async () => {
-            const res = await fetch("/api/acces?id=" + props.session, { cache: "no-store" })
+            const res = await fetch("/api/acces/" + props.session, { cache: "no-store" })
             if (!res.ok) {
                 console.log("error")
             }
