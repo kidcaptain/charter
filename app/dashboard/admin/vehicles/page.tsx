@@ -55,12 +55,8 @@ export default function Vehicules() {
                     marque: editItem.marque,
                     modele: editItem.modele,
                     typeBus: editItem.typeBus,
-                    anneeFabrication: editItem.anneeFabrication,
                     capacite: editItem.capacite,
-                    placesDisponible: editItem.placesDisponible,
-                    placesTotal: editItem.placesTotal,
                     panneVehicule: panne,
-                    employeId: editItem.employeId,
                     horsService: editItem.horsService
                 }
                 const response = await fetch(`/api/bus/${editItem.id}`, {
@@ -90,10 +86,7 @@ export default function Vehicules() {
                 typeBus: item.typeBus,
                 anneeFabrication: item.anneeFabrication,
                 capacite: item.capacite,
-                placesDisponible: item.placesDisponible,
-                placesTotal: item.placesTotal,
                 panneVehicule: panne,
-                employeId: item.employeId,
                 horsService: horsService
             }
             const response = await fetch(`/api/bus/${item.id}`, {
@@ -127,6 +120,9 @@ export default function Vehicules() {
             case "edit":
                 router.push(`/dashboard/admin/vehicles/${val.item.id}/editer`)
                 break;
+            case "add":
+                    router.push(`/dashboard/admin/vehicles/${val.item.id}/piece`)
+                    break;
             case "horsService":
                 setHorsService(val.item)
                 break;

@@ -56,7 +56,7 @@ class ComponentToPrint extends React.Component<DataRapportHebdo> {
 
                     
                     <h2 className="underline text-2xl text-center uppercase font-bold">Rapport hebdomadaire</h2>
-                    <h3>N°BUS </h3>
+                    <h3>N°BUS {this.props.bus?.id} </h3>
                     <div className="p-4 border bg-black text-white border-stone-800 flex justify-between">
                        <span> semaine </span> <span>du</span> <span>{this.props.date}</span> <span>au</span> <span>  {this.props.date2}</span>
                     </div>

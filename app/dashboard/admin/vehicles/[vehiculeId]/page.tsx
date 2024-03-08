@@ -7,10 +7,7 @@ interface Vehicules {
     marque: string,
     modele: string,
     typeBus: string,
-    anneeFabrication: string,
     capacite: number,
-    placesDisponible: number,
-    placesTotal: number,
     panneVehicule: string,
     employeId: number
 }
@@ -23,10 +20,7 @@ export default function Page({ params }: { params: IPrams }) {
             marque: "",
             modele: "",
             typeBus: "",
-            anneeFabrication: "",
             capacite: 0,
-            placesDisponible: 0,
-            placesTotal: 0,
             panneVehicule: "",
             employeId: 0
         }
@@ -68,10 +62,7 @@ export default function Page({ params }: { params: IPrams }) {
                         marque: bus.marque,
                         modele: bus.modele,
                         typeBus: bus.typeBus,
-                        anneeFabrication: bus.anneeFabrication,
                         capacite: bus.capacite,
-                        placesDisponible: bus.placesDisponible,
-                        placesTotal: bus.placesTotal,
                         panneVehicule: bus.panneVehicule
                     }} />
                 </div>

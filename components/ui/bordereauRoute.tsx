@@ -144,7 +144,7 @@ class ComponentToPrint extends React.Component<DataBordereau> {
                     <div className="     text-xs">
                         <div className=""><div className="font-bold  uppercase py-2 ">Signature</div> </div>
                         <div className="flex items-center gap-5"><div className="font-bold uppercase py-2 ">Chef d&apos;agence </div> {this.props.agence?.chef} </div>
-                        <div className="flex items-center gap-5"><div className="font-bold  uppercase py-2 ">Nom du chauffeur</div> {this.props.chauffeur?.nom} {this.props.chauffeur?.prenom}</div>
+                        <div className="flex items-center gap-5"><div className="font-bold  uppercase py-2 ">Nom du chauffeur</div> {this.props.chauffeur} </div>
                         <div className=""><div className="font-bold uppercase py-2 ">Chef d&apos;agence arrivée </div> </div>
                         <div className="flex items-center gap-5"><div className="font-bold uppercase py-2 ">Heure d&apos;arrivée</div> {this.props.trajet?.heureArrivee}</div>
                         <div className=""><div className="font-bold uppercase py-2 ">Observations</div></div>

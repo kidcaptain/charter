@@ -16,19 +16,15 @@ export const GET = async (req: NextRequest) => {
 
 export const POST = async (req: Request) => {
   const body = await req.json();
-  const { marque, modele, typeBus, anneeFabrication, capacite, placesDisponible, placesTotal, panneVehicule, employeId } = body;
+  const { marque, modele, typeBus, capacite, panneVehicule } = body;
   try {
     const bus = await prisma.bus.create({
       data: {
         marque: marque,
         modele: modele,
         typeBus: typeBus,
-        anneeFabrication: anneeFabrication,
         capacite: parseInt(capacite),
-        placesDisponible: parseInt(placesDisponible),
-        placesTotal: parseInt(placesTotal),
         panneVehicule: panneVehicule,
-        employeId: parseInt(employeId),
     }
     });
     return NextResponse.json(bus)

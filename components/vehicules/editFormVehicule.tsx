@@ -11,12 +11,8 @@ const EditFormVehicule = (props: { childToParent: Function, id?: string }) => {
             marque: "",
             modele: "",
             typeBus: "",
-            anneeFabrication: "",
             capacite: 0,
-            placesDisponible: 0,
-            placesTotal: 0,
             panneVehicule: "",
-            employeId: 0
         }
     )
     const [bus, setBus] = useState<any>()
@@ -27,12 +23,9 @@ const EditFormVehicule = (props: { childToParent: Function, id?: string }) => {
             marque: value.marque,
             modele: value.modele,
             typeBus: value.typeBus,
-            anneeFabrication: value.anneeFabrication,
             capacite: value.capacite,
-            placesDisponible: value.placesDisponible,
-            placesTotal: value.placesTotal,
             panneVehicule: bus.panneVehicule,
-            employeId: value.employeId
+
         }
         try {
             const res = await fetch(`/api/bus/${value.id}`, {
@@ -118,30 +111,11 @@ const EditFormVehicule = (props: { childToParent: Function, id?: string }) => {
                         </select>
                     </div>
                     <div className="mt-2">
-                        <label className="  text-sm font-bold text-gray-800 dark:text-white">Année de Fabrication</label>
-                        <input type="date" required onChange={handleInputChange} id="anneeFabrication" value={value.anneeFabrication} name="anneeFabrication" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
-                    </div>
-                    <div className="mt-2">
                         <label className="  text-sm font-bold text-gray-800 dark:text-white">Capacité</label>
                         <input type="number" required onChange={handleInputChange} id="capacite" value={value.capacite} name="capacite" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                     </div>
-                    <div className="mt-2">/
-                        <label className="  text-sm font-bold text-gray-800 dark:text-white">Place Disponible</label>
-                        <input type="number" required onChange={handleInputChange} id="placesDisponible" value={value.placesDisponible} name="placesDisponible" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
-                    </div>
-                    <div className="mt-2">
-                        <label className="  text-sm font-bold text-gray-800 dark:text-white">Place Total</label>
-                        <input type="number" required onChange={handleInputChange} id="placesTotal" value={value.placesTotal} name="placesTotal" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
-                    </div>
-                    <div className="mt-4">
-                        <label htmlFor="" className="text-sm font-bold text-gray-800 dark:text-white ">Chauffeur</label>
-                        <select name="employeId" required autoComplete="off" onChange={handleInputChange} value={value.employeId} className="block w-full p-2  text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " id="">
-                            <option value="0" >Aucun</option>
-                            {chauffeurs.map((item: any, index: number) => (
-                                <option value={item.id} key={index + 1}>{item.nom} {item.prenom}</option>
-                            ))}
-                        </select>
-                    </div>
+               
+                 
                 </div>
                 <div className="p-4">
                     <button type="submit" className="text-white text-sm hover:bg-cyan-700 rounded-sm bg-cyan-500 p-2">

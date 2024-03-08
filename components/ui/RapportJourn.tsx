@@ -50,7 +50,7 @@ class ComponentToPrint extends React.Component<DataRapportJourn> {
                         Yaoundé, le <span > {this.props.date} </span>
                     </div>
                     <h2 className="underline text-2xl text-center uppercase font-bold">Rapport Journalière</h2>
-                    <h3 className="p-4 font-bold">N°BUS: {this.props.bus.modele} {this.props.bus.marque}</h3>
+                    <h3 className="p-4 font-bold">N°BUS: {this.props.bus?.id} </h3>
                     <h3 className="p-4 font-bold">CHAUFFEUR: {this.props.chauffeur?.nom} {this.props.chauffeur?.prenom}</h3>
                     <div className="p-4">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-800 ">

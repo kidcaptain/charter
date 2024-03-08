@@ -15,7 +15,7 @@ export default function FicheSuivie(props: { item: DataFicheSuivie }) {
                 />
 
                 {/* component to be printed */}
-                <ComponentToPrint depense={props.item.depense} semaine={props.item.semaine} production={props.item.production} date={props.item.date} ref={(el) => (componentRef = el)} />
+                <ComponentToPrint depense={props.item.depense} semaine={props.item.semaine} bus={props.item.bus} production={props.item.production} date={props.item.date} ref={(el) => (componentRef = el)} />
             </div>
         </>
     );
@@ -25,6 +25,7 @@ export interface DataFicheSuivie {
     depense: any[],
     production: any[],
     date: string,
+    bus: any,
     semaine: {
         lundi: any[],
         mardi: any[],
@@ -123,7 +124,7 @@ class ComponentToPrint extends React.Component<DataFicheSuivie> {
                         <ul>
                             <li>  ENTREPRISE DE TRANSPORT INTER-URBAIN</li>
                             <li> BP: 5029 YAOUNDE</li>
-                            <li className="my-4">FICHE SUIVIE</li>
+                            <li className="my-4">FICHE SUIVIE DU BUS N° {this.props.bus?.id}</li>
                         </ul>
                     </div>
                     <div>

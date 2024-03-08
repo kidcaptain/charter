@@ -340,7 +340,7 @@ export default function TicketSaleLayout({
     };
     getTrajet()
 
- 
+
     const getLenghtTicket = async () => {
       const res = await fetch("/api/ticket", { cache: "no-store" })
       if (!res.ok) {
@@ -644,19 +644,24 @@ export default function TicketSaleLayout({
                                 <button type="reset" onClick={() => { window.location.reload() }} className=" p-2 px-3 rounded-md hover:bg-stone-400 text-sm hover:text-white border border-stone-500 text-stone-500 font-bold">Nouvelle vente</button>
                               </div>
                               {(passager != null) ? (
-                                <ComponentTicketPrint item={{
-                                  client: `${passager?.passager?.nom} ${passager?.passager?.prenom}`,
-                                  tel: passager?.passager?.telephone,
-                                  depart: getDateFormat(ticket?.voyages?.dateDepart),
-                                  voyage: `C${ticket?.voyages?.id}`,
-                                  montant: ticket?.voyage?.prixVoyage,
-                                  remboursement: 0,
-                                  caisse: `GUICHET ${session?.user?.name}`,
-                                  numticket: (numTicket + 1).toString(),
-                                  type: ticket?.voyage?.typeVoyage,
-                                  trajet: `${ticket?.trajet?.lieuDepart} / ${ticket?.trajet.lieuArrivee}`,
-                                  siege: ticket?.voyages?.placeDisponible
-                                }} />
+                                <>
+                                  <ComponentTicketPrint item={{
+                                    client: `${passager?.passager?.nom} ${passager?.passager?.prenom}`,
+                                    tel: passager?.passager?.telephone,
+                                    depart: getDateFormat(ticket?.voyages?.dateDepart),
+                                    voyage: `C${ticket?.voyages?.id}`,
+                                    montant: ticket?.voyage?.prixVoyage,
+                                    remboursement: 0,
+                                    caisse: `GUICHET ${session?.user?.name}`,
+                                    numticket: (numTicket + 1).toString(),
+                                    type: ticket?.voyage?.typeVoyage,
+                                    trajet: `${ticket?.trajet?.lieuDepart} / ${ticket?.trajet.lieuArrivee}`,
+                                    siege: ticket?.voyages?.placeDisponible
+                                  }} />
+                                  <p className="p-4 uppercase">
+                                    client:{passager?.passager?.nom} {passager?.passager?.prenom}, téléphone client:{passager?.passager?.telephone},départ: {getDateFormat(ticket?.voyages?.dateDepart)}, Numèro de bus:{ticket?.bus?.id},
+                                    trajet:{ticket?.trajet?.lieuDepart}/{ticket?.trajet.lieuArrivee}, voyageN°: {ticket?.voyages?.id}, numèro de siège:{ticket?.bus?.capacite - ticket?.voyages?.placeDisponible < 10 ? '0' + (ticket?.bus?.capacite - ticket?.voyages?.placeDisponible) : ticket?.bus?.capacite - ticket?.voyages?.placeDisponible}
+                                  </p></>
                               ) : null}
                             </div>
                           </div>
@@ -704,7 +709,7 @@ export default function TicketSaleLayout({
                           }
                         </div>
                       ) : null}
-                    
+
                     </section>
                     {/* ) : (<div>
                     <Image src={svg} width={15} height={15} alt="Loader" className="animate-spin" /> <p className="text-white">Chargement du formulaire...</p>

@@ -77,7 +77,7 @@ class ComponentToPrint extends React.Component<DataFicheProduction> {
         let totalBrut: number = 0;
         let totalDepense: number = 0;
         this.props.depense.map((l) => {
-            totalDepense+=l.montant
+            totalDepense+=parseInt(l.montant)
         })
         dayks.map((l) => {
             totalBrut+=l.montant
@@ -279,8 +279,8 @@ class ComponentToPrint extends React.Component<DataFicheProduction> {
                                 <tr className="bg-yellow-400">
                                     <th className="text-xs uppercase border border-stone-800 py-2 px-1 text-black" >Depenses</th>
                                     {
-                                        dayks.map((i: any, index: number) => (
-                                            <th colSpan={2} key={index+1} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{(this.props.depense[index]?.jour == i) && this.props.depense[index] ?  this.props.depense[index].montant : 0} fcfa</th>
+                                        this.props.depense.map((i: any, index: number) => (
+                                            <th colSpan={2} key={index+1} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{this.props.depense[index].montant} fcfa</th>
                         
                                         ))
                                     }

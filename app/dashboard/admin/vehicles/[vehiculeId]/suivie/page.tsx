@@ -12,7 +12,7 @@ interface IPrams {
 
 export default function Page({ params }: { params: IPrams }) {
     // const [chauffeur, setChauffeur] = useState<any>(null)
-    // const [bus, setBus] = useState<any>(null)
+    const [bus, setBus] = useState<any>(null)
     // const [fiche, setFiche] = useState<any>(null)
     const [depenses, setDepenses] = useState<any[]>([])
     const [agences, setAgences] = useState<any[]>([])
@@ -375,8 +375,9 @@ export default function Page({ params }: { params: IPrams }) {
                 throw new Error("Failed")
             }
             const val = await res.json();
-            return val
+            setBus(val)
         };
+        getData()
         const getAgences = async () => {
             const res = await fetch("/api/agences/", { cache: "no-store" })
             if (!res.ok) {
@@ -392,7 +393,7 @@ export default function Page({ params }: { params: IPrams }) {
     return (
         <div className="p-10 w-full">
             <div className=" py-4 flex lowercase text-sm justify-between items-start mb-2">
-                <h1 className=" text-gray-900"><Link className="hover:text-blue-600" href={"/dashboard/admin/vehicles"}>Vehicules</Link> / <Link className="hover:text-blue-600" href={`/dashboard/admin/vehicles/${params.vehiculeId}`}>Fiche technique</Link> / <Link className="hover:text-blue-600" href="">Fiche de suivie</Link></h1>
+                <h1 className=" text-gray-900"><Link className="hover:text-blue-600" href={"/dashboard/admin/vehicles"}>Vehicules</Link> / <Link className="hover:text-blue-600" href="">Fiche de suivie</Link></h1>
             </div>
 
             <div>
@@ -414,7 +415,8 @@ export default function Page({ params }: { params: IPrams }) {
                         production: recettes,
                         depense: depenses,
                         date: date,
-                        semaine: week
+                        semaine: week,
+                        bus: bus
                     }} />
                 </div>
             </div>

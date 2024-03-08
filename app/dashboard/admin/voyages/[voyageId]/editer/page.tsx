@@ -120,7 +120,7 @@ export default function Page({ params }: { params: IPrams }) {
                                 <select id="busId" name="busId" value={data.busId} required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option></option>
                                     {bus.map((item: any, i: number) => (
-                                        <option key={i} value={[item.id, item.placesDisponible]}>{item.marque} {item.modele} ({item.typeBus})</option>
+                                        <option key={i} value={[item.id, item.capacite]}>{item.marque} {item.modele} ({item.typeBus})</option>
                                     ))}
                                 </select>
                             </div>

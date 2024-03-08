@@ -177,8 +177,8 @@ export default function Page() {
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Bus</label>
                                 <select id="busId" name="busId" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option></option>
-                                    {bus.map((item: any, i: number) => (
-                                        <option key={i} value={[item.id, item.placesDisponible]}>{item.marque} {item.modele} ({item.typeBus})</option>
+                                    {bus.map((item: any, i: number) => ( item.horsService != "non" ?
+                                        <option key={i} value={[item.id, item.capacite]}>{item.marque} {item.modele} ({item.typeBus})</option> : null
                                     ))}
                                 </select>
 

@@ -43,7 +43,6 @@ model Employe {
   imageCNIRecto      String   @default("")
   imageCNIVerso      String   @default("")
 }
-
 model Voyage {
   id              Int      @id @default(autoincrement())
   dateDepart      DateTime
@@ -55,7 +54,9 @@ model Voyage {
   trajetId        Int
   agenceId        Int
   ready           String @default("non")
+  employeId       Int    @default(0)
 }
+
 
 model Trajet {
   id           Int    @id @default(autoincrement())
@@ -77,17 +78,15 @@ model Reservation {
   dateConfirmation  String  @default("")
 }
 
+
 model Bus {
   id               Int    @id @default(autoincrement())
-  employeId        Int
+  employeId        Int    @default(0)
   marque           String
   modele           String
   typeBus          String
-  anneeFabrication String
   capacite         Int
-  placesDisponible Int
-  placesTotal      Int
-  panneVehicule    String
+  panneVehicule    String @default("")
   horsService      String @default("non")
   
 }
@@ -234,3 +233,12 @@ model Facture {
   ext          String
   montant      Int
 }   
+
+
+model Piece {
+  id          Int  @id @default(autoincrement())
+  nom         String
+  datePeremption  DateTime
+  busId       Int
+  dateUpdate  DateTime
+}

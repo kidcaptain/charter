@@ -24,22 +24,22 @@ const VoyageTable = (props: { childToParent: Function }) => {
 
         const getData = async () => {
 
-          if (agence) {
-            const s = JSON.parse(agence);
-            const res = await fetch("/api/voyages?agenceId=" + s.agenceId, { cache: "no-store" })
-            if (!res.ok) {
-                throw new Error("Failed")
+            if (agence) {
+                const s = JSON.parse(agence);
+                const res = await fetch("/api/voyages?agenceId=" + s.agenceId, { cache: "no-store" })
+                if (!res.ok) {
+                    throw new Error("Failed")
+                }
+                const data = await res.json();
+                return data
+            } else {
+                const res = await fetch("/api/voyages", { cache: "no-store" })
+                if (!res.ok) {
+                    throw new Error("Failed")
+                }
+                const data = await res.json();
+                return data
             }
-            const data = await res.json();
-            return data
-          }else{
-            const res = await fetch("/api/voyages", { cache: "no-store" })
-            if (!res.ok) {
-                throw new Error("Failed")
-            }
-            const data = await res.json();
-            return data
-          }
         };
         const getBus = async () => {
             const res = await fetch("/api/bus", { cache: "no-store" })
@@ -58,7 +58,7 @@ const VoyageTable = (props: { childToParent: Function }) => {
                 tabTrajets.map((i) => {
                     tabBus.map((j) => {
                         if ((r.trajetId === i.id) && (parseInt(r.busId) === j.id)) {
-                            tab.push({ trajet: i, voyages: r, bus: j, placeOccupees: (j.placesDisponible - r.placeDisponible) })
+                            tab.push({ trajet: i, voyages: r, bus: j, placeOccupees: (j.capacite - r.placeDisponible) })
                         }
                     })
 
@@ -91,7 +91,7 @@ const VoyageTable = (props: { childToParent: Function }) => {
             }
         } catch (err) {
             console.log(err)
-           
+
         }
     }
     const getDate = (str: string) => {
@@ -103,20 +103,20 @@ const VoyageTable = (props: { childToParent: Function }) => {
     }
 
     const edit = (str: number) => {
-        props.childToParent({id: str, action: "edit"})
+        props.childToParent({ id: str, action: "edit" })
     }
     const view = (str: string) => {
-        props.childToParent({id: str, action: "view"})
+        props.childToParent({ id: str, action: "view" })
     }
     const classVoyage = (numb: number, str: string) => {
         if (numb == 0 && (str == "non" || str == "")) {
             return `border-b border-gray-200 text-sm  bg-cyan-100 border-cyan-300 border-b-2 hover:bg-cyan-200  `
-        }else if (numb == 0 && str == "oui") {
+        } else if (numb == 0 && str == "oui") {
             return "cursor-not-allowed border-b border-gray-200 text-sm  bg-lime-100 border-lime-300 border-b-2 hover:bg-lime-200"
-        } else{
+        } else {
             return 'bg-gray-50 border-b border-gray-200 text-sm   cursor-pointer hover:bg-gray-200'
         }
-    } 
+    }
     return (
         <section className=" bg-white h-full w-full shadow-xl rounded-sm">
             <div className="relative overflow-x-auto">

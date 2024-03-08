@@ -20,10 +20,7 @@ export default function FicheTechnique(props: { item: DataFicheTechnique }) {
                     marque={props.item.marque}
                     modele={props.item.modele}
                     typeBus={props.item.typeBus}
-                    anneeFabrication={props.item.anneeFabrication}
                     capacite={props.item.capacite}
-                    placesDisponible={props.item.placesDisponible}
-                    placesTotal={props.item.placesTotal}
                     panneVehicule={props.item.panneVehicule}
                 ref={(el) => (componentRef = el)} />
             </div>
@@ -35,10 +32,7 @@ export interface DataFicheTechnique {
     marque: string,
     modele: string,
     typeBus: string,
-    anneeFabrication: string,
     capacite: number,
-    placesDisponible: number,
-    placesTotal: number,
     panneVehicule: string
 }
 
@@ -84,20 +78,8 @@ class ComponentToPrint extends React.Component<DataFicheTechnique> {
                                 <td className="border text-gray-600 border-stone-700 uppercase p-2">Bus {this.props.typeBus}</td>
                             </tr>
                             <tr className="border">
-                                <td className="border border-stone-700 uppercase p-2">Année de fabrication</td>
-                                <td className="border text-gray-600 border-stone-700 uppercase p-2">{this.props.anneeFabrication}</td>
-                            </tr>
-                            <tr className="border">
                                 <td className="border border-stone-700 uppercase p-2">Capacité</td>
                                 <td className="border text-gray-600 border-stone-700 uppercase p-2">{this.props.capacite}</td>
-                            </tr>
-                            <tr className="border">
-                                <td className="border border-stone-700 uppercase p-2">Places disponible</td>
-                                <td className="border text-gray-600 border-stone-700 uppercase p-2">{this.props.placesDisponible}</td>
-                            </tr>
-                            <tr className="border">
-                                <td className="border border-stone-700 uppercase p-2">Places total</td>
-                                <td className="border text-gray-600 border-stone-700 uppercase p-2">{this.props.placesTotal}</td>
                             </tr>
                             <tr className="border">
                                 <td className="border border-stone-700 uppercase p-2">Panne </td>

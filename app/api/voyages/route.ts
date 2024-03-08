@@ -56,19 +56,21 @@ export const PUT = async (req: Request) => {
 
   const body = await req.json();
 
-  const { agenceId, dateDepart, lieuArrivee, placeDisponible, typeVoyage, prixVoyage, busId, trajetId } = body;
+  const { agenceId, dateDepart, dateArrivee, placeDisponible, typeVoyage, prixVoyage, busId, trajetId, ready, employeId } = body;
   try {
     const voyages = await prisma.voyage.update({
       where: { id: parseInt(`${id}`) },
       data: {
-        dateDepart: dateDepart,
-        dateArrivee: lieuArrivee,
-        placeDisponible: placeDisponible,
+        agenceId: agenceId,
+        dateDepart: `${dateDepart}T00:00:00.000Z`,
+        dateArrivee: `${dateArrivee}T00:00:00.000Z`,
+        placeDisponible: parseInt(placeDisponible),
         typeVoyage: typeVoyage,
         prixVoyage: parseInt(prixVoyage),
         busId: busId,
-        trajetId: trajetId,
-        agenceId: agenceId
+        trajetId: parseInt(trajetId),
+        ready: ready,
+        employeId: parseInt(employeId)
       }
     });
     return NextResponse.json(voyages)
