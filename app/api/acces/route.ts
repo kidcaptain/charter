@@ -6,7 +6,11 @@ export const GET = async (req: NextRequest) => {
   const id = searchParams.get("id");
   const TypeDroits = searchParams.get("TypeDroits");
   try {
-    if(TypeDroits){
+    if (id)
+    {
+      const droitsAcces = await prisma.droitsAcces.findUnique({ where: { id: parseInt(id) } });
+      return new NextResponse(JSON.stringify(droitsAcces), { status: 200 });
+    }else if(TypeDroits){
       const droitsAcces = await prisma.droitsAcces.findUnique({ where: { TypeDroits: TypeDroits } });
       return new NextResponse(JSON.stringify(droitsAcces), { status: 200 });
     } else{
