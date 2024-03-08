@@ -21,17 +21,13 @@ const AddFormVehicule = (props: { childToParent: Function }) => {
 
     const HandlerSubmit = async (e: any) => {
         e.preventDefault()
-        const employeId = value.employeId ? value.employeId : 0
+        // const employeId = value.employeId ? value.employeId : 0
         const datas = {
             marque: value.marque,
             modele: value.modele,
             typeBus: value.typeBus,
-            anneeFabrication: value.anneeFabrication,
             capacite: value.capacite,
-            placesDisponible: value.placesDisponible,
-            placesTotal: value.placesTotal,
             panneVehicule: "",
-            employeId: employeId
         }
         try {
             const res = await fetch('/api/bus', {
@@ -124,13 +120,7 @@ const AddFormVehicule = (props: { childToParent: Function }) => {
                             <option value="simple">Simple</option>
                         </select>
                     </div>
-                    <div className="mt-4">
-                        <div className="flex gap-4 mb-1 items-start">
-                            <label className={className}>Année de Fabrication(<span className="text-red-500">*</span>)</label>
-                            {(value?.anneeFabrication && (date.getFullYear() < new Date(value?.anneeFabrication).getFullYear())) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null}
-                        </div>
-                        <input type="date" required onChange={handleInputChange} id="anneeFabrication" name="anneeFabrication" className={`block text-sm w-full p-2  ${(value?.anneeFabrication && (date.getFullYear() < new Date(value?.anneeFabrication).getFullYear())) ? "bg-green-50 ring-green-400/50 ring-4" : null} text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 `} />
-                    </div>
+                 
                     <div className="mt-4">
                         <div className="flex gap-4 mb-1 items-start">
                             <label className={className}>Capacité(<span className="text-red-500">*</span>)</label>
@@ -138,29 +128,8 @@ const AddFormVehicule = (props: { childToParent: Function }) => {
                         </div>
                         <input type="number" required onChange={handleInputChange} id="capacite" name="capacite" className={`block text-sm w-full p-2  ${((value?.capacite && value?.capacite > 0)) ? "bg-green-50 ring-green-400/50 ring-4" : null} text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 `} />
                     </div>
-                    <div className="mt-4">
-                        <div className="flex gap-4 mb-1 items-start">
-                            <label className={className}>Place Disponible(<span className="text-red-500">*</span>)</label>
-                            {((value?.placesDisponible && value?.placesDisponible != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null}
-                        </div>
-                        <input type="number" required onChange={handleInputChange} id="placesDisponible" name="placesDisponible" className={`block text-sm w-full p-2 text-gray-900 border ${((value?.placesDisponible && value?.placesDisponible > 0)) ? "bg-green-50 ring-green-400/50 ring-4" : null} border-gray-300 rounded-sm focus:ring-2  ${(value?.placesDisponible && (parseInt(value?.placesDisponible) > 0)) ? "bg-green-50 ring-green-400/50 ring-4" : null}  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 `} />
-                    </div>
-                    <div className="mt-4">
-                        <div className="flex gap-4 mb-1 items-start">
-                            <label className={className}>Place Total(<span className="text-red-500">*</span>)</label>
-                            {((value?.placesTotal && value?.placesTotal != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null}
-                        </div>
-                        <input type="number" required onChange={handleInputChange} id="placesTotal" name="placesTotal" className={`block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2 ${(value?.placesTotal && (parseInt(value?.placesTotal) > 0)) ? "bg-green-50 ring-green-400/50 ring-4" : null} focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400`} />
-                    </div>
-                    <div className="mt-4">
-                        <label htmlFor="" className="text-sm font-bold text-gray-800 dark:text-white ">Chauffeur</label>
-                        <select name="employeId" required autoComplete="off" onChange={handleInputChange} className={`block w-full p-2  text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ${value?.employeId ? "bg-green-50 ring-green-400/50 ring-4" : null}`} id="">
-                            <option value="0" >Aucun</option>
-                            {chauffeurs.map((item: any, index: number) => (
-                                <option value={item.id} key={index + 1}>{item.nom} {item.prenom}</option>
-                            ))}
-                        </select>
-                    </div>
+                 
+                  
                 </div>
                 <div className="p-4">
                     <button type="submit" className="text-white text-sm hover:bg-blue-700 rounded-sm bg-blue-500 p-2">

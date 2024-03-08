@@ -49,18 +49,11 @@ const VehiculeTable = (props: { childToParent: Function, setData: Function, isAd
                             <th scope="col" className="p-2 border-2 border-stone-800">
                                 Type de Bus
                             </th>
-                            <th scope="col" className="p-2 border-2 border-stone-800">
-                                Année de Fabrication
-                            </th>
+                           
                             <th scope="col" className="p-2 border-2 border-stone-800">
                                 Capacité
                             </th>
-                            <th scope="col" className="p-2 border-2 border-stone-800">
-                                Places Disponible
-                            </th>
-                            <th scope="col" className="p-2 border-2 border-stone-800">
-                                Places Total
-                            </th>
+                           
                             <th scope="col" className="p-2 border-2 border-stone-800">
                                 Pannes
                             </th>
@@ -87,18 +80,11 @@ const VehiculeTable = (props: { childToParent: Function, setData: Function, isAd
                                 <td className="p-2 border-2 border-stone-700">
                                     {item.typeBus}
                                 </td>
-                                <td className="p-2 border-2 border-stone-700">
-                                    {item.anneeFabrication}
-                                </td>
+                               
                                 <td className="p-2 border-2 border-stone-700">
                                     {item.capacite}
                                 </td>
-                                <td className="p-2 border-2 border-stone-700">
-                                    {item.placesDisponible}
-                                </td>
-                                <td className="p-2 border-2 border-stone-700">
-                                    {item.placesTotal}
-                                </td>
+                              
                                 <td className="p-2 border-2 border-stone-700">
                                     {item.panneVehicule}
                                 </td>
@@ -107,7 +93,8 @@ const VehiculeTable = (props: { childToParent: Function, setData: Function, isAd
                                 </td>
                                 <td className="p-2 border-2 border-stone-700">
                                     <button type="button" onClick={() => deleteBus(item.id)} className="bg-red-500 text-white text-sm p-1 px-2">Retirer</button>
-                                    <button type="button" onClick={() => props.setData({ action: "edit", item: item })} className="bg-yellow-500 text-white text-sm p-1 px-2">Editer</button>
+                                    <button type="button" onClick={() => props.setData({ action: "edit", item: item })} className="bg-yellow-500 text-white text-sm p-1 px-2">Editer</button>     
+                                    <button type="button" onClick={() => props.setData({ action: "add", item: item })} className="bg-stone-900 hover:bg-black text-white text-sm p-1 px-2">Pièces du véhicule</button>
                                     <button type="button" onClick={() => props.setData({ action: "horsService", item: item })} className="bg-green-500 text-white text-sm p-1 px-2">Mettre Hors Service</button>
                                     <button type="button" onClick={() => props.setData({ action: "signal", item: item })} className="bg-cyan-500 text-white text-sm p-1 px-2">Signaler une panne</button>
                                     <button type="button" onClick={() => props.setData({ action: "fiche", item: item })} className="bg-blue-500 text-white text-sm p-1 px-2 ">Fiche technique </button>
