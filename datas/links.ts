@@ -12,6 +12,8 @@ import depense from '@/public/images/depenses.svg'
 import fiche from '@/public/images/fiche.svg'
 import access from '@/public/images/access.svg'
 import setting from '@/public/images/setting.svg'
+import vente from '@/public/images/vente.svg'
+import facture from '@/public/images/facture.svg'
 
 export const LinksCaissier : {label: string, selected: boolean, icon: string, link: string }[] = [
     {
@@ -78,7 +80,7 @@ export const LinksAdmin : {label: string, selected: boolean, icon: string, link:
     {
         label: "Ventes des tickets",
         selected: false,
-        icon: svg1,
+        icon: vente,
         link: "/dashboard/admin/ventes",
     },
     {
@@ -162,7 +164,7 @@ export const LinksAdmin : {label: string, selected: boolean, icon: string, link:
     {
         label: "Factures",
         selected: false,
-        icon: setting,
+        icon: facture,
         link: "/dashboard/admin/factures",
     }
 ]
