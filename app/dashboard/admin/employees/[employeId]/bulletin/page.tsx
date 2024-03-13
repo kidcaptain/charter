@@ -59,13 +59,21 @@ export default function Page({ params }: { params: IPrams }) {
             const employee = await getData();
             const tabPoste: any[] = await getPoste();
             const tabAgence: any[] = await getAgence();
+           
+            let pos: any = null;
+            let age: any = null;
             tabPoste.map((i) => {
-                tabAgence.map((j) => {
-                    if ((employee.posteId == i.id) && (employee.agenceId == j.id)) {
-                        setEmploye({ poste: i, employe: employee, agence: j })
-                    }
-                })
+                if (employee.posteId == i.id) {
+                    pos = i;
+                    // setEmploye({ poste: i, employe: employee, agence: j })
+                }
             })
+            tabAgence.map((j) => {
+                if (employee.agenceId == j.id) {
+                    age = j
+                }
+            })
+            setEmploye({ poste: pos, employe: employee, agence: age })
         }
         selectEmploye()
 

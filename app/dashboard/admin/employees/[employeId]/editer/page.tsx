@@ -230,16 +230,23 @@ export default function Page({ params }: { params: IPrams }) {
             const employee = await getData();
             const tabPoste: any[] = await getPoste();
             const tabAgence: any[] = await getAgence();
+            let postes = null, agences = null;
             tabPoste.map((i) => {
-                tabAgence.map((j) => {
-                    if ((employee.posteId == i.id) && (employee.agenceId == j.id)) {
-                        setData(employee)
-                        setEmploye({ poste: i, employe: employee, agence: j })
-                        setPosteEmploye(poste)
-                        setAgenceEmploye(agence)
-                    }
-                })
+                if (employee.posteId == i.id) {
+                    postes = i;
+                }
             })
+            tabAgence.map((j) => {
+                if (employee.agenceId == j.id) {
+                    agences = j;
+                }
+               
+            }) 
+            setData(employee)
+            setPosteEmploye(poste)
+            setAgenceEmploye(agence)
+            setEmploye({ poste: postes, employe: employee, agence: agences })
+
         }
         selectEmploye()
 

@@ -89,13 +89,21 @@ const EmployeeEditForm = (props: { id?: string }) => {
             const employee = await getData();
             const tabPoste: any[] = await getPoste();
             const tabAgence: any[] = await getAgence();
+
+            let pos: any = null;
+            let age: any = null;
             tabPoste.map((i) => {
-                tabAgence.map((j) => {
-                    if ((employee.posteId == i.id) && (employee.agenceId == j.id)) {
-                        setEmploye({ poste: i, employe: employee, agence: j })
-                    }
-                })
+                if (employee.posteId == i.id) {
+                    pos = i;
+                    // setEmploye({ poste: i, employe: employee, agence: j })
+                }
             })
+            tabAgence.map((j) => {
+                if (employee.agenceId == j.id) {
+                    age = j
+                }
+            })
+            setEmploye({ poste: pos, employe: employee, agence: age })
         }
         selectEmploye()
 
@@ -112,58 +120,62 @@ const EmployeeEditForm = (props: { id?: string }) => {
                     <div>
                         <div className="border border-black p-4">
                             <h2 className="block mb-1 text-sm  text-gray-900 font-bold">Nom Complet</h2>
-                            <p>{employe.employe.nom} {employe.employe.prenom}</p>
+                            <p>{employe.employe?.nom} {employe.employe?.prenom}</p>
                         </div>
                         <div className="border border-black p-4">
                             <h2 className="block mb-1 text-sm  text-gray-900 font-bold">Adresse</h2>
-                            <p>{employe.employe.adresse}</p>
+                            <p>{employe.employe?.adresse}</p>
                         </div>
                         <div className="border border-black p-4">
                             <h2 className="block mb-1 text-sm  text-gray-900 font-bold">Téléphone</h2>
-                            <p>{employe.employe.telephone}</p>
+                            <p>{employe.employe?.telephone}</p>
                         </div>
                         <div className="border border-black p-4">
                             <h2 className="block mb-1 text-sm  text-gray-900 font-bold">Numéro CNI</h2>
-                            <p>{employe.employe.numCNI}</p>
+                            <p>{employe.employe?.numCNI}</p>
                         </div>
                         <div className="border border-black p-4">
                             <h2 className="block mb-1 text-sm  text-gray-900 font-bold">Date de naissance</h2>
-                            <p>{getDateFormat(employe.employe.dateNaissance)}</p>
+                            <p>{getDateFormat(employe.employe?.dateNaissance)}</p>
                         </div>
                         <div className="border border-black p-4">
                             <h2 className="block mb-1 text-sm  text-gray-900 font-bold">Genre</h2>
-                            <p>{employe.employe.genre === "m" ? "Homme" : "Femme"} </p>
+                            <p>{employe.employe?.genre === "m" ? "Homme" : "Femme"} </p>
                         </div>
                     </div>
                     <div>
                         <div className="border border-black p-4">
                             <h2 className="block mb-1 text-sm  text-gray-900 font-bold">Poste</h2>
-                            <p>{employe.poste.titre} </p>
+                            <p>{employe.poste?.titre} </p>
                         </div>
                         <div className="border border-black p-4">
                             <h2 className="block mb-1 text-sm  text-gray-900 font-bold">Agence</h2>
-                            <p>{employe.agence.nom} </p>
+                            <p>{employe.agence?.nom} </p>
                         </div>
                         <div className="border border-black p-4">
                             <h2 className="block mb-1 text-sm  text-gray-900 font-bold">matricule</h2>
-                            <p>{employe.employe.matricule ?? "Aucun"} </p>
+                            <p>{employe.employe?.matricule ?? "Aucun"} </p>
                         </div>
                         <div className="border border-black p-4">
                             <h2 className="block mb-1 text-sm  text-gray-900 font-bold">Nature du contrat</h2>
-                            <p>{employe.employe.natureContrat ?? "Indeterminé"} </p>
+                            <p>{employe.employe?.natureContrat ?? "Indeterminé"} </p>
                         </div>
                         <div className="border border-black p-4">
                             <h2 className="block mb-1 text-sm  text-gray-900 font-bold">ancienneté</h2>
-                            <p>{employe.employe.ancienneté ?? "Indeterminé"} </p>
+                            <p>{employe.employe?.ancienneté ?? "Indeterminé"} </p>
                         </div>
                     </div>
                     <div>
-                        <div className="bg-gray-100 w-full h-1/2">
-                            <img src={employe.employe.imageCNIRecto} alt="Image CNI" />
-                        </div>
-                        <div className="bg-gray-100 w-full h-1/2">
-                            <img src={employe.employe.imageCNIVerso} alt="Image CNI" />
-                        </div>
+                        {employe.employe?.imageCNIRecto ?
+                            <div className="bg-gray-100 w-full h-1/2">
+                                <img src={employe.employe?.imageCNIRecto} alt="Image CNI" />
+                            </div> : null
+                        }
+                        {employe.employe?.imageCNIVerso ?
+                            <div className="bg-gray-100 w-full h-1/2">
+                                <img src={employe.employe?.imageCNIVerso} alt="Image CNI" />
+                            </div> : null
+                        }
                     </div>
                 </div>
 

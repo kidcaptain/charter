@@ -57,7 +57,6 @@ export default function Page() {
         const tabDepense: any[] = await data;
         const tab: any[] = [];
         const tabBus: any[] = [];
-        console.log(tabDepense)
         tabDepense.map((i) => {
             if (i.typeDepense === "bus") {
                 tabBus.push(i)

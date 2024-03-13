@@ -72,7 +72,6 @@ export default function Page() {
             const monthm = (month) < 10 ? `0${month}` : `${month}`;
             tab.push(`${year}-${monthm}-${daym}`)
         }
-
         tab = tab.reverse();
         day = date.getDate();
         month = date.getMonth() + 1;
@@ -120,8 +119,6 @@ export default function Page() {
                         day = day + 1;
                     }
                 }
-
-
                 const daym = (day) < 10 ? `0${day}` : `${day}`;
                 const monthm = (month) < 10 ? `0${month}` : `${month}`;
                 tab.push(`${year}-${monthm}-${daym}`)
@@ -143,7 +140,6 @@ export default function Page() {
                     somme = somme + parseInt(j.montant);
                 })
             }
-            console.log(re)
             if (re.length > 0) {
                 re.map((j) => {
                     if (agence == j.agenceId) {
@@ -152,8 +148,6 @@ export default function Page() {
                     }
                 })
             }
-            
-
             const k = new Date(element).getDay();
             switch (k) {
                 case 0:

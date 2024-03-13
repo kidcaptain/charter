@@ -86,12 +86,16 @@ export default function Page() {
             const tabEmploye: any[] = await getData();
             const tab: any[] = [];
             const tabPoste: any[] = await getPoste();
+            let poste: any = null;
             tabEmploye.map((r) => {
                 tabPoste.map((i) => {
                     if (r.posteId === i.id) {
-                        tab.push({ poste: i, employe: r })
+                     poste = i;
                     }
                 })
+                if (poste != null) {
+                    tab.push({ poste: poste, employe: r })
+                }
             })
             setEmployees(tab)
         }

@@ -40,14 +40,21 @@ export default function ReservationTable() {
             const tabVoyages: any[] = await getVoyage();
             const tabReservation: any[] = await getReservationTable();
             const tab: any[] = [];
+            let passager: any = null;
+            let voyage: any = null;
+
             tabReservation.map((r) => {
                 tabPassager.map((i) => {
-                    tabVoyages.map((j) => {
-                        if ((r.passagerId === i.id) && (r.voyageId === j.id)) {
-                            tab.push({ passager: i, voyages: j, reservation: r })
-                        }
-                    })
+                    if ((r.passagerId === i.id)) {
+                        passager = i;
+                    }
                 })
+                tabVoyages.map((j) => {
+                    if ((r.voyageId === j.id)) {
+                        voyage = j;
+                    }
+                })
+                tab.push({ passager: passager, voyages: voyage, reservation: r })
             })
             setReservation(tab)
         }
@@ -102,7 +109,9 @@ export default function ReservationTable() {
                 voyageId: item.reservation.voyageId,
                 dateReservation: getDateFormat(item.reservation.dateReservation),
                 statutReservation: validite,
-                agenceId: item.voyages?.agenceId
+                agenceId: item.voyages?.agenceId,
+                avance: item.reservation.avance,
+                dateConfirmation: item.reservation.dateConfirmation
             }
             try {
                 const response = await fetch(`/api/reservations/${id}`, {
@@ -113,7 +122,9 @@ export default function ReservationTable() {
 
                 if (response.ok) {
                     if (validite === "validé") {
-                        postTicket(item.reservation.voyageId, item)
+                        postTicket(item.reservation.voyageId, item, a)
+                    }else{
+                        editVoyage(item, a)
                     }
                 }
             } catch (err) {
@@ -122,29 +133,33 @@ export default function ReservationTable() {
         }
     }
 
-    const editVoyage = async (item: any) => {
-        const voyageData = {
-            dateDepart: getDateFormat(item.dateDepart),
-            dateArrivee: getDateFormat(item.dateArrivee),
-            placeDisponible: (parseInt(item.placeDisponible) - 1) < 0 ? 0 : (parseInt(item.placeDisponible) - 1),
-            typeVoyage: item.typeVoyage,
-            prixVoyage: item.prixVoyage,
-            busId: item.busId,
-            trajetId: item.trajetId,
-            agenceId: item?.agenceId,
-            ready: item.ready
-        }
-        try {
-            const res = await fetch(`/api/voyages/${item.id}`, {
-                method: 'PUT', cache: 'no-store', body: JSON.stringify(voyageData)
-            })
-            if (res.ok) {
-                const d = await res.json();
-                postLigneRecette(d.message)
+    const editVoyage = async (item: any, a: any) => {
+        if (a.statutReservation == "annulé") {
+            let plac: number = (parseInt(item.placeDisponible) + 1) < 0 ? 0 : (parseInt(item.placeDisponible) + 1);
+            const voyageData = {
+                dateDepart: getDateFormat(item.dateDepart),
+                dateArrivee: getDateFormat(item.dateArrivee),
+                placeDisponible: plac,
+                typeVoyage: item.typeVoyage,
+                prixVoyage: item.prixVoyage,
+                busId: item.busId,
+                trajetId: item.trajetId,
+                agenceId: item?.agenceId,
+                ready: item.ready
             }
-        } catch (error) {
-
+            try {
+                const res = await fetch(`/api/voyages/${item.id}`, {
+                    method: 'PUT', cache: 'no-store', body: JSON.stringify(voyageData)
+                })
+                if (res.ok) {
+                    const d = await res.json();
+                    postLigneRecette(d.message)
+                }
+            } catch (error) {
+                console.log(error)
+            }
         }
+       
     }
     const getBus = async (id: number) => {
         const res = await fetch(`/api/bus/${id}`, {
@@ -156,39 +171,39 @@ export default function ReservationTable() {
         }
         return "simple"
     }
-    const postTicket = async (voyageId: any, item: any) => {
+    const postTicket = async (voyageId: any, item: any, a: any) => {
 
-            const date = new Date()
-            const year = date.getFullYear();
-            const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
-            const day = (date.getDate()) < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
-            const hours = (date.getHours()) < 10 ? `0${date.getHours()}` : `${date.getHours()}`;
-            const minutes = (date.getMinutes()) < 10 ? `0${date.getMinutes()}` : `${date.getMinutes()}`;
-            const typeTicket = await getBus(item.voyages.busId);
+        const date = new Date()
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
+        const day = (date.getDate()) < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
+        const hours = (date.getHours()) < 10 ? `0${date.getHours()}` : `${date.getHours()}`;
+        const minutes = (date.getMinutes()) < 10 ? `0${date.getMinutes()}` : `${date.getMinutes()}`;
+        const typeTicket = await getBus(item.voyages.busId);
 
-            const data = {
-                numeroSiege: (item.voyages?.placeDisponible),
-                prixTicket: item.voyages?.prixVoyage,
-                voyageId: item.reservation.voyageId,
-                typeTicket: typeTicket,
-                statusTicket: "valide",
-                dateCreation: `${year}-${month}-${day}T${hours}:${minutes}`,
-                agenceId: item.voyages?.agenceId,
-                passagerId: item.passager.id,
-                employeId: 0
+        const data = {
+            numeroSiege: (item.voyages?.placeDisponible),
+            prixTicket: item.voyages?.prixVoyage,
+            voyageId: item.reservation.voyageId,
+            typeTicket: typeTicket,
+            statusTicket: "valide",
+            dateCreation: `${year}-${month}-${day}T${hours}:${minutes}`,
+            agenceId: item.voyages?.agenceId,
+            passagerId: item.passager.id,
+            employeId: 0
+        }
+        try {
+            const res = await fetch(`/api/ticket`, {
+                method: 'POST', cache: 'no-store', body: JSON.stringify(data)
+            })
+            if (res.ok) {
+                editVoyage(item.voyages, a);
+                // configPopup("Ticket payé", "green", "Reservation")
             }
-            try {
-                const res = await fetch(`/api/ticket`, {
-                    method: 'POST', cache: 'no-store', body: JSON.stringify(data)
-                })
-                if (res.ok) {
-                    editVoyage(item.voyages);
-                    // configPopup("Ticket payé", "green", "Reservation")
-                }
-            } catch (err) {
-                console.log(err)
-            }
-        
+        } catch (err) {
+            console.log(err)
+        }
+
     }
 
 
@@ -202,31 +217,34 @@ export default function ReservationTable() {
                     Réservations
                 </h2>
                 <div className="p-4 text-left">
-                    <div className="grid grid-cols-4 shadow-lg bg-stone-100 p-4 rounded-md text-gray-900 text-sm font-semibold justify-between">
+                    <div className="grid grid-cols-5 shadow-lg bg-stone-100 p-4 rounded-md text-gray-900 text-sm font-semibold justify-between">
                         <div>Dates</div>
                         <div>Passagers </div>
-                        <div>Prix </div>
+                        <div>Type de voyage</div>
+                        <div>A confirmer avant le </div>
                         <div>Type de voyage</div>
                     </div>
                     <ul className="overflow-hidden overflow-y-auto p-4" style={{ maxHeight: 400 }}>
                         {reservation.map((item: any, i: number) => (
-                            <li title={item.reservation.statutReservation} key={i} className={` ${(i % 2) == 0 ? ' bg-lime-100' : 'bg-white '} shadow-lg  border my-4 overflow-hidden rounded-xl  items-center  text-sm `}>
-                                <div className="grid-cols-4 p-3 grid justify-between text-gray-800 items-center font-medium">
-                                    <div >{getDateFormat(item.voyages.dateDepart)}</div>
+                            <li title={item.reservation.statutReservation } key={i} className={` ${(i % 2) == 0 ? ' bg-lime-100' : 'bg-white '} shadow-lg  border my-4 overflow-hidden rounded-xl  items-center  text-sm `}>
+                                <div className="grid-cols-5 p-3 grid justify-between text-gray-800 items-center font-medium">
+                                    <div >{getDateFormat(item.voyages?.dateDepart ?? "") }</div>
                                     <div className="w-full">
-                                        <span className="first-letter:uppercase" >{item.passager.nom} {item.passager.prenom}</span> <br />
-                                        <div className="flex gap-8 items-center" >{item.passager.adresse} <ul><li className="list-disc">{item.passager.numCNI}</li></ul></div>
+                                        <span className="first-letter:uppercase" >{item.passager?.nom ?? ""} {item.passager?.prenom ?? ""}</span> <br />
+                                        <div className="flex gap-8 items-center" >{item.passager?.adresse ?? ""} <ul><li className="list-disc">{item.passager?.numCNI ?? ""}</li></ul></div>
                                     </div>
-                                    <span className="font-bold" >{item.voyages.prixVoyage} Fcfa</span>
-                                    <span >{item.voyages.typeVoyage}</span>
+                                   
+                                    <span className="font-bold" >{item.voyages?.prixVoyage ?? 0} Fcfa</span>
+                                    <span className="text-red-500">{item.reservation.dateConfirmation}</span>
+                                    <span >{item.voyages?.typeVoyage ?? ""}</span>
 
                                 </div>
                                 <div className={`flex border-t  p-2  gap-2  ${item.reservation.statutReservation === "annulé" ? "bg-red-400" : "bg-white"}`} >
-                                    { }
+                                  
                                     {
                                         item.reservation.statutReservation === "validé" ? (
                                             <div>
-                                                <Link href={"/dashboard/caisse/ticket"} className="text-cyan-700 hover:text-white hover:bg-cyan-500 rounded-sm bg-cyan-100 text-xs  p-2">
+                                                <Link href={"/dashboard/admin/ticket"} className="text-cyan-700 hover:text-white hover:bg-cyan-500 rounded-sm bg-cyan-100 text-xs  p-2">
                                                     Générer le ticket
                                                 </Link>
                                             </div>
@@ -245,10 +263,6 @@ export default function ReservationTable() {
                                         ) : null
                                     }
 
-
-                                    {/* <Link href={'/dashboard/caisse/reservations/' + item.reservation.Id} className="text-white flex py-2 items-center gap-2 justify-center hover:shadow-md transition ease-linear hover:from-cyan-700 rounded-sm bg-cyan-500 text-xs from-cyan-600 bg-gradient-to-t p-2">
-                                        Afficher
-                                    </Link> */}
                                 </div>
                             </li>
                         ))

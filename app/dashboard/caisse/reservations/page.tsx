@@ -6,6 +6,7 @@ import PassagerTable from '@/components/passager/passagerTable';
 import AddFormPassager from '@/components/passager/AddFormPassager';
 import ReservationTable from "@/components/reservation/reservationTable";
 import { getDateFormat } from "@/functions/actionsClient";
+import Link from "next/link";
 
 export default function Page() {
 
@@ -214,27 +215,39 @@ export default function Page() {
                     Réservations
                 </h2>
                 <div className="p-4 text-left">
-                    <div className="grid grid-cols-4 shadow-lg bg-stone-100 p-4 rounded-md text-gray-900 text-sm font-semibold justify-between">
+                    <div className="grid grid-cols-5 shadow-lg bg-stone-100 p-4 rounded-md text-gray-900 text-sm font-semibold justify-between">
                         <div>Dates</div>
                         <div>Passagers </div>
-                        <div>Prix </div>
+                        <div>Type de voyage</div>
+                        <div>A confirmer avant le </div>
                         <div>Type de voyage</div>
                     </div>
                     <ul className="overflow-hidden overflow-y-auto p-4" style={{ maxHeight: 400 }}>
                         {reservation.map((item: any, i: number) => (
-                            <li title={item.reservation.statutReservation} key={i} className={` ${(i % 2) == 0 ? ' bg-lime-100' : 'bg-white '} shadow-lg  border my-4 overflow-hidden rounded-xl  items-center  text-sm `}>
-                                <div className="grid-cols-4 p-3 grid justify-between text-gray-800 items-center font-medium">
-                                    <div >{getDateFormat(item.voyages.dateDepart)}</div>
+                            <li title={item.reservation.statutReservation } key={i} className={` ${(i % 2) == 0 ? ' bg-lime-100' : 'bg-white '} shadow-lg  border my-4 overflow-hidden rounded-xl  items-center  text-sm `}>
+                                <div className="grid-cols-5 p-3 grid justify-between text-gray-800 items-center font-medium">
+                                    <div >{getDateFormat(item.voyages?.dateDepart ?? "") }</div>
                                     <div className="w-full">
-                                        <span className="first-letter:uppercase" >{item.passager.nom} {item.passager.prenom}</span> <br />
-                                        <div className="flex gap-8 items-center" >{item.passager.adresse} <ul><li className="list-disc">{item.passager.numCNI}</li></ul></div>
+                                        <span className="first-letter:uppercase" >{item.passager?.nom ?? ""} {item.passager?.prenom ?? ""}</span> <br />
+                                        <div className="flex gap-8 items-center" >{item.passager?.adresse ?? ""} <ul><li className="list-disc">{item.passager?.numCNI ?? ""}</li></ul></div>
                                     </div>
-                                    <span className="font-bold" >{item.voyages.prixVoyage} Fcfa</span>
-                                    <span >{item.voyages.typeVoyage}</span>
+                                   
+                                    <span className="font-bold" >{item.voyages?.prixVoyage ?? 0} Fcfa</span>
+                                    <span className="text-red-500">{item.reservation.dateConfirmation}</span>
+                                    <span >{item.voyages?.typeVoyage ?? ""}</span>
 
                                 </div>
                                 <div className={`flex border-t  p-2  gap-2  ${item.reservation.statutReservation === "annulé" ? "bg-red-400" : "bg-white"}`} >
                                   
+                                    {
+                                        item.reservation.statutReservation === "validé" ? (
+                                            <div>
+                                                <Link href={"/dashboard/caisse/ticket"} className="text-cyan-700 hover:text-white hover:bg-cyan-500 rounded-sm bg-cyan-100 text-xs  p-2">
+                                                    Générer le ticket
+                                                </Link>
+                                            </div>
+                                        ) : null
+                                    }
                                     {
                                         item.reservation.statutReservation === "en attente" ? (
                                             <div>

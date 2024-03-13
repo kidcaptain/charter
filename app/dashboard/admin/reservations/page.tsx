@@ -1,55 +1,9 @@
 "use client"
 
-import { useEffect, useState } from "react";
-import EditFormPassager from '@/components/passager/editFormPassager';
-import PassagerTable from '@/components/passager/passagerTable';
-import AddFormPassager from '@/components/passager/AddFormPassager';
+
 import ReservationTable from "@/components/reservation/reservationTable";
-import { getDateFormat } from "@/functions/actionsClient";
 
 export default function Page() {
-    const [isOpenEditForm, setIsOpenEditForm] = useState<boolean>(false);
-    const [data, setData] = useState<any>();
-    const [ticket, setTicket] = useState<any[]>([]);
-
-    const handleButtonClickEditForm = (val: boolean) => {
-        setIsOpenEditForm(val);
-        console.log(val)
-    }
-
-    const getItem = (val: any) => {
-        setData(val)
-    }
-
-    const [isOpenAddForm, setIsOpenAddForm] = useState<boolean>(false);
-
-    const handleButtonClickAddForm = (val: boolean) => {
-        setIsOpenAddForm(val);
-    }
-    const handleOnEmit = (val: boolean) => {
-        if (val) {
-            alert("Walter white")
-        } else {
-            alert("Better Call Saul")
-        }
-    }
-
-    useEffect(() => {
-
-        const selectTicker = async () => {
-            const response = await fetch(`/api/reservations`, {
-                method: 'GET',
-                body: JSON.stringify(data),
-            })
-            const a = await response.json()
-
-            if (response.ok) {
-                setTicket(a)
-            }
-        }
-        selectTicker()
-    }, [])
-
     return (
         <div className="w-full p-10 shadow-2xl">
             <div className=" py-4 flex justify-between items-start mb-2">

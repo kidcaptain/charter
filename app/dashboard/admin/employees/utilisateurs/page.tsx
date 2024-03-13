@@ -207,18 +207,28 @@ export default function Page() {
             const tabPoste: any[] = await getPoste();
             const tabAgence: any[] = await getAgence();
             const tabUser: any[] = await getUtilisateur();
-
+            let em: any = null;
+            let pos: any = null;
+            let ag: any = null;
             tabUser.map((r) => {
                 tabEmploye.map((i) => {
-                    tabPoste.map((j) => {
+                    if ((r.employeId == i.id)) {
+                        em = r;
                         tabAgence.map((k) => {
-                            if ((r.employeId == i.id) && (r.droitsAccesId == j.id) && (k.id == i.agenceId)) {
-                                tab.push({ ...r, ...{ poste: j.TypeDroits }, ...{ emplacement: k.nom }, ...{ posteId: j.id } })
+                            if ((k.id == i.agenceId)) {
+                                ag = k;
                             }
                         })
-                    })
-
+                    }
                 })
+                tabPoste.map((j) => {
+                    if ((r.droitsAccesId == j.id)) {
+                        pos = j;
+                        
+                    }
+                })
+                tab.push({ ...r, ...{ poste: pos?.TypeDroits }, ...{ emplacement: ag?.nom ?? "" }, ...{ posteId: pos?.id } })
+             
             })
             setUtilisateurs(tab)
             setUserTotal(tab.length)

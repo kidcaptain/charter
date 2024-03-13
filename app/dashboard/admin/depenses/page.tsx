@@ -284,7 +284,7 @@ export default function Page() {
                 <button onClick={e => setTabulation(false)} className={`${!tabulation ? " bg-white shadow-xl  " : ""} border uppercase overflow-hidden   rounded-md  hover:bg-stone-100 p-2  px-4`}>Dépenses</button>
                 {/* <button onClick={e => setTabulation(true)} className={`${tabulation ? " bg-white shadow-xl  " : ""} border uppercase overflow-hidden     rounded-md  hover:bg-stone-100 p-2  px-4`}>BILAN GÉNÉRAL ET STATISTIQUE DE PRODUCTION</button> */}
                 <Link href={"/dashboard/admin/production"} className={`border uppercase overflow-hidden     rounded-md  hover:bg-stone-100 p-2  px-4`}>PRODUCTION</Link>
-                {/* <Link href={"/dashboard/admin/journal"} className={`border uppercase overflow-hidden     rounded-md  hover:bg-stone-100 p-2  px-4`}>JOURNAL</Link> */}
+                <Link href={"/dashboard/admin/journal"} className={`border uppercase overflow-hidden     rounded-md  hover:bg-stone-100 p-2  px-4`}>JOURNAL</Link>
 
             </div>
             {!tabulation ? (
@@ -435,8 +435,8 @@ export default function Page() {
                                             <td className="px-3 py-2 border border-stone-400">
                                                 {item.agence.nom}
                                             </td>
-                                            <td className="px-3 py-2 border border-stone-400">
-                                                {item.depense.montant}
+                                            <td className="px-3 py-2 border text-right border-stone-400">
+                                                {item.depense.montant} fcfa
                                             </td>
                                             <td className="px-3 py-2 border border-stone-400">
                                                 {item.depense.typeDepense}

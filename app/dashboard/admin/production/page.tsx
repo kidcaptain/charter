@@ -201,68 +201,60 @@ export default function Page() {
                     de.map((j: any) => {
 
                         if ((j?.typeDepense == "ration") || (j?.typeDepense == "carburant") || (j?.typeDepense == "peage") || (j?.typeDepense == "voyage") || (j?.typeDepense == "bus")) {
-
                             if (k == 0) {
-                                if (getDateFormat(j.date) == element) {
+                                if (getDateFormat(j?.date) == element) {
                                     sommedi += parseInt(j.montant)
-                                    tab2.push({ jour: "Dimanche", montant: sommedi })
-                                } else {
-                                    tab2.push({ jour: "Dimanche", montant: 0 })
                                 }
                             }
                             if (k == 1) {
-                                if (getDateFormat(j.date) == element) {
+                                if (getDateFormat(j?.date) == element) {
                                     sommelu += parseInt(j.montant)
-                                    tab2.push({ jour: "Lundi", montant: sommelu })
-                                } else {
-                                    tab2.push({ jour: "Lundi", montant: 0 })
                                 }
                             }
                             if (k == 2) {
-                                if (getDateFormat(j.date) == element) {
+                                if (getDateFormat(j?.date) == element) {
                                     sommema += parseInt(j.montant)
-                                    tab2.push({ jour: "Mardi", montant: sommema })
-                                } else {
-                                    tab2.push({ jour: "Mardi", montant: 0 })
                                 }
-
-
                             }
                             if (k == 3) {
-                                if (getDateFormat(j.date) == element) {
-                                    sommeme += parseInt(j.montant)
-                                    tab2.push({ jour: "Mercredi", montant: sommeme })
-                                } else {
-                                    tab2.push({ jour: "Mercredi", montant: 0 })
-                                }
+                                if (getDateFormat(j?.date) == element)
+                                    sommeme += parseInt(j.montant);
                             }
                             if (k == 4) {
-                                if (getDateFormat(j.date) == element) {
-                                    sommeje += parseInt(j.montant)
-                                    tab2.push({ jour: "Jeudi", montant: sommeje })
-                                } else {
-                                    tab2.push({ jour: "Jeudi", montant: 0 })
-                                }
+                                if (getDateFormat(j?.date) == element)
+                                    sommeje += parseInt(j.montant);
                             }
                             if (k == 5) {
-
-                                if (getDateFormat(j.date) == element) {
-                                    sommeve += parseInt(j.montant)
-                                    tab2.push({ jour: "Vendredi", montant: sommeve })
-                                } else {
-                                    tab2.push({ jour: "Vendredi", montant: 0 })
-                                }
+                                if (getDateFormat(j?.date) == element)
+                                    sommeve += parseInt(j.montant);
                             }
                             if (k == 6) {
-                                if (getDateFormat(j.date) == element) {
-                                    sommesa += parseInt(j.montant)
-                                    tab2.push({ jour: "Samedi", montant: sommesa })
-                                } else {
-                                    tab2.push({ jour: "Samedi", montant: 0 })
-                                }
+                                if (getDateFormat(j?.date) == element)
+                                    sommesa += parseInt(j.montant);
                             }
                         }
                     })
+                    if (k == 0) {
+                        tab2.push({ jour: "Dimanche", montant: sommedi })
+                    }
+                    if (k == 1) {
+                        tab2.push({ jour: "Lundi", montant: sommelu })
+                    }
+                    if (k == 2) {
+                        tab2.push({ jour: "Mardi", montant: sommema })
+                    }
+                    if (k == 3) {
+                        tab2.push({ jour: "Mercredi", montant: sommeme })
+                    }
+                    if (k == 4) {
+                        tab2.push({ jour: "Jeudi", montant: sommeje })
+                    }
+                    if (k == 5) {
+                        tab2.push({ jour: "Vendredi", montant: sommeve })
+                    }
+                    if (k == 6) {
+                        tab2.push({ jour: "Samedi", montant: sommesa })
+                    }
                 }
                 if (re.length > 0) {
                     re.map(async (r) => {
