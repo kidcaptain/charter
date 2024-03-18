@@ -1,0 +1,19 @@
+{
+    "name": "Charter Express Dashboard",
+    "short_name": "Charter Express",
+    "scope": "/",
+    "icons" : [
+        {
+            "src":  "/images/titre.png",
+            "sizes": "300x300",
+            "type": "image/png",
+            "purpose": "any"
+        }
+    ],
+    "theme_color": "#000",
+    "background_color": "#000",
+    "start_url": "/",
+    "display": "standalone", 
+    "orientation": "any", 
+    "splash_pages": null
+}
