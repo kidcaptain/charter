@@ -60,6 +60,8 @@ const TrajetAddForm = (props: { childToParent: Function }) => {
                 btn?.click();
                 setData(null);
             } else {
+                const re = await response.json();
+                console.log(re)
                 props.childToParent(false)
             }
         } catch (err) {
