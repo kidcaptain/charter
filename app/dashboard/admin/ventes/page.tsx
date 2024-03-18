@@ -753,7 +753,7 @@ export default function Page() {
                                           
                                             <div className="p-4 text-sm">
                                                 <h4 className="my-2 font-bold text-green-400">
-                                                    Selectionner l'arrêts
+                                                    Selectionner l&apos;arrêts
                                                 </h4>
                                                 <ul>
                                                     <li onClick={() => { setItem({ ...item, prixFinal: item.trajet.prix, dest: "" }); setDest(""); handleItemOnclick() }} className={`p-1 py-2 rounded-md my-1 border border-b-2 grid cursor-pointer grid-cols-2 bg-white hover:bg-stone-100 `}>
