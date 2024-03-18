@@ -24,16 +24,17 @@ export const GET = async (req: NextRequest) => {
 export const POST = async (req: Request) => {
   const body = await req.json();
   // const date = new Date()
-  const { lieudepart, lieuarrivee, heuredepart, heurearrivee, distance } = body;
-  const trajets = await prisma.trajet.create({
-    data: {
-      lieuArrivee: lieuarrivee,
-      lieuDepart: lieudepart,
-      heureDepart: heuredepart,
-      heureArrivee: heurearrivee,
-      distance: parseInt(distance),
-    }
-  });
+  const { lieuDepart, lieuArrivee, prix, arrets, distance } = body;
+      const trajets = await prisma.trajet.update({
+        where: { id: parseInt(`${id}`)  },
+        data: {
+          lieuArrivee: lieuArrivee,
+          lieuDepart: lieuDepart,
+          distance: parseInt(distance),
+          prix:   parseInt(prix),
+          arrets: arrets
+        }
+      });
   return NextResponse.json(trajets)
 }
 
@@ -42,17 +43,16 @@ export const PUT = async (req: Request) => {
   const id = searchParams.get("id");
 
   const body = await req.json();
-
-  const { lieuDepart, lieuArrivee, heureDepart, heureArrivee, distance } = body;
+  const { lieuDepart, lieuArrivee, prix, arrets, distance } = body;
   try {
     const trajets = await prisma.trajet.update({
       where: { id: parseInt(`${id}`)  },
       data: {
         lieuArrivee: lieuArrivee,
         lieuDepart: lieuDepart,
-        heureDepart: heureDepart,
-        heureArrivee: heureArrivee,
         distance: parseInt(distance),
+        prix:   parseInt(prix),
+        arrets: arrets
       }
     });
     return NextResponse.json(trajets)

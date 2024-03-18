@@ -26,16 +26,16 @@ export const PUT = async (req: Request, { params }: { params: { id: string } }) 
     const { id } = params;
     const body = await req.json();
   
-    const { lieuDepart, lieuArrivee, heureDepart, heureArrivee, distance } = body;
+    const { lieuDepart, lieuArrivee, prix, arrets, distance } = body;
     try {
       const trajets = await prisma.trajet.update({
         where: { id: parseInt(`${id}`)  },
         data: {
           lieuArrivee: lieuArrivee,
           lieuDepart: lieuDepart,
-          heureDepart: heureDepart,
-          heureArrivee: heureArrivee,
           distance: parseInt(distance),
+          prix:   parseInt(prix),
+          arrets: arrets
         }
       });
       return NextResponse.json(trajets)
