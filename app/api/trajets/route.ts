@@ -25,8 +25,7 @@ export const POST = async (req: Request) => {
   const body = await req.json();
   // const date = new Date()
   const { lieuDepart, lieuArrivee, prix, arrets, distance } = body;
-      const trajets = await prisma.trajet.update({
-        where: { id: parseInt(`${id}`)  },
+      const trajets = await prisma.trajet.create({
         data: {
           lieuArrivee: lieuArrivee,
           lieuDepart: lieuDepart,
@@ -41,7 +40,6 @@ export const POST = async (req: Request) => {
 export const PUT = async (req: Request) => {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
-
   const body = await req.json();
   const { lieuDepart, lieuArrivee, prix, arrets, distance } = body;
   try {
