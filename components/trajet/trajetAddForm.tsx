@@ -48,7 +48,7 @@ const TrajetAddForm = (props: { childToParent: Function }) => {
            prix = data.prix;
         }
         const datas = {...data, prix: prix, arrets: JSON.stringify(arrets)}
-
+        console.log(datas)
         try {
             const response = await fetch('/api/trajets', {
                 method: 'POST',
