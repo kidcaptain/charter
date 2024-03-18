@@ -24,11 +24,11 @@ export const GET = async (req: NextRequest) => {
 export const POST = async (req: Request) => {
   const body = await req.json();
   // const date = new Date()
-  const { lieuDepart, lieuArrivee, prix, arrets, distance } = body;
+  const { lieudepart, lieuarrivee, prix, arrets, distance } = body;
       const trajets = await prisma.trajet.create({
         data: {
-          lieuArrivee: lieuArrivee,
-          lieuDepart: lieuDepart,
+          lieuArrivee: lieuarrivee,
+          lieuDepart: lieudepart,
           distance: parseInt(distance),
           prix:   parseInt(prix),
           arrets: arrets
