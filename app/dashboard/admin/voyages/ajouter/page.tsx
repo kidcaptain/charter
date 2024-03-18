@@ -76,15 +76,16 @@ export default function Page() {
         e.preventDefault()
         const str = data.busId;
         const array = str.split(',').map(Number);
+        let trajet = JSON.parse(data.trajetId);
         if (messageError == "") {
             const voyage = {
                 agenceId: data.agenceId,
                 dateDepart: data.dateDepart,
                 dateArrivee: data.dateArrivee,
                 busId: `${array[0]}`,
-                trajetId: data.trajetId,
+                trajetId: trajet.id,
                 typeVoyage: data.typeVoyage,
-                prixVoyage: data.prixVoyage,
+                prixVoyage: trajet.prix,
                 placeDisponible: array[1]
             }
             try {
@@ -177,8 +178,8 @@ export default function Page() {
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Bus</label>
                                 <select id="busId" name="busId" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option></option>
-                                    {bus.map((item: any, i: number) => ( item.horsService != "non" ?
-                                        <option key={i} value={[item.id, item.capacite]}>{item.marque} {item.modele} ({item.typeBus})</option> : null
+                                    {bus.map((item: any, i: number) => (
+                                        <option key={i} value={[item.id, item.capacite]}>{item.marque} {item.modele} ({item.typeBus})</option>
                                     ))}
                                 </select>
 
@@ -188,7 +189,7 @@ export default function Page() {
                                 <select id="trajetId" name="trajetId" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option></option>
                                     {trajet.map((item: any, i: number) => (
-                                        <option key={i} value={[item.id]}>{item.lieuDepart} - {item.lieuArrivee} ({item.heureArrivee} - {item.heureDepart})</option>
+                                        <option key={i} value={JSON.stringify({id: item.id, prix: item.prix})}>{item.lieuDepart} - {item.lieuArrivee}</option>
                                     ))}
                                 </select>
                             </div>
@@ -197,7 +198,7 @@ export default function Page() {
                                 <select id="agenceId" name="agenceId" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option></option>
                                     {agences.map((item: any, i: number) => (
-                                        <option key={i} value={[item.id]}>{item.nom} ({item.adresse})</option>
+                                        <option key={i} value={item.id}>{item.nom} ({item.adresse})</option>
                                     ))}
                                 </select>
                             </div>
@@ -209,10 +210,10 @@ export default function Page() {
                                     <option value="aller simple">Aller Simple</option>
                                 </select>
                             </div>
-                            <div className="mt-4">
+                            {/* <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Prix du voyage</label>
                                 <input onChange={handleInputChange} required type="number" id="prixVoyage" name="prixVoyage" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
-                            </div>
+                            </div> */}
                             <div className="mt-4 flex">
                                 <button type="submit" className="text-white text-sm flex px-4  hover:shadow-md  hover:from-blue-700 rounded-sm bg-blue-500  from-blue-600 bg-gradient-to-t p-2">
                                     Enregistrer

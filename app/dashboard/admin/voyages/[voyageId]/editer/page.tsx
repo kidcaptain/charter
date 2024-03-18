@@ -22,7 +22,7 @@ export default function Page({ params }: { params: IPrams }) {
     const [trajet, setTrajet] = useState<any[]>([])
 
     const handleInputChange = (event: any) => {
-        const target = event.target
+        const target = event.target 
         const data = target.type === 'checkbox' ? target.checked : target.value
         setData((oldValue: any) => {
             return { ...oldValue, [target.name]: data }
@@ -33,13 +33,15 @@ export default function Page({ params }: { params: IPrams }) {
         e.preventDefault()
         const str = data.busId;
         const array = str.split(',').map(Number);
+        let trajet = JSON.parse(data.trajetId);
         const voyage = {
-            dateDepart: getDateFormat(data.dateDepart),
-            dateArrivee: getDateFormat(data.dateArrivee),
+            agenceId: data.agenceId,
+            dateDepart: data.dateDepart,
+            dateArrivee: data.dateArrivee,
             busId: `${array[0]}`,
-            trajetId: data.trajetId,
+            trajetId: trajet.id,
             typeVoyage: data.typeVoyage,
-            prixVoyage: data.prixVoyage,
+            prixVoyage: trajet.prix,
             placeDisponible: array[1]
         }
         try {
@@ -124,15 +126,15 @@ export default function Page({ params }: { params: IPrams }) {
                                     ))}
                                 </select>
                             </div>
-                            <div className="mt-4">
+                            {/* <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Trajet</label>
                                 <select id="trajetId" value={data.trajetId} name="trajetId" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option></option>
                                     {trajet.map((item: any, i: number) => (
-                                        <option key={i} value={[item.id]}>{item.lieuDepart} - {item.lieuArrivee} ({item.heureArrivee} - {item.heureDepart})</option>
+                                        <option key={i} value={JSON.stringify({id: item.id, prix: item.prix})}>{item.lieuDepart} - {item.lieuArrivee} ({item.heureArrivee} - {item.heureDepart})</option>
                                     ))}
                                 </select>
-                            </div>
+                            </div> */}
                             <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Type de voyages:</label>
                                 <select id="typeVoyage" value={data.typeVoyage} name="typeVoyage" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
@@ -140,10 +142,10 @@ export default function Page({ params }: { params: IPrams }) {
                                     <option value="aller simple">Aller Simple</option>
                                 </select>
                             </div>
-                            <div className="mt-4">
+                            {/* <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Prix du voyage</label>
                                 <input onChange={handleInputChange} value={data.prixVoyage} required type="number" id="prixVoyage" name="prixVoyage" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
-                            </div>
+                            </div> */}
                             <div className="mt-4 flex">
                                 <button type="submit" className="text-white text-sm flex px-4  hover:shadow-md  hover:from-cyan-700 rounded-sm bg-cyan-500  from-cyan-600 bg-gradient-to-t p-2">
                                     Modifier

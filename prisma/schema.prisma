@@ -57,14 +57,13 @@ model Voyage {
   employeId       Int    @default(0)
 }
 
-
 model Trajet {
   id           Int    @id @default(autoincrement())
   lieuDepart   String
   lieuArrivee  String
-  heureDepart  String
-  heureArrivee String
-  distance     Int
+  distance     Int @default(0)
+  prix         Int @default(0)
+  arrets       String @default("")
 }
 
 model Reservation {

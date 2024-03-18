@@ -32,6 +32,7 @@ export default function Page() {
     const [typePaiement, setTypePaiement] = useState<string>("");
     const [trajet, setTrajet] = useState<string>("");
     const [agenceId, setAgenceId] = useState<string>("");
+    const [dest, setDest] = useState<string>("");
     const [item, setItem] = useState<any>(null);
     const [ticket, setTicket] = useState<any>(null);
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
@@ -243,7 +244,7 @@ export default function Page() {
         let nom: string = "";
         let typeService: string = "";
         let montantRecette: number = 0;
-        
+
         if (method == "payer") {
             nom = "Achat de ticket de bus";
             typeService = "ventes";
@@ -271,6 +272,7 @@ export default function Page() {
             })
             if (respost.ok) {
                 document.getElementById("resetbtn")?.click()
+                router.refresh()
             }
         } catch (err) {
             console.log(err)
@@ -424,7 +426,7 @@ export default function Page() {
                 })
                 tab.push({ trajet: traj, voyages: r, bus: bus });
             })
-           setVoyage(tab)
+            setVoyage(tab)
         }
 
         // const getLenghtTicket = async () => {
@@ -594,7 +596,7 @@ export default function Page() {
                                                         <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Montant à payer</label>
                                                         {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
                                                     </div>
-                                                    <input value={parseInt(item.voyages?.prixVoyage)} disabled type="number" id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200 sm:text-md focus-visible:ring-blue-400 " ue-400  `} />
+                                                    <input value={parseInt(item.prixFinal)} disabled type="number" id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200 sm:text-md focus-visible:ring-blue-400 " ue-400  `} />
                                                 </div>
                                                 <div className="mt-4">
                                                     <div className="flex gap-4 mb-1 items-start">
@@ -625,14 +627,14 @@ export default function Page() {
                                                         <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Avance versée</label>
                                                         {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
                                                     </div>
-                                                    <input type="number" id="montant" onChange={e => setAvance(parseInt(e.target.value))} max={parseInt(item.voyages?.prixVoyage)} name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " ue-400  `} />
+                                                    <input type="number" id="montant" onChange={e => setAvance(parseInt(e.target.value))} max={parseInt(item.prixFinal)} name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " ue-400  `} />
                                                 </div>
                                                 <div className="mt-4">
                                                     <div className="flex gap-4 mb-1 items-start">
                                                         <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">reste à payé</label>
                                                         {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
                                                     </div>
-                                                    <input disabled type="number" onChange={e => setReste(parseInt(e.target.value))} value={parseInt(item.voyages?.prixVoyage) - avance} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " ue-400  `} />
+                                                    <input disabled type="number" onChange={e => setReste(parseInt(e.target.value))} value={parseInt(item.prixFinal) - avance} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " ue-400  `} />
                                                 </div>
                                                 <div className="mt-4">
                                                     <div className="flex gap-4 mb-1 items-start">
@@ -666,25 +668,25 @@ export default function Page() {
                                     <button type="reset" onClick={() => { window.location.reload() }} className=" p-2 px-3 rounded-md hover:bg-stone-400 text-sm hover:text-white border border-stone-500 text-stone-500 font-bold">Nouvelle vente</button>
                                 </div>
                                 {(isReady) ? (
-                                 <div>
-                                       <ComponentTicketPrint item={{
-                                        client: `${passager?.passager?.nom} ${passager?.passager?.prenom}`,
-                                        tel: passager?.passager?.telephone,
-                                        depart: getDateFormat(ticket?.voyages?.dateDepart),
-                                        voyage: `C${ticket?.voyages?.id}`,
-                                        montant: ticket?.voyage?.prixVoyage,
-                                        remboursement: 0,
-                                        caisse: `GUICHET ${session?.user?.name}`,
-                                        numticket: numTicket.toString(),
-                                        type: ticket?.voyage?.typeVoyage,
-                                        trajet: `${ticket?.trajet?.lieuDepart} / ${ticket?.trajet.lieuArrivee}`,
-                                        siege: ticket?.bus?.capacite - ticket?.voyages?.placeDisponible
-                                    }} />
-                                    <p className="p-4 uppercase">
-                                        client:{passager?.passager?.nom} {passager?.passager?.prenom}, téléphone client:{passager?.passager?.telephone},départ: {getDateFormat(ticket?.voyages?.dateDepart)}, Numèro de bus:{ticket?.bus?.id},
-                                        trajet:{ticket?.trajet?.lieuDepart}/{ticket?.trajet.lieuArrivee}, voyageN°: {ticket?.voyages?.id}, numèro de siège:{ticket?.bus?.capacite - ticket?.voyages?.placeDisponible < 10 ? '0'+ (ticket?.bus?.capacite - ticket?.voyages?.placeDisponible) : ticket?.bus?.capacite - ticket?.voyages?.placeDisponible }
-                                    </p>
-                                 </div>
+                                    <div>
+                                        <ComponentTicketPrint item={{
+                                            client: `${passager?.passager?.nom} ${passager?.passager?.prenom}`,
+                                            tel: passager?.passager?.telephone,
+                                            depart: getDateFormat(ticket?.voyages?.dateDepart),
+                                            voyage: `C${ticket?.voyages?.id}`,
+                                            montant: ticket?.voyage?.prixVoyage,
+                                            remboursement: 0,
+                                            caisse: `GUICHET ${session?.user?.name}`,
+                                            numticket: numTicket.toString(),
+                                            type: ticket?.voyage?.typeVoyage,
+                                            trajet: `${ticket?.trajet?.lieuDepart} / ${dest == "" ? ticket?.trajet.lieuArrivee : dest}`,
+                                            siege: ticket?.bus?.capacite - ticket?.voyages?.placeDisponible + 1
+                                        }} />
+                                        <p className="p-4 uppercase">
+                                            client:{passager?.passager?.nom} {passager?.passager?.prenom}, téléphone client:{passager?.passager?.telephone},départ: {getDateFormat(ticket?.voyages?.dateDepart)}, Numèro de bus:{ticket?.bus?.id},
+                                            trajet:{ticket?.trajet?.lieuDepart}/{ticket?.trajet.lieuArrivee}, voyageN°: {ticket?.voyages?.id}, numèro de siège:{ticket?.bus?.capacite - ticket?.voyages?.placeDisponible < 10 ? '0' + (ticket?.bus?.capacite - ticket?.voyages?.placeDisponible) : ticket?.bus?.capacite - ticket?.voyages?.placeDisponible}
+                                        </p>
+                                    </div>
                                 ) : null}
                             </div>
                         </div>
@@ -713,18 +715,62 @@ export default function Page() {
                         </div>
                         {
                             !onSearched ? (
-                                <ul className=" grid grid-cols-4 gap-8 relative h-full ">
-                                    {voyages.map((item: any, i: number) => ((item.voyages?.placeDisponible != 0 && compareDate(getDateFormat(item.voyages?.dateDepart)) && item.voyages?.ready != "oui")  ?
-                                        <li key={i} onClick={() => { setItem(item); handleItemOnclick() }} className="cursor-pointer" >
-                                            <CardVoyage isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
+                                <ul className=" grid grid-cols-4 items-start gap-8 relative h-full ">
+                                    {voyages.map((item: any, i: number) => ((item.voyages?.placeDisponible != 0 && compareDate(getDateFormat(item.voyages?.dateDepart)) && item.voyages?.ready != "oui") ?
+                                        <li key={i} className=" hover:translate-y-2 hover:shadow-green-900/50 shadow-2xl rounded-md" >
+                                            <CardVoyage isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.prixFinal} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
+
+
+                                            <div className="p-4 text-sm">
+                                                <h4 className="my-2 font-bold text-green-400">
+                                                    Selectionner l'arrêts
+                                                </h4>
+                                                <ul>
+                                                    <li onClick={() => { setItem({ ...item, prixFinal: item.trajet.prix, dest: "" }); setDest(""); handleItemOnclick() }} className={`p-1 py-2 rounded-md my-1 border border-b-2 grid cursor-pointer grid-cols-2 bg-white hover:bg-stone-100 `}>
+                                                        <span >{item.trajet?.lieuDepart} - {item.trajet?.lieuArrivee}</span> <span className="text-right uppercase">{item.trajet.prix} fcfa</span>
+                                                    </li>
+                                                    {
+                                                        item.trajet?.arrets != "" ?
+                                                            JSON.parse(item.trajet?.arrets).map((i: any, index: number) => (
+                                                                <li onClick={() => { setItem({ ...item, prixFinal: i.prix, dest: i.nom }); setDest(i.nom); handleItemOnclick() }} key={index} className={`p-1 py-2 border rounded-md my-1 cursor-pointer border-b-2 grid grid-cols-2 ${index % 2 == 0 ? 'bg-blue-200 hover:bg-blue-300 border-b-blue-400' : 'bg-white hover:bg-stone-100'}`}>
+                                                                    <span>{item.trajet?.lieuDepart} - {i.nom}</span> <span className="text-right uppercase ">{i.prix} fcfa</span>
+                                                                </li>
+                                                            ))
+                                                            : null
+                                                    }
+
+                                                </ul>
+                                            </div>
                                         </li> : null
                                     ))}
                                 </ul>
                             ) : (
                                 <ul className=" grid grid-cols-4 gap-8 relative h-full ">
                                     {voyagesResult.map((item: any, i: number) => (item.voyages?.placeDisponible != 0 && compareDate(getDateFormat(item.voyages?.dateDepart)) && item.voyages?.ready != "oui" ?
-                                        <li key={i} onClick={() => { setItem(item); handleItemOnclick() }} className="cursor-pointer" >
-                                            <CardVoyage isHidden={true} id={item.voyages?.id}  isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
+                                        <li key={i} onClick={() => { setItem(item); handleItemOnclick() }} className="cursor-pointer border" >
+                                            <CardVoyage isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
+
+                                          
+                                            <div className="p-4 text-sm">
+                                                <h4 className="my-2 font-bold text-green-400">
+                                                    Selectionner l'arrêts
+                                                </h4>
+                                                <ul>
+                                                    <li onClick={() => { setItem({ ...item, prixFinal: item.trajet.prix, dest: "" }); setDest(""); handleItemOnclick() }} className={`p-1 py-2 rounded-md my-1 border border-b-2 grid cursor-pointer grid-cols-2 bg-white hover:bg-stone-100 `}>
+                                                        <span >{item.trajet?.lieuDepart} - {item.trajet?.lieuArrivee}</span> <span className="text-right uppercase">{item.trajet.prix} fcfa</span>
+                                                    </li>
+                                                    {
+                                                        item.trajet?.arrets != "" ?
+                                                            JSON.parse(item.trajet?.arrets).map((i: any, index: number) => (
+                                                                <li onClick={() => { setItem({ ...item, prixFinal: i.prix, dest: i.nom }); setDest(i.nom); handleItemOnclick() }} key={index} className={`p-1 py-2 border rounded-md my-1 cursor-pointer border-b-2 grid grid-cols-2 ${index % 2 == 0 ? 'bg-blue-200 hover:bg-blue-300 border-b-blue-400' : 'bg-white hover:bg-stone-100'}`}>
+                                                                    <span>{item.trajet?.lieuDepart} - {i.nom}</span> <span className="text-right uppercase ">{i.prix} fcfa</span>
+                                                                </li>
+                                                            ))
+                                                            : null
+                                                    }
+
+                                                </ul>
+                                            </div>
                                         </li> : null
                                     ))}
                                 </ul>
@@ -749,10 +795,9 @@ export default function Page() {
                                         <li className="py-2 px-4 font-semibold flex flex-row text-gray-700 justify-between">
                                             <span>numéro CNI:</span> <span>{value.numCNI}</span>
                                         </li>
-
                                     </ul>
                                 </div>
-                                <CardVoyage isHidden={true} id={item.voyages?.id}  isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
+                                <CardVoyage isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.prixFinal} lieuArrive={dest} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
                             </div>
                         ) : null}
                     </div>

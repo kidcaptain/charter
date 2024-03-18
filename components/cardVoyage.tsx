@@ -16,7 +16,7 @@ export default function CardVoyage(props: {
     agence: string,
     prix: number,
     isVip: boolean,
-    isHidden: boolean
+    isHidden: boolean,
 }) {
 
     const [isOpen, setIsOpen] = useState<boolean>(true);
@@ -43,7 +43,7 @@ export default function CardVoyage(props: {
         setIsOpenModal(val);
     }
     return (
-        <div title={`${props.isVip ? 'Bus vip' :'Bus standard' }`} className={`bg-white shadow-2xl max-w-96 hover:translate-y-2  hover:shadow-green-900/50 rounded-md overflow-hidden border border-t-8 ${props.isVip ? 'border-t-yellow-400' :'border-t-slate-700' } transition-all ease-linear`}>
+        <div title={`${props.isVip ? 'Bus vip' :'Bus standard' }`} className={`bg-white  max-w-96  rounded-md overflow-hidden  border-t-8 ${props.isVip ? 'border-t-yellow-400' :'border-t-slate-700' } transition-all ease-linear`}>
             <h6 className=" my-2 text-sm text-center font-semibold ">Départ le {props.date}</h6>
             <div className="pb-3 sm:pb-4 flex items-center justify-between space-x-4  p-4 rtl:space-x-reverse">
                 <div className="flex gap-2 items-center">

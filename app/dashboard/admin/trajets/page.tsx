@@ -5,11 +5,14 @@ import Popup from "@/components/ui/popup";
 import { useRouter } from "next/navigation";
 import { useState } from "react"
 
+
+
+
 export default function Page() {
     const router = useRouter()
     const [popupData, setPopupData] = useState<{ message: string, title?: string, color: string }>({ message: "", title: "", color: "" })
     const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false);
-
+   
     const handleOnEmitTable = (val: any) => {
         router.push("/dashboard/admin/trajets/" + val)
     }
@@ -30,12 +33,12 @@ export default function Page() {
 
     return (
         <div className="p-10">
-            <div className=" w-full">
+            <div className=" w-full min-h-screen">
                 <div className=" py-4 flex justify-between items-start mb-2">
                     <h1 className="text-xl text-gray-900">Trajets</h1>
                 </div>
                 <div>
-                    <section className="grid grid-cols-4 w-full gap-4">
+                    <section className="grid grid-cols-4 w-full h-full gap-4">
                        <div className="col-span-1">
                        <TrajetAddForm childToParent={handleChildren} />
                        </div>
