@@ -14,8 +14,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-        <body>{children}</body>
+    <html lang="fr">
+      <head>
+        <link rel="manifest" crossOrigin="use-credentials" href="/manifest.json" />
+      </head>
+      <body>{children}</body>
     </html>
   );
 }
