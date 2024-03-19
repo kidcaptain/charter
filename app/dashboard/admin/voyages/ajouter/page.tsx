@@ -82,7 +82,6 @@ export default function Page() {
             const voyage = {
                 agenceId: data.agenceId,
                 dateDepart: data.dateDepart,
-                dateArrivee: data.dateArrivee,
                 busId: `${array[0]}`,
                 trajetId: trajet.id,
                 typeVoyage: data.typeVoyage,

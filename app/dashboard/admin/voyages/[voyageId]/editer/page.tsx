@@ -38,7 +38,7 @@ export default function Page({ params }: { params: IPrams }) {
         const voyage = {
             agenceId: data.agenceId,
             dateDepart: data.dateDepart,
-            dateArrivee: data.dateArrivee,
+            dateArrivee: getDateFormat(data.dateArrivee),
             busId: `${array[0]}`,
             trajetId: trajet.id,
             typeVoyage: data.typeVoyage,
