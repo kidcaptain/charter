@@ -7,6 +7,7 @@ interface IPrams {
     voyageId?: string
 }
 export default function Page({ params }: { params: IPrams }) {
+    const [employe, setemploye] = useState<any[]>([])
     const [data, setData] = useState<any>(
         {
             dateDepart: "",
@@ -22,7 +23,7 @@ export default function Page({ params }: { params: IPrams }) {
     const [trajet, setTrajet] = useState<any[]>([])
 
     const handleInputChange = (event: any) => {
-        const target = event.target 
+        const target = event.target
         const data = target.type === 'checkbox' ? target.checked : target.value
         setData((oldValue: any) => {
             return { ...oldValue, [target.name]: data }
@@ -42,7 +43,10 @@ export default function Page({ params }: { params: IPrams }) {
             trajetId: trajet.id,
             typeVoyage: data.typeVoyage,
             prixVoyage: trajet.prix,
-            placeDisponible: array[1]
+            placeDisponible: array[1],
+            chauffeurId: data.chauffeurId,
+            heureDepart: data.heureDepart,
+            numVoyage: data.numVoyage,
         }
         try {
             const response = await fetch(`/api/voyages/${params.voyageId}`, {
@@ -59,7 +63,7 @@ export default function Page({ params }: { params: IPrams }) {
         }
     }
 
-    
+
 
 
     useEffect(() => {
@@ -77,7 +81,7 @@ export default function Page({ params }: { params: IPrams }) {
                 throw new Error("Failed")
             }
             const val = await res.json();
-            setData({ ...val }); 
+            setData({ ...val });
             // setValue({ ...val });
         };
         getData()
@@ -88,6 +92,24 @@ export default function Page({ params }: { params: IPrams }) {
             }
             const data = await res.json();
             setBus(data)
+        };
+        const getEmploye = async () => {
+            const resc = await fetch(`/api/postes`, { cache: "no-store" })
+            if (!resc.ok) {
+                throw new Error("Failed")
+            }
+
+            const data: any[] = await resc.json();
+            data.map(async (z) => {
+                if (z.titre == "chauffeur") {
+                    const res = await fetch(`/api/employes?posteId=${z.id}`, { cache: "no-store" })
+                    if (!res.ok) {
+                        throw new Error("Failed")
+                    }
+                    const datas = await res.json();
+                    setemploye(datas)
+                }
+            })
         };
         getBus();
         getTrajet();
@@ -106,17 +128,22 @@ export default function Page({ params }: { params: IPrams }) {
 
                     <form onSubmit={HandlerSubmit} className="col-span-1 bg-white shadow-xl rounded-sm  ">
                         <h2 className=" text-gray-100 p-4 bg-cyan-500  uppercase">
-                            Modification 
-                        </h2> 
+                            Modification
+                        </h2>
                         <div className=" m-auto p-4">
+                            <div className="mt-4">
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Numéro Voyage</label>
+                                <input onChange={handleInputChange}  type="date" id="numVoyage" placeholder="Identifiant du voyage" name="numVoyage" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
+                            </div>
                             <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Date de Départ</label>
                                 <input onChange={handleInputChange} value={getDateFormat(data.dateDepart)} required type="date" id="dateDepart" placeholder="Départ" name="dateDepart" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Date d&apos;arrivée</label>
-                                <input onChange={handleInputChange} required type="date" value={getDateFormat(data.dateArrivee)} id="dateArrivee" placeholder="Arrivée" name="dateArrivee" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Heure de Départ</label>
+                                <input onChange={handleInputChange}  type="date" id="heureDepart" placeholder="Heure de départ" name="heureDepart" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
+
                             <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Bus</label>
                                 <select id="busId" name="busId" value={data.busId} required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
@@ -136,8 +163,17 @@ export default function Page({ params }: { params: IPrams }) {
                                 </select>
                             </div> */}
                             <div className="mt-4">
+                                <label className="  text-sm uppercase">Attribuer un chauffeur</label>
+                                <select id="chauffeurId" name="chauffeurId" value={data.chauffeurId} onChange={handleInputChange} className="block w-full text-sm p-2 uppercase text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
+                                    <option></option>
+                                    {employe.map((item: any, i: number) => (
+                                        <option key={i} value={JSON.stringify({ id: item.id, nom: `${item.nom} ${item.prenom}` })}>{item.nom} {item.prenom}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Type de voyages:</label>
-                                <select id="typeVoyage" value={data.typeVoyage} name="typeVoyage" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
+                                <select id="typeVoyage" value={data.typeVoyage} name="typeVoyage"  onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option value="aller-retour">Aller-Retour</option>
                                     <option value="aller simple">Aller Simple</option>
                                 </select>

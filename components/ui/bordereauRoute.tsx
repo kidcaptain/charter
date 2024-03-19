@@ -73,7 +73,7 @@ class ComponentToPrint extends React.Component<DataBordereau> {
                     <div className="border border-black p-2 uppercase"><span className="font-bold ">Date :</span> {year}-{month}-{day} </div>
                     <div className="border border-black p-2 uppercase"><span className="font-bold">Heure :</span> {hour}:{minute}</div>
                     <div className="border border-black p-2 uppercase"><span className="font-bold">Bus N° :</span> {this.props.bus?.id}</div>
-                    <div className="border border-black p-2 uppercase"><span className="font-bold">Voyage N° :</span> {this.props.voyage?.id}</div>
+                    <div className="border border-black p-2 uppercase"><span className="font-bold">Voyage N° :</span> {this.props.voyage?.numVoyage}</div>
                 </div>
                 <div className="overflow-hidden " style={{ maxHeight: 800 }}>
                     <table className="w-full  text-center border ">

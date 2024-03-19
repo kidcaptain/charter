@@ -75,10 +75,10 @@ export default function CardVoyage(props: {
             
 
                 <div className="text-right">
-                    <div>
+                    {/* <div>
                         <span className="text-sm">{props.heureArrive}</span> <br />
                         <span className="text-xs font-semibold text-gray-600">Heure de d&apos;arrivée</span>
-                    </div>
+                    </div> */}
                     <div>
                         <span className="text-sm uppercase">{props.lieuArrive}</span> <br />
                         <span className="text-xs font-semibold text-gray-600">Lieu de d&apos;arrivée</span>

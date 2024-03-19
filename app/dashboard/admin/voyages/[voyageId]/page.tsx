@@ -186,8 +186,8 @@ export default function Voyage({ params }: { params: IPrams }) {
           }
         })
       })
-      if (val.employeId != 0) {
-        const ress = await fetch(`/api/employes/${val.employeId}`, { cache: "no-store" })
+      if (val.chauffeurId != 0) {
+        const ress = await fetch(`/api/employes/${val.chauffeurId}`, { cache: "no-store" })
         const datas = await ress.json();
         setChauffeur(datas.nom + " " + datas.prenom)
       }
@@ -205,18 +205,6 @@ export default function Voyage({ params }: { params: IPrams }) {
       </div>
       <div className="shadow-2xl border rounded-md ">
         <h2 className="p-4 bg-white uppercase border-b font-bold">Bordereau de route </h2>
-        <form className="p-4" onSubmit={HandlerSubmit}>
-          <div className="mt-2">
-            <label className="  text-sm uppercase">Attribuer un chauffeur</label>
-            <select id="idTypeDepense" name="idTypeDepense" onChange={(e) => { setChauffeur(JSON.parse(e.target.value)?.nom); setid(JSON.parse(e.target.value)?.id) }} className="block w-96 text-sm p-2 uppercase text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
-              <option></option>
-              {employe.map((item: any, i: number) => (
-                <option key={i} value={JSON.stringify({ id: item.id, nom: `${item.nom} ${item.prenom}` })}>{item.nom} {item.prenom}</option>
-              ))}
-            </select>
-          </div>
-          <button type="submit" className="p-2 bg-green-400 text-sm  w-96"> Enregistrer</button>
-        </form>
       </div>
 
       <BordereauRoute item={{ depense: { carburant: parseInt(depense?.carburant), peage: parseInt(depense?.peage), ration: parseInt(depense?.ration), autre: parseInt(depense?.autre) }, bus: bus, trajet: trajet, voyage: voyage, passagers: passagers, chauffeur: chauffeur, agence: agence }} />

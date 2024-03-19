@@ -46,7 +46,7 @@ model Employe {
 model Voyage {
   id              Int      @id @default(autoincrement())
   dateDepart      DateTime
-  dateArrivee     DateTime
+  dateArrivee     DateTime @default(now())
   placeDisponible Int
   typeVoyage      String
   prixVoyage      Decimal
@@ -55,6 +55,9 @@ model Voyage {
   agenceId        Int
   ready           String @default("non")
   employeId       Int    @default(0)
+  chauffeurId     Int    @default(0)
+  heureDepart     String @default("")
+  numVoyage       String @default("")
 }
 
 model Trajet {
