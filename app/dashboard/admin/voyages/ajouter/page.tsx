@@ -87,7 +87,7 @@ export default function Page() {
                 typeVoyage: data.typeVoyage,
                 prixVoyage: trajet.prix,
                 placeDisponible: array[1],
-                chauffeurId: data.chauffeurId,
+                chauffeurId: data.chauffeurId ?? 0,
                 heureDepart: data.heureDepart,
                 numVoyage: data.numVoyage,
             }
@@ -242,7 +242,7 @@ export default function Page() {
                                 <select id="chauffeurId" name="chauffeurId" onChange={handleInputChange} className="block w-full text-sm p-2 uppercase text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option></option>
                                     {employe.map((item: any, i: number) => (
-                                        <option key={i} value={JSON.stringify({ id: item.id, nom: `${item.nom} ${item.prenom}` })}>{item.nom} {item.prenom}</option>
+                                        <option key={i} value={item.id}>{item.nom} {item.prenom}</option>
                                     ))}
                                 </select>
                             </div>
