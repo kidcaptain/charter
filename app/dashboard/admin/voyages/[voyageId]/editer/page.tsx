@@ -42,7 +42,7 @@ export default function Page({ params }: { params: IPrams }) {
             busId: `${array[0]}`,
             trajetId: data.id,
             typeVoyage: data.typeVoyage,
-            prixVoyage: data.prix,
+            prixVoyage: data.prixVoyage,
             placeDisponible: array[1],
             chauffeurId: data.chauffeurId,
             heureDepart: data.heureDepart,
