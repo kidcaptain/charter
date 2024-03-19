@@ -37,7 +37,7 @@ export default function Page({ params }: { params: IPrams }) {
         let trajet = JSON.parse(data.trajetId);
         const voyage = {
             agenceId: data.agenceId,
-            dateDepart: data.dateDepart,
+            dateDepart: getDateFormat(data.dateDepart),
             dateArrivee: getDateFormat(data.dateArrivee),
             busId: `${array[0]}`,
             trajetId: data.id,

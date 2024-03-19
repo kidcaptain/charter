@@ -34,12 +34,11 @@ export const GET = async (req: NextRequest) => {
 export const POST = async (req: Request) => {
   const body = await req.json();
   // const date = new Date()
-  const {chauffeurId, numVoyage, heureDepart, agenceId, dateDepart, dateArrivee, placeDisponible, typeVoyage, prixVoyage, busId, trajetId } = body;
+  const {chauffeurId, numVoyage, heureDepart, agenceId, dateDepart, placeDisponible, typeVoyage, prixVoyage, busId, trajetId } = body;
   const voyages = await prisma.voyage.create({
     data: {
       agenceId: parseInt(agenceId),
       dateDepart: `${dateDepart}T00:00:00.000Z`,
-      dateArrivee: `${dateArrivee}T00:00:00.000Z`,
       placeDisponible: parseInt(placeDisponible),
       typeVoyage: typeVoyage,
       prixVoyage: parseInt(prixVoyage),
