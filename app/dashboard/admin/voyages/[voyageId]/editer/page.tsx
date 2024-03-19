@@ -133,7 +133,7 @@ export default function Page({ params }: { params: IPrams }) {
                         <div className=" m-auto p-4">
                             <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Numéro Voyage</label>
-                                <input onChange={handleInputChange}  type="date" id="numVoyage" placeholder="Identifiant du voyage" name="numVoyage" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
+                                <input onChange={handleInputChange}  type="text" id="numVoyage" placeholder="Identifiant du voyage" name="numVoyage" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                             <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Date de Départ</label>
@@ -141,7 +141,7 @@ export default function Page({ params }: { params: IPrams }) {
                             </div>
                             <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Heure de Départ</label>
-                                <input onChange={handleInputChange}  type="date" id="heureDepart" placeholder="Heure de départ" name="heureDepart" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
+                                <input onChange={handleInputChange}  type="time" id="heureDepart" placeholder="Heure de départ" name="heureDepart" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
 
                             <div className="mt-4">
@@ -162,6 +162,15 @@ export default function Page({ params }: { params: IPrams }) {
                                     ))}
                                 </select>
                             </div> */}
+                          
+                            <div className="mt-4">
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Type de voyages:</label>
+                                <select id="typeVoyage" value={data.typeVoyage} name="typeVoyage"  onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
+                                    <option value="aller-retour">Aller-Retour</option>
+                                    <option value="aller simple">Aller Simple</option>
+                                </select>
+                            </div>
+
                             <div className="mt-4">
                                 <label className="  text-sm uppercase">Attribuer un chauffeur</label>
                                 <select id="chauffeurId" name="chauffeurId" value={data.chauffeurId} onChange={handleInputChange} className="block w-full text-sm p-2 uppercase text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
@@ -169,13 +178,6 @@ export default function Page({ params }: { params: IPrams }) {
                                     {employe.map((item: any, i: number) => (
                                         <option key={i} value={JSON.stringify({ id: item.id, nom: `${item.nom} ${item.prenom}` })}>{item.nom} {item.prenom}</option>
                                     ))}
-                                </select>
-                            </div>
-                            <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Type de voyages:</label>
-                                <select id="typeVoyage" value={data.typeVoyage} name="typeVoyage"  onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
-                                    <option value="aller-retour">Aller-Retour</option>
-                                    <option value="aller simple">Aller Simple</option>
                                 </select>
                             </div>
                             {/* <div className="mt-4">
