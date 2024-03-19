@@ -724,7 +724,7 @@ export default function Page() {
 
                                             <div className="p-4 text-sm">
                                                 <h4 className="my-2 text-xl text-stone-400">
-                                                    Selectionner l'arrêts
+                                                    Selectionner l&apos;arrêts
                                                 </h4>
                                                 <ul>
                                                     <li onClick={() => { setItem({ ...item, prixFinal: item.trajet.prix, dest: "" }); setDest(""); handleItemOnclick(); setprixF(item.trajet.prix) }} className={`p-1 py-2 rounded-md my-1 border border-b-2 grid cursor-pointer grid-cols-2 bg-white hover:bg-stone-100 `}>
@@ -753,7 +753,7 @@ export default function Page() {
                                           
                                             <div className="p-4 text-sm">
                                             <h4 className="my-2 text-xl text-stone-400">
-                                                    Selectionner l'arrêts
+                                                    Selectionner l&apos;arrêts
                                                 </h4>
                                                 <ul>
                                                     <li onClick={() => { setItem({ ...item, prixFinal: item.trajet.prix, dest: "" }); setDest(""); handleItemOnclick(); setprixF(item.trajet.prix) }} className={`p-1 py-2 rounded-md my-1 border border-b-2 grid cursor-pointer grid-cols-2 bg-white hover:bg-stone-100 `}>
@@ -796,7 +796,7 @@ export default function Page() {
                                         </li>
                                     </ul>
                                 </div>
-                                <CardVoyage isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.prixFinal} lieuArrive={dest} heureArrive={""} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.voyages?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
+                                <CardVoyage isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.prixFinal} lieuArrive={dest} heureArrive={""} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.voyages              ?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
                             </div>
                         ) : null}
                     </div>
