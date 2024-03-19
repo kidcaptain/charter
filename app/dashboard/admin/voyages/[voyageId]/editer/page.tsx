@@ -48,6 +48,7 @@ export default function Page({ params }: { params: IPrams }) {
             heureDepart: data.heureDepart,
             numVoyage: data.numVoyage,
         }
+        console.log(voyage)
         try {
             const response = await fetch(`/api/voyages/${params.voyageId}`, {
                 method: 'PUT',

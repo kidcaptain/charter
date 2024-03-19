@@ -91,6 +91,7 @@ export default function Page() {
                 heureDepart: data.heureDepart,
                 numVoyage: data.numVoyage,
             }
+            console.log(voyage)
             try {
                 const response = await fetch('/api/voyages', {
                     method: 'POST',
