@@ -112,6 +112,7 @@ export default function Page({ params }: { params: IPrams }) {
                 }
             })
         };
+        getEmploye()
         getBus();
         getTrajet();
     }, [])
