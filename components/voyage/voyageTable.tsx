@@ -117,7 +117,10 @@ const VoyageTable = (props: { childToParent: Function }) => {
             typeVoyage: item.typeVoyage,
             prixVoyage: item.prixVoyage,
             placeDisponible: item.placeDisponible,
-            ready: "oui"
+            ready: "oui",
+            chauffeurId: item.chauffeurId,
+            heureDepart: item.heureDepart,
+            numVoyage: item.numVoyage,
         }
         try {
             const response = await fetch(`/api/voyages/${item.id}`, {
