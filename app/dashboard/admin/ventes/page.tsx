@@ -674,7 +674,7 @@ export default function Page() {
                                             client: `${passager?.passager?.nom} ${passager?.passager?.prenom}`,
                                             tel: passager?.passager?.telephone,
                                             depart: getDateFormat(ticket?.voyages?.dateDepart),
-                                            voyage: `C${ticket?.voyages?.id}`,
+                                            voyage: ticket?.voyages?.numVoyage ?? `VOY${ticket?.voyages?.id}`,
                                             montant: prixF,
                                             remboursement: 0,
                                             caisse: `GUICHET ${session?.user?.name}`,
