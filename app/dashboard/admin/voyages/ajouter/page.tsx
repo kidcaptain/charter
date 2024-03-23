@@ -299,7 +299,7 @@ export default function Page() {
                                 <select id="busId" name="busId" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option></option>
                                     {bus.map((item: any, i: number) => (
-                                        <option key={i} value={[item.id, item.capacite]}>Bus: N°0{item.busId} {item.marque} {item.modele} ({item.typeBus})</option>
+                                        <option key={i} value={[item.id, item.capacite]}>Bus-{item.id} {item.typeBus} ({item.marque} {item.modele} )</option>
                                     ))}
                                 </select>
                             </div>
@@ -321,7 +321,7 @@ export default function Page() {
                                 <select id="trajetId" name="trajetId" required onChange={(e) => { handleInputChange(e); viewArret(e.target.value) }} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option></option>
                                     {trajet.map((item: any, i: number) => (
-                                        <option key={i} value={JSON.stringify({ id: item.id, prix: item.prix })}>N°0{item.id} ({item.lieuDepart} - {item.lieuArrivee} {JSON.parse(item.arrets).length == 0 ? "" : JSON.parse(item.arrets).map((i: any, k: number) => `- ${i.nom} `)}) {JSON.parse(item.arrets).length == 0 ? "Aucun arrêt" : ""}</option>
+                                        <option key={i} value={JSON.stringify({ id: item.id, prix: item.prix })}>{item.lieuDepart} - {item.lieuArrivee}</option>
                                     ))}
                                 </select>
                             </div>
@@ -368,70 +368,73 @@ export default function Page() {
                     </form>
                     {isOpenPopup ? (<Popup color={popupData?.color} title={popupData.title} message={popupData?.message} onShow={() => setIsOpenPopup(false)} />) : null}
                 </div>
-                <div className="col-span-2">
-                    {
-                        data?.busId ?
-                            (<div>
-                                <h2>Disponibilité du bus</h2>
-                                <Planning id={busId} />
-                            </div>) : null
-                    }
-                    {
-                        data?.trajetId ?
-                            (
+             <div className="col-span-2">
+             {
+                    data?.busId ?
+                        (<div>
+                            <h2>Disponibilité du bus</h2>
+                            <Planning id={busId} />
+                        </div>) : null
+                }
+                {
+                    data?.trajetId ?
+                        (
 
-                                <div className="w-full overflow-hidden bg-white border rounded-md  ">
-                                    <h2 className="p-4 "> Trajet {trajItem?.id}</h2>
-                                    <div className=" m-auto relative " style={{ width: 600 }}>
-                                        <div className='flex p-4 py-8 items-center gap-4 overflow-x-auto'>
-                                            <div className='flex items-center gap-4'>
-                                                <div className='text-center'>
-                                                    <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
-                                                        <Image width={35} height={35} alt='' src={busSvg} />
-                                                    </div>
-                                                    <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{trajItem?.lieuDepart} </h4>
+                            <div className="w-full overflow-hidden bg-white border rounded-md  ">
+                               <h2 className="p-4 "> Trajet {trajItem?.id}</h2>
+                                <div className=" m-auto relative " style={{ width: 600 }}>
+                                    <div className='flex p-4 py-8 items-center gap-4 overflow-x-auto'>
+                                        <div className='flex items-center gap-4'>
+                                            <div className='text-center'>
+                                                <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
+                                                    <Image width={35} height={35} alt='' src={busSvg} />
                                                 </div>
-
+                                                <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{trajItem?.lieuDepart} </h4>
                                             </div>
-                                            {
-                                                arrets.map((i: any, index: number) => (
-                                                    <div key={index} className='flex items-center gap-4'>
-                                                        <div>
-                                                            <hr className=' border-dashed border-2 border-yellow-300' />
-                                                            <span className='text-xs'>
-                                                                {i.prix}Fcfa
-                                                            </span>
-                                                        </div>
-                                                        <div className='text-center'>
-                                                            <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
-                                                                <Image width={35} height={35} alt='' src={positionSvg} />
-                                                            </div>
-                                                            <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{i.nom}</h4>
-                                                        </div>
 
+                                        </div>
+                                        {
+                                            arrets.map((i: any, index: number) => (
+                                                <div key={index} className='flex items-center gap-4'>
+                                                    <div>
+                                                        <hr className=' border-dashed border-2 border-yellow-300' />
+                                                        <span className='text-xs'>
+                                                            {i.prix}Fcfa
+                                                        </span>
                                                     </div>
-                                                ))
-                                            }
-                                            <div className='flex items-center gap-4'>
-                                                <div>
-                                                    <hr className=' border-dashed border-2 border-yellow-300' />
-                                                    <span className='text-xs'>
-                                                        {parseInt(trajItem?.prix) - prixA} Fcfa
-                                                    </span>
-                                                </div>
-                                                <div className='text-center'>
-                                                    <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
-                                                        <Image width={35} height={35} alt='' src={busSvg} />
+                                                    <div className='text-center'>
+                                                        <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
+                                                            <Image width={35} height={35} alt='' src={positionSvg} />
+                                                        </div>
+                                                        <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{i.nom}</h4>
                                                     </div>
-                                                    <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{trajItem?.lieuArrivee}</h4>
+
                                                 </div>
+                                            ))
+                                        }
+                                        <div className='flex items-center gap-4'>
+                                            <div>
+                                                <hr className=' border-dashed border-2 border-yellow-300' />
+                                                <span className='text-xs'>
+                                                    {parseInt(trajItem?.prix) - prixA} Fcfa
+                                                </span>
                                             </div>
+                                            <div className='text-center'>
+                                                <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
+                                                    <Image width={35} height={35} alt='' src={busSvg} />
+                                                </div>
+                                                <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{trajItem?.lieuArrivee}</h4>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
-                            ) : null
-                    }
-                </div>
+
+                            </div>
+
+                        ) : null
+                }
+             </div>
             </div>
 
         </div>
