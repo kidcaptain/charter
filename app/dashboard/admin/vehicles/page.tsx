@@ -3,13 +3,11 @@
 import Popup from "@/components/ui/popup";
 import AddFormVehicule from "@/components/vehicules/addFormVehicule";
 import VehiculeTable from "@/components/vehicules/vehiculesTable";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react"
 
 export default function Vehicules() {
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false);
     const [isHorsServiceForm, setIsHorsServiceForm] = useState<boolean>(false);
     const [popupData, setPopupData] = useState<{ message: string, title?: string, color: string }>({ message: "", title: "", color: "" })
     const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false);
@@ -121,8 +119,11 @@ export default function Vehicules() {
                 router.push(`/dashboard/admin/vehicles/${val.item.id}/editer`)
                 break;
             case "add":
-                    router.push(`/dashboard/admin/vehicles/${val.item.id}/piece`)
-                    break;
+                router.push(`/dashboard/admin/vehicles/${val.item.id}/piece`)
+                break;
+            case "planning":
+                router.push(`/dashboard/admin/vehicles/${val.item.id}/planning`)
+                break;
             case "horsService":
                 setHorsService(val.item)
                 break;
@@ -138,13 +139,6 @@ export default function Vehicules() {
                 <button onClick={handleButtonClick} className="text-white bg-blue-600 text-sm p-2 rounded-sm">Ajouter un véhicule</button>
             </div>
             {isOpen ? (<AddFormVehicule childToParent={postData} />) : null}
-            {/* <div className=" bg-white my-2">
-                <h3 className="uppercase bg-green-500 text-white p-4 ">Rechercher un vehicule</h3>
-                <form className="flex items-center  p-4 flex-row justify-start gap-2">
-                    <input type="search" name="" className="p-2 rounded-sm text-stone-500 border focus:outline-none text-xs focus:ring-green-400 focus:ring-4" id="" />
-                    <button className="text-white bg-green-600 text-xs flex items-center p-2 rounded-sm">Rechercher</button>
-                </form>
-            </div> */}
             <div className=" col-span-3 w-full bg-white border shadow-2xl rounded-sm">
                 <VehiculeTable isAdmin="admin" childToParent={deleteData} setData={handleAction} />
             </div>

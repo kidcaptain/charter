@@ -341,8 +341,6 @@ export default function Page() {
                                 window.location.reload()
                             }
                         }} className=" hover:bg-red-600 text-sm border p-2 rounded-sm text-white bg-red-500 flex gap-4">Vider</button>
-
-                     
                     </div>
                 </div>
                 <div className="py-20 px-5  shadow-2xl m-auto mt-4 min-h-screen bg-white">

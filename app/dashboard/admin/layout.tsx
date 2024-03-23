@@ -11,11 +11,11 @@ export default function AdminLayout({
   children: React.ReactNode
 }) {
   return (
-    <main className="flex">
+    <main className="flex bg-white">
       <DashboardNav items={LinksAdmin} label="Administrateur" />
-      <section className=" w-full min-h-screen h-full bg-white overflow-hidden" >
+      <section className=" w-full min-h-screen h-full overflow-y-auto overflow-hidden" >
         <Header></Header>
-        <div className=" w-full h-full relative  justify-center">
+          <div className=" w-full h-full relative">
             {children}
         </div>
       </section>

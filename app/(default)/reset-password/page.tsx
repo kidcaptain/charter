@@ -85,7 +85,7 @@ export default function Home() {
                   <h1 className='my-4 font-semibold text-center  text-gray-500 uppercase'>Entrez les informations suivantes</h1>
                   <div>
                     <div className="mb-6">
-                      <label className="block mb-2 text-sm font-semibold text-gray-700 ">Identifiant de l&apos;utilisateur</label>
+                      <label className="block mb-2 text-sm font-semibold text-gray-700 ">Nom d&apos;utilisateur</label>
                       <input type="text" required id="nom" onChange={e => setNom(e.target.value)} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-md focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                     </div>
                     <div className="mb-6">

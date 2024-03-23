@@ -352,8 +352,7 @@ export default function Page({ params }: { params: IPrams }) {
             }
             setDepenses(tab2)
             setRecettes(tab3)
-            console.log(tab3)
-
+            
             setWeek({
                 lundi: lundi,
                 mardi: mardi,

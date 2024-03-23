@@ -40,12 +40,7 @@ export interface DataFicheSuivie {
 class ComponentToPrint extends React.Component<DataFicheSuivie> {
 
     render() {
-        const date = new Date();
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
-        const day = (date.getDate()) < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
-        const hours = (date.getHours()) < 10 ? `0${date.getHours()}` : `${date.getHours()}`;
-        const minutes = (date.getMinutes()) < 10 ? `0${date.getMinutes()}` : `${date.getMinutes()}`;
+
         const days: string[] = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
         let Tlundi: number = 0;
         let Tmardi: number = 0;
@@ -96,7 +91,7 @@ class ComponentToPrint extends React.Component<DataFicheSuivie> {
                 case "Mardi":
                     TmardiR = this.props?.production[index]?.montant - Tmardi
                     break;
-                case "Mecredi":
+                case "Mercredi":
                     TmercrediR = this.props?.production[index]?.montant - Tmercredi
                     break;
                 case "Jeudi":
@@ -254,7 +249,7 @@ class ComponentToPrint extends React.Component<DataFicheSuivie> {
                                                                 {i?.description}
                                                             </div>
                                                             <div className="border py-3 px-1  border-stone-900 ">
-                                                                {parseInt(i?.montant).toString() == "NaN" ? 0 : parseInt(i?.montant).toString()}
+                                                                {parseInt(i?.montant).toString() == "NaN" ? 0 : parseInt(i?.montant).toString()} FCFA
                                                             </div>
                                                         </div>
                                                     ))
@@ -271,7 +266,7 @@ class ComponentToPrint extends React.Component<DataFicheSuivie> {
                                                                 {i?.description}
                                                             </div>
                                                             <div className="border py-3 px-1  border-stone-900 ">
-                                                                {parseInt(i?.montant).toString() == "NaN" ? 0 : parseInt(i?.montant).toString()}
+                                                                {parseInt(i?.montant).toString() == "NaN" ? 0 : parseInt(i?.montant).toString()} FCFA
                                                             </div>
                                                         </div>
                                                     ))
@@ -288,7 +283,7 @@ class ComponentToPrint extends React.Component<DataFicheSuivie> {
                                                                 {i?.description}
                                                             </div>
                                                             <div className="border py-3 px-1  border-stone-900 ">
-                                                                {parseInt(i?.montant).toString() == "NaN" ? 0 : parseInt(i?.montant).toString()}
+                                                                {parseInt(i?.montant).toString() == "NaN" ? 0 : parseInt(i?.montant).toString()} FCFA
                                                             </div>
                                                         </div>
                                                     ))
@@ -322,7 +317,7 @@ class ComponentToPrint extends React.Component<DataFicheSuivie> {
                                                                 {i?.description}
                                                             </div>
                                                             <div className="border py-3 px-1  border-stone-900 ">
-                                                                {parseInt(i?.montant).toString() == "NaN" ? 0 : parseInt(i?.montant).toString()}
+                                                                {parseInt(i?.montant).toString() == "NaN" ? 0 : parseInt(i?.montant).toString()} FCFA
                                                             </div>
                                                         </div>
                                                     ))
@@ -339,7 +334,7 @@ class ComponentToPrint extends React.Component<DataFicheSuivie> {
                                                                 {i?.description}
                                                             </div>
                                                             <div className="border py-3 px-1  border-stone-900 ">
-                                                                {parseInt(i?.montant).toString() == "NaN" ? 0 : parseInt(i?.montant).toString()}
+                                                                {parseInt(i?.montant).toString() == "NaN" ? 0 : parseInt(i?.montant).toString()} FCFA
                                                             </div>
                                                         </div>
                                                     ))
@@ -356,7 +351,7 @@ class ComponentToPrint extends React.Component<DataFicheSuivie> {
                                                                 {i?.description}
                                                             </div>
                                                             <div className="border py-3 px-1  border-stone-900 ">
-                                                                {parseInt(i?.montant).toString() == "NaN" ? 0 : parseInt(i?.montant).toString()}
+                                                                {parseInt(i?.montant).toString() == "NaN" ? 0 : parseInt(i?.montant).toString()} FCFA
                                                             </div>
                                                         </div>
                                                     ))
@@ -398,20 +393,18 @@ class ComponentToPrint extends React.Component<DataFicheSuivie> {
                                             )
                                         })
                                     }
-
                                     <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >  {totalBrut} fcfa</th>
                                 </tr>
                                 <tr className="bg-green-500 ">
                                     <th className="text-xs uppercase border border-stone-800 py-2 px-1 text-black" >Rentabilité</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{TlundiR} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{TmardiR} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{TmercrediR} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{TjeudiR} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{TvendrediR} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right"  >{TsamediR} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >{TdimancheR} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >   {TlundiR + TmardiR + TmercrediR + TjeudiR + TvendrediR + TsamediR + TdimancheR} fcfa</th>
-
+                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{isNaN(TlundiR) ? 0 : TlundiR} fcfa</th>
+                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{isNaN(TmardiR) ? 0 : TmardiR} fcfa</th>
+                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{isNaN(TmercrediR) ? 0 : TmercrediR} fcfa</th>
+                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{isNaN(TjeudiR) ? 0 : TjeudiR} fcfa</th>
+                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{isNaN(TvendrediR) ? 0 : TvendrediR} fcfa</th>
+                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right"  >{isNaN(TsamediR) ? 0 : TsamediR} fcfa</th>
+                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >{isNaN(TdimancheR) ? 0 : TdimancheR} fcfa</th>
+                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >   {isNaN(TlundiR + TmardiR + TmercrediR + TjeudiR + TvendrediR + TsamediR + TdimancheR) ? 0 : TlundiR + TmardiR + TmercrediR + TjeudiR + TvendrediR + TsamediR + TdimancheR} fcfa</th>
                                 </tr>
                             </tfoot>
                         </table>

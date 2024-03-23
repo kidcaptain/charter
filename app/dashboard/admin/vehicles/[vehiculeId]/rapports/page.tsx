@@ -21,11 +21,9 @@ export default function Page({ params }: { params: IPrams }) {
                 <div className="p-4 py-8">
                     <Link className="bg-gray-50 hover:bg-black hover:text-white border-black text-black font-bold text-sm p-3 border rounded-md" href={`/dashboard/admin/vehicles/${params.vehiculeId}/rapports/rapportJournalier`} >Rapport Journalière </Link>
                     <Link className="bg-gray-50 mx-5 hover:bg-black hover:text-white border-black text-black font-bold text-sm p-3 border rounded-md" href={`/dashboard/admin/vehicles/${params.vehiculeId}/rapports/rapportHebdo`} >Rapport Hebdomadaire </Link>
-                    {/* <Link className="bg-gray-50 hover:bg-black hover:text-white border-black text-black font-bold text-sm p-3 border rounded-md" href={`/dashboard/admin/vehicles/${params.vehiculeId}/rapports/rapportJournalier`} >Rapport Annuel </Link> */}
+                    <Link className="bg-gray-50 hover:bg-black hover:text-white border-black text-black font-bold text-sm p-3 border rounded-md" href={`/dashboard/admin/vehicles/${params.vehiculeId}/rapports/rapportAnnuel`} >Rapport Annuel </Link>
                 </div>
-                 
             </div>
-           
         </div>
     )
 }

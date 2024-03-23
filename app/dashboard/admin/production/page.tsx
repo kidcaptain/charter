@@ -59,7 +59,7 @@ export default function Page() {
         return data
     };
 
-    const getDepenseByDate = async (date: string, id: string) => {
+    const getDepenseByDate = async () => {
         const res = await fetch(`/api/depenses`, { cache: "no-store" })
         if (!res.ok) {
             console.log("error")
@@ -87,6 +87,8 @@ export default function Page() {
         let tab: any[] = []
         let d = dates.getDay() - 1;
         let t = (7 - dates.getDay());
+        let tab2: any[] = []
+        tab2.length = 0;
         if (d == -1) {
             d = 6
         };
@@ -169,7 +171,7 @@ export default function Page() {
             }
         }
 
-        let tab2: any[] = []
+
         const lundi: any[] = [];
         const mardi: any[] = [];
         const mercredi: any[] = [];
@@ -189,73 +191,7 @@ export default function Page() {
                 const re: any[] = await getRecetteByDate(element, b.id);
                 const k = new Date(element).getDay();
 
-                const de: any[] = await getDepenseByDate(element, b.id);
-                if (de.length > 0) {
-                    let sommelu = 0;
-                    let sommema = 0;
-                    let sommeme = 0;
-                    let sommeje = 0;
-                    let sommeve = 0;
-                    let sommesa = 0;
-                    let sommedi = 0;
-                    de.map((j: any) => {
 
-                        if ((j?.typeDepense == "ration") || (j?.typeDepense == "carburant") || (j?.typeDepense == "peage") || (j?.typeDepense == "voyage") || (j?.typeDepense == "bus")) {
-                            if (k == 0) {
-                                if (getDateFormat(j?.date) == element) {
-                                    sommedi += parseInt(j.montant)
-                                }
-                            }
-                            if (k == 1) {
-                                if (getDateFormat(j?.date) == element) {
-                                    sommelu += parseInt(j.montant)
-                                }
-                            }
-                            if (k == 2) {
-                                if (getDateFormat(j?.date) == element) {
-                                    sommema += parseInt(j.montant)
-                                }
-                            }
-                            if (k == 3) {
-                                if (getDateFormat(j?.date) == element)
-                                    sommeme += parseInt(j.montant);
-                            }
-                            if (k == 4) {
-                                if (getDateFormat(j?.date) == element)
-                                    sommeje += parseInt(j.montant);
-                            }
-                            if (k == 5) {
-                                if (getDateFormat(j?.date) == element)
-                                    sommeve += parseInt(j.montant);
-                            }
-                            if (k == 6) {
-                                if (getDateFormat(j?.date) == element)
-                                    sommesa += parseInt(j.montant);
-                            }
-                        }
-                    })
-                    if (k == 0) {
-                        tab2.push({ jour: "Dimanche", montant: sommedi })
-                    }
-                    if (k == 1) {
-                        tab2.push({ jour: "Lundi", montant: sommelu })
-                    }
-                    if (k == 2) {
-                        tab2.push({ jour: "Mardi", montant: sommema })
-                    }
-                    if (k == 3) {
-                        tab2.push({ jour: "Mercredi", montant: sommeme })
-                    }
-                    if (k == 4) {
-                        tab2.push({ jour: "Jeudi", montant: sommeje })
-                    }
-                    if (k == 5) {
-                        tab2.push({ jour: "Vendredi", montant: sommeve })
-                    }
-                    if (k == 6) {
-                        tab2.push({ jour: "Samedi", montant: sommesa })
-                    }
-                }
                 if (re.length > 0) {
                     re.map(async (r) => {
                         const vo = await getVoyageByDate(r.voyageId);
@@ -384,9 +320,81 @@ export default function Page() {
             }
             bus.push({ bus: b, data: tabVoyageRecette });
         })
-        console.log(tab2)
+        for (let i = 0; i < tab.length; i++) {
+            const element = tab[i];
+            const k = new Date(element).getDay();
+            const de: any[] = await getDepenseByDate();
+            let sommelu = 0;
+            let sommema = 0;
+            let sommeme = 0;
+            let sommeje = 0;
+            let sommeve = 0;
+            let sommesa = 0;
+            let sommedi = 0;
+            if (de.length > 0) {
+                de.map((j: any) => {
+                    if ((j?.typeDepense == "ration") || (j?.typeDepense == "carburant") || (j?.typeDepense == "peage") || (j?.typeDepense == "voyage") || (j?.typeDepense == "bus")) {
+                        if (k == 0) {
+                            if (getDateFormat(j?.date) == element) {
+                                sommedi += parseInt(j.montant)
+                            }
+                        }
+                        if (k == 1) {
+                            if (getDateFormat(j?.date) == element) {
+                                sommelu += parseInt(j.montant)
+                            }
+                        }
+                        if (k == 2) {
+                            if (getDateFormat(j?.date) == element) {
+                                sommema += parseInt(j.montant)
+                            }
+                        }
+                        if (k == 3) {
+                            if (getDateFormat(j?.date) == element)
+                                sommeme += parseInt(j.montant);
+                        }
+                        if (k == 4) {
+                            if (getDateFormat(j?.date) == element)
+                                sommeje += parseInt(j.montant);
+                        }
+                        if (k == 5) {
+                            if (getDateFormat(j?.date) == element)
+                                sommeve += parseInt(j.montant);
+                        }
+                        if (k == 6) {
+                            if (getDateFormat(j?.date) == element)
+                                sommesa += parseInt(j.montant);
+                        }
+                    }
+                })
+            }
+            if (k == 0) {
+                console.log(k)
+                tab2.push({ jour: "Dimanche", montant: sommedi })
+            }
+            if (k == 1) {
+                tab2.push({ jour: "Lundi", montant: sommelu })
+            }
+            if (k == 2) {
+                tab2.push({ jour: "Mardi", montant: sommema })
+            }
+            if (k == 3) {
+                tab2.push({ jour: "Mercredi", montant: sommeme })
+            }
+            if (k == 4) {
+                tab2.push({ jour: "Jeudi", montant: sommeje })
+            }
+            if (k == 5) {
+                tab2.push({ jour: "Vendredi", montant: sommeve })
+            }
+            if (k == 6) {
+                tab2.push({ jour: "Samedi", montant: sommesa })
+            }
+        }
         setDepenses(tab2)
-        tab2.length = 0;
+        router.refresh()
+
+
         setRecettes(bus)
         setTotalRecette(total)
 
@@ -403,7 +411,6 @@ export default function Page() {
             router.refresh()
         }, 3000);
     };
-
 
     return (
         <div className="p-10 w-full">
@@ -430,10 +437,8 @@ export default function Page() {
                                 date2: date2,
                                 totalRecette: totalRecette
                             }} />
-
                         ) : null
                     }
-
                 </div>
             </div>
         </div>

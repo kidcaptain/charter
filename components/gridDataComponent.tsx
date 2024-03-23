@@ -5,12 +5,12 @@ import { useEffect, useState } from 'react';
 import svg from '@/public/images/user.svg';
 import svg2 from '@/public/images/road.svg'
 import svg4 from '@/public/images/passager.svg'
-import user from '@/public/images/user.svg'
+import svg5 from '@/public/images/passagers.svg'
 import bussvg from '@/public/images/bus-logo.svg'
 import agencesvg from '@/public/images/agence.svg'
-
 import ticketsvg from '@/public/images/ticket.svg'
 import reservationsvg from '@/public/images/reservation.svg'
+import Link from 'next/link';
 
 const GridDataComponent = () => {
 
@@ -99,55 +99,70 @@ const GridDataComponent = () => {
 
     }, [])
     return (
-        <div className='grid grid-cols-4 gap-4'>
-            <div className="bg-blue-400 border-2 border-blue-300 ring-2 ring-blue-400 bg-gradient-to-bl from-blue-600 p-4 rounded-md overflow-hidden">
-                <div className='bg-white w-14 h-14 items-center justify-center flex rounded-2xl shadow-2xl'>
-                    <Image src={svg} width={45} height={45} alt='User Image' />
+        <div className='grid grid-cols-6 gap-4'>
+            <div className=" shadow-xl border  text-blue-500 p-4 rounded-md overflow-hidden hover:translate-y-1 ease-linear transition-all">
+                <div className='bg-white ring-2 ring-blue-400/40 w-14 h-14 items-center justify-center flex rounded-2xl shadow-2xl'>
+                    <Image src={svg} width={40} height={40} alt='User Image' />
                 </div>
-                <h1 className=" pt-4 text-sm text-white font-bold uppercase">Employées ({employeesTotal})</h1>
+                <h1 className=" pt-4 text-sm font-semibold uppercase">Employées ({employeesTotal})</h1>
+                <Link href={'/dashboard/admin/employees'} className='text-green-400 font-semibold  text-xs'>Voir le rapport</Link>
+
             </div >
-            <div className="bg-blue-600 border-2 border-blue-300 ring-2 ring-blue-400 bg-gradient-to-bl from-purple-500 p-4 rounded-md overflow-hidden">
-                <div className='bg-white w-14 h-14 items-center justify-center flex rounded-2xl shadow-2xl'>
-                    <Image src={user} width={45} height={45} alt='User Image' />
+            <div className="shadow-xl border text-blue-500 p-4 rounded-md overflow-hidden hover:translate-y-1 ease-linear transition-all">
+                <div className='bg-white ring-2 ring-blue-400/40 w-14 h-14 items-center justify-center flex rounded-2xl shadow-2xl'>
+                    <Image src={svg5} width={40} height={40} alt='User Image' />
                 </div>
-                <h1 className=" pt-4 text-sm text-white font-bold uppercase">Utilisateurs ({users})</h1>
+                <h1 className=" pt-4 text-sm  font-semibold uppercase">Utilisateurs ({users})</h1>
+                <Link href={'/dashboard/admin/employees/utilisateurs'} className='text-green-400 font-semibold  text-xs'>Voir le rapport</Link>
             </div >
-            <div className="bg-purple-500 border-2 border-blue-300 ring-2 ring-blue-400 bg-gradient-to-bl from-violet-500 p-4 rounded-md overflow-hidden">
+            <div className="shadow-xl border text-blue-500 p-4 rounded-md overflow-hidden hover:translate-y-1 ease-linear transition-all">
                 <div className='bg-white w-14 h-14 items-center justify-center flex rounded-2xl shadow-2xl'>
-                    <Image src={bussvg} width={45} height={45} alt='User Image' />
+                    <Image src={bussvg} width={40} height={40} alt='User Image' />
                 </div>
-                <h1 className=" pt-4 text-sm text-white font-bold uppercase">Véhicules ({bus})</h1>
+                <h1 className=" pt-4 text-sm  font-bold uppercase">Véhicules ({bus})</h1>
+                <Link href={'/dashboard/admin/vehicles'} className='text-green-400 font-semibold  text-xs'>Voir le rapport</Link>
+
             </div >
-            <div className="bg-purple-500 border-2 border-blue-300 ring-2 ring-blue-400 bg-gradient-to-bl from-red-400 p-4 rounded-md overflow-hidden">
+            <div className="shadow-xl border text-blue-500 p-4 rounded-md overflow-hidden hover:translate-y-1 ease-linear transition-all">
                 <div className='bg-white w-14 h-14 items-center justify-center flex rounded-2xl shadow-2xl'>
-                    <Image src={svg2} width={45} height={45} alt='User Image' />
+                    <Image src={svg2} width={40} height={40} alt='User Image' />
                 </div>
-                <h1 className=" pt-4 text-sm text-white font-bold uppercase">Trajet ({trajet})</h1>
+                <h1 className=" pt-4 text-sm  font-bold uppercase">Trajet ({trajet})</h1>
+                <Link href={'/dashboard/admin/trajets'} className='text-green-400 font-semibold  text-xs'>Voir le rapport</Link>
+
             </div >
-            <div className="bg-emerald-500 border-2 border-blue-300 ring-2 ring-blue-400 bg-gradient-to-bl from-green-700 p-4 rounded-md overflow-hidden">
+            <div className="shadow-xl border text-blue-500 p-4 rounded-md overflow-hidden hover:translate-y-1 ease-linear transition-all">
                 <div className='bg-white w-14 h-14 items-center justify-center flex rounded-2xl shadow-2xl'>
-                    <Image src={agencesvg} width={45} height={45} alt='User Image' />
+                    <Image src={agencesvg} width={40} height={40} alt='User Image' />
                 </div>
-                <h1 className=" pt-4 text-sm text-white font-bold uppercase">Agences ({agence})</h1>
+                <h1 className=" pt-4 text-sm font-bold uppercase">Agences ({agence})</h1>
+                <Link href={'/dashboard/admin/agences'} className='text-green-400 font-semibold  text-xs'>Voir le rapport</Link>
+
             </div >
 
-            <div className="bg-blue-600 border-2 border-blue-300 ring-2 ring-blue-400 bg-gradient-to-br from-purple-500 p-4 rounded-md overflow-hidden">
+            <div className="shadow-xl border text-blue-500 p-4 rounded-md overflow-hidden hover:translate-y-1 ease-linear transition-all">
                 <div className='bg-white w-14 h-14 items-center justify-center flex rounded-2xl shadow-2xl'>
-                    <Image src={svg4} width={45} height={45} alt='User Image' />
+                    <Image src={svg4} width={40} height={40} alt='User Image' />
                 </div>
-                <h1 className=" pt-4 text-sm text-white font-bold uppercase">Passager ({passager})</h1>
+                <h1 className=" pt-4 text-sm font-bold uppercase">Passager ({passager})</h1>
+                <Link href={'/dashboard/admin/passagers'} className='text-green-400 font-semibold  text-xs'>Voir le rapport</Link>
+
             </div >
-            <div className="bg-orange-500 border-2 border-blue-300 ring-2 ring-blue-400 bg-gradient-to-tr from-lime-400 p-4 rounded-md overflow-hidden">
+            <div className="shadow-xl border text-blue-500 p-4 rounded-md overflow-hidden hover:translate-y-1 ease-linear transition-all">
                 <div className='bg-white w-14 h-14 items-center justify-center flex rounded-2xl shadow-2xl'>
-                    <Image src={ticketsvg} width={45} height={45} alt='User Image' />
+                    <Image src={ticketsvg} width={40} height={40} alt='User Image' />
                 </div>
-                <h1 className=" pt-4 text-sm text-white font-bold uppercase">Tickets ({ticket})</h1>
+                <h1 className=" pt-4 text-sm font-bold uppercase">Tickets ({ticket})</h1>
+                <Link href={'/dashboard/admin/ticket'} className='text-green-400 font-semibold  text-xs'>Voir le rapport</Link>
+
             </div >
-            <div className="bg-lime-500 border-2 border-blue-300 ring-2 ring-blue-400 bg-gradient-to-bl from-green-400 p-4 rounded-md overflow-hidden">
+            <div className="shadow-xl border text-blue-500 p-4 rounded-md overflow-hidden hover:translate-y-1 ease-linear transition-all">
                 <div className='bg-white w-14 h-14 items-center justify-center flex rounded-2xl shadow-2xl'>
-                    <Image src={reservationsvg} width={45} height={45} alt='User Image' />
+                    <Image src={reservationsvg} width={40} height={40} alt='User Image' />
                 </div>
-                <h1 className=" pt-4 text-sm text-white font-bold uppercase">Reservations ({reservation})</h1>
+                <h1 className=" pt-4 text-sm font-bold uppercase">Reservations ({reservation})</h1>
+                <Link href={'/dashboard/admin/reservations'} className='text-green-400 font-semibold  text-xs'>Voir le rapport</Link>
+
             </div >
         </div>
     )

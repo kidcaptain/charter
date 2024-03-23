@@ -1,6 +1,6 @@
 "use client"
 
-import { FormEvent, useState , useEffect } from "react"
+import { FormEvent, useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import EditFormVehicule from "@/components/vehicules/editFormVehicule"
@@ -11,11 +11,10 @@ interface IPrams {
 export default function Page({ params }: { params: IPrams }) {
 
     const router = useRouter();
-    
+
     const editData = (val: any) => {
         if (val.isClose) {
-            
-        }else{
+        } else {
             if (val.isCompleted) {
                 router.push('/dashboard/admin/vehicles')
             } else {
@@ -26,11 +25,11 @@ export default function Page({ params }: { params: IPrams }) {
 
     return (
         <div className=" w-full p-10">
-           <div className=" py-4 flex lowercase text-sm justify-between items-start mb-2">
+            <div className=" py-4 flex lowercase text-sm justify-between items-start mb-2">
                 <h1 className=" text-gray-900"><Link className="hover:text-blue-600" href={"/dashboard/admin/vehicles"}>Vehicules</Link> / <Link className="hover:text-blue-600" href="#">Editer</Link></h1>
             </div>
             <div className="m-auto">
-              <EditFormVehicule id={params.vehiculeId} childToParent={editData} />
+                <EditFormVehicule id={params.vehiculeId} childToParent={editData} />
             </div>
         </div>
 

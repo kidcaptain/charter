@@ -1,11 +1,9 @@
 "use client"
 
 import RapportJourn from "@/components/ui/RapportJourn";
-import FicheDepense from "@/components/ui/ficheDepense";
-import FicheRecette from "@/components/ui/ficheRecette";
-import RapportHebdo from "@/components/ui/rapportHebdo";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface IPrams {
     vehiculeId?: string
@@ -16,7 +14,7 @@ export default function Page({ params }: { params: IPrams }) {
     const [ficheRetour, setFicheRetour] = useState<any[]>([]);
     const [bus, setBus] = useState<any[]>([]);
     const [chauffeur, setChauffeur] = useState<any[]>([]);
-
+    const router = useRouter();
     const [date, setDate] = useState<string>("");
     const [total, setTotal] = useState<number>(0);
     const getLigneRecette = async (id: number, date: string) => {
@@ -54,32 +52,42 @@ export default function Page({ params }: { params: IPrams }) {
     };
     const getRapportBus = async (e: any, str: string) => {
         e.preventDefault()
-        const date = new Date(str);
-        let year = date.getFullYear();
-        const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
-        const day = (date.getDate()) < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
-        let day2 = date.getDate();
-        let tab: any[] = []
-        const t = 7 - date.getDay();
-        const bus = await getBus();
-        setBus(bus);
-        const chauffeurs = await getEmploye(bus.employeId);
-        setChauffeur(chauffeurs)
-        const recette: any[] = await getLigneRecette(bus.id, `${year}-${month}-${day}`);
-        const voyages: any[] = await getVoyage(bus.id, `${year}-${month}-${day}`);
-        let compte: number = 0;
-        if (recette.length > 0) {
-            recette.map((j) => {
-                voyages.map((i) => {
-                    if (i.id === j.voyageId) {
-                        tab.push({voyage: i, recette: j})
-                        compte = compte + parseInt(j.montant);
-                    }
+        if (str != "") {
+            const date = new Date(str);
+            let year = date.getFullYear();
+            const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
+            const day = (date.getDate()) < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
+            let tab: any[] = []
+            const t = 7 - date.getDay();
+            const bus = await getBus();
+            setBus(bus);
+           
+            const recette: any[] = await getLigneRecette(bus.id, `${year}-${month}-${day}`);
+            const voyages: any[] = await getVoyage(bus.id, `${year}-${month}-${day}`);
+            let compte: number = 0;
+    
+            let c: string = ""
+            if (recette.length > 0) {
+                recette.map((j) => {
+                    voyages.map(async (i) => {
+                        if (i.id === j.voyageId) { 
+                            compte = compte + parseInt(j.montant);
+                            const d = await getEmploye(i.chauffeurId);
+                            if (d) { 
+                                tab.push({ voyage: i, recette: j, chauffeur: `${d.nom} ${d.prenom}` })
+                            }else{ 
+                                tab.push({ voyage: i, recette: j, chauffeur: "" })
+                            }
+                        }
+                    })
                 })
-            })
+            }
+            setTotal(compte)
+            setFiche(tab)
+            router.refresh()
+        }else{
+            alert("Selectionner une date!")
         }
-        setTotal(compte)
-        setFiche(tab)
     }
 
     return (

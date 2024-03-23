@@ -1,7 +1,8 @@
 
+import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import ReactToPrint from "react-to-print";
-
+import logoSvg from "@/public/images/logo.jpeg"
 export default function FicheProduction(props: { item: DataFicheProduction }) {
     let componentRef: any = useRef();
     const [itemProp, setItemProp] = useState<DataFicheProduction>()
@@ -67,20 +68,20 @@ class ComponentToPrint extends React.Component<DataFicheProduction> {
         { jour: "Dimanche", type: "retour" },
         { jour: "Dimanche", type: "aller" }
         ];
-        const dayks: any[] = [{jour:"Lundi", montant: this.props.totalRecette[0] + this.props.totalRecette[1] },
-         {jour:"Mardi", montant: this.props.totalRecette[2] + this.props.totalRecette[3]},
-          {jour:"Mecredi", montant: this.props.totalRecette[4] + this.props.totalRecette[5]}, 
-          {jour:"Jeudi", montant: this.props.totalRecette[6] + this.props.totalRecette[7]},
-           {jour:"Vendredi", montant: this.props.totalRecette[8] + this.props.totalRecette[9]},
-            {jour:"Samedi", montant: this.props.totalRecette[10] + this.props.totalRecette[11]},
-             {jour:"Dimanche", montant: this.props.totalRecette[12] + this.props.totalRecette[13]}];
+        const dayks: any[] = [{ jour: "Lundi", montant: this.props.totalRecette[0] + this.props.totalRecette[1] },
+        { jour: "Mardi", montant: this.props.totalRecette[2] + this.props.totalRecette[3] },
+        { jour: "Mecredi", montant: this.props.totalRecette[4] + this.props.totalRecette[5] },
+        { jour: "Jeudi", montant: this.props.totalRecette[6] + this.props.totalRecette[7] },
+        { jour: "Vendredi", montant: this.props.totalRecette[8] + this.props.totalRecette[9] },
+        { jour: "Samedi", montant: this.props.totalRecette[10] + this.props.totalRecette[11] },
+        { jour: "Dimanche", montant: this.props.totalRecette[12] + this.props.totalRecette[13] }];
         let totalBrut: number = 0;
         let totalDepense: number = 0;
         this.props.depense.map((l) => {
-            totalDepense+=parseInt(l.montant)
+            totalDepense += parseInt(l.montant)
         })
         dayks.map((l) => {
-            totalBrut+=l.montant
+            totalBrut += l.montant
         })
 
 
@@ -89,6 +90,7 @@ class ComponentToPrint extends React.Component<DataFicheProduction> {
             <div>
                 <div className="h-full w-full">
                     <div className="text-center font-bold my-8">
+                        <Image src={logoSvg} width={150} height={150} alt="" className="m-auto" />
                         <h2>CHARTER EXPRESS VOYAGES</h2>
                         <ul>
                             <li>  ENTREPRISE DE TRANSPORT INTER-URBAIN</li>
@@ -280,8 +282,8 @@ class ComponentToPrint extends React.Component<DataFicheProduction> {
                                     <th className="text-xs uppercase border border-stone-800 py-2 px-1 text-black" >Depenses</th>
                                     {
                                         this.props.depense.map((i: any, index: number) => (
-                                            <th colSpan={2} key={index+1} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{this.props.depense[index].montant} fcfa</th>
-                        
+                                            <th colSpan={2} key={index + 1} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{this.props.depense[index].montant} fcfa</th>
+
                                         ))
                                     }
 
@@ -291,99 +293,14 @@ class ComponentToPrint extends React.Component<DataFicheProduction> {
                                     <th className="text-xs uppercase border border-stone-800 py-2 px-1 text-black" >Net</th>
                                     {
                                         dayks.map((i: any, index: number) => (
-                                            <th colSpan={2} key={index+1} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " > { dayks[index].montant - (this.props.depense[index]?.montant ?? 0) } fcfa</th>
-                        
+                                            <th colSpan={2} key={index + 1} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " > {dayks[index].montant - (this.props.depense[index]?.montant ?? 0)} fcfa</th>
+
                                         ))
                                     }
-
                                     <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >  {totalBrut - totalDepense} fcfa</th>
-
                                 </tr>
                             </tfoot>
                         </table>
-
-                        {/* <table className="w-full mt-10 text-xs font-mono text-center uppercase text-gray-800 ">
-                            <tbody>
-                                <tr className="bg-lime-500">
-                                    <th rowSpan={2} className="text-xs uppercase border border-stone-800 py-2 px-1 text-black" >Prod VIP</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tmardi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tmardi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tmercredi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tmercredi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tjeudi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tjeudi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tvendredi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tvendredi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right"  >{Tsamedi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right"  >{Tsamedi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >{Tdimanche} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >{Tdimanche} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >   {Tlundi + Tmardi + Tmercredi + Tjeudi + Tvendredi + Tsamedi + Tdimanche} fcfa</th>
-                                </tr>
-                                <tr className="bg-lime-500">
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 py-2 px-1 text-black" >Net</th>
-                                </tr>
-                            </tbody>
-                        </table>
-
-
-                        <table className="w-full mt-10 text-xs font-mono text-center uppercase text-gray-800 ">
-                            <tbody>
-                                <tr className="bg-blue-700">
-                                    <th rowSpan={2} className="text-xs uppercase border border-stone-800 py-2 px-1 text-black" >Prod classic</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tmardi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tmardi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tmercredi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tmercredi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tjeudi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tjeudi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tvendredi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tvendredi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right"  >{Tsamedi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right"  >{Tsamedi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >{Tdimanche} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >{Tdimanche} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right" >   {Tlundi + Tmardi + Tmercredi + Tjeudi + Tvendredi + Tsamedi + Tdimanche} fcfa</th>
-                                </tr>
-                                <tr className="bg-blue-700">
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 py-2 px-1 text-black" >Net</th>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table className="w-full mt-10 text-xs font-mono text-center uppercase text-gray-800 ">
-                            <thead>
-
-                                <tr className="bg-blue-700">
-                                    <th className="text-xs uppercase border border-stone-800 py-2 px-1 text-black" >Prod annoncée</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th colSpan={2} className="text-xs uppercase border border-stone-800 text-black py-2 px-1 text-right " >{Tlundi} fcfa</th>
-                                    <th className="text-xs uppercase border border-stone-800 py-2 px-1 text-black" >Net</th>
-                                </tr>
-                            </thead>
-                        </table> */}
                     </div>
 
                 </div>

@@ -8,6 +8,7 @@ import { FormEvent, useState, useEffect } from "react"
 const TrajetAddForm = (props: { childToParent: Function }) => {
 
     const [data, setData] = useState<any>();
+    const [prixD, setprixD] = useState<number>(0);
     const router = useRouter();
     const className = "block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 "
     const [arrets, setArrets] = useState<{ nom: string, prix: number }[]>([])
@@ -37,18 +38,18 @@ const TrajetAddForm = (props: { childToParent: Function }) => {
 
     const HandlerSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-       
+
         let prix: number = 0;
-       
+
         if (arrets.length > 0) {
             arrets.map((i) => {
-                prix+= i.prix;
+                prix += i.prix;
             })
-        }else{
-           prix = data.prix;
+        } else {
+            prix = data.prix;
         }
-        const datas = {...data, prix: prix, arrets: JSON.stringify(arrets)}
-        console.log(datas)
+        const datas = { ...data, prix: parseInt(`${prix}`) + parseInt(`${prixD}`), arrets: JSON.stringify(arrets) }
+
         try {
             const response = await fetch('/api/trajets', {
                 method: 'POST',
@@ -60,8 +61,6 @@ const TrajetAddForm = (props: { childToParent: Function }) => {
                 btn?.click();
                 setData(null);
             } else {
-                const re = await response.json();
-                console.log(re)
                 props.childToParent(false)
             }
         } catch (err) {
@@ -86,10 +85,10 @@ const TrajetAddForm = (props: { childToParent: Function }) => {
         setArrets(tab)
         router.refresh()
     }
-    
+
     return (
         <form onSubmit={HandlerSubmit} className="col-span-1 overflow-hidden bg-white shadow-2xl rounded-md  ">
-            <h2 className=" text-gray-100 font-bold p-4 bg-blue-500 bg-gradient-to-tr from-blue-700 uppercase">
+            <h2 className=" text-gray-100 font-bold p-4 bg-blue-500 uppercase">
                 Créer un trajet de voyage
             </h2>
             <div className=" p-4">
@@ -108,10 +107,10 @@ const TrajetAddForm = (props: { childToParent: Function }) => {
                     </div>
                     <input onChange={handleInputChange} required type="text" id="lieuarrivee" placeholder="Arrivée" name="lieuarrivee" className={`${className} ${((data?.lieuarrivee && data?.lieuarrivee != "") && (data?.lieuarrivee != data?.lieudepart)) ? "bg-green-50 ring-green-400/30 ring-4" : ""}`} />
                 </div>
-
+                <button type="button" onClick={addArret} className="border-blue-400 border text-blue-400 mt-4 text-sm p-1" >Ajouter un arrêt</button>
                 {
-                    arrets.length > 0 ? (<fieldset className="py-4">
-                        <h3 className="mt-4  font-bold">Arrêts</h3>
+                    arrets.length > 0 ? (<fieldset >
+                        <h3 className="mt-4 font-bold">Arrêts</h3>
                         {
                             arrets.map((i: { nom: string, prix: number }, index: number) => (
                                 <div key={index} className="my-2">
@@ -122,24 +121,25 @@ const TrajetAddForm = (props: { childToParent: Function }) => {
                                 </div>
                             ))
                         }
-
-                    </fieldset>) : <div className="my-4">
-
+                        <div className="my-2">
+                            <label className="block text-sm font-bold text-gray-900 dark:text-white">Prix du dernier arrêt au lieu d'arrivée</label>
+                            <input onChange={(e) => setprixD(parseInt(e.target.value))} required type="number" min={0} placeholder="prix" name="prixD" className={`block my-1 text-sm w-full p-1.5 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400`} />
+                        </div>
+                        
+                    </fieldset>) : 
+                    <div className="my-4">
                         <label className="block text-sm  font-bold text-gray-900 dark:text-white">Prix du trajet</label>
-
                         <input onChange={handleInputChange} required type="number" min={0} id="prix" placeholder="prix" name="prix" className={`block my-1 text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400`} />
                     </div>
                 }
                 <div className="grid grid-cols-3 gap-1">
-                    <button type="button" onClick={addArret} className="border-blue-400 border mt-2 text-blue-400  text-sm p-1" >Ajouter un arrêt</button>
                     {
-                    arrets.length > 1 ?
-                    <button type="button" onClick={deleteArret} className="border-red-400 border mt-2 text-red-400  text-sm p-1" >Retirer</button> : null }
+                        arrets.length > 1 ?
+                            <button type="button" onClick={deleteArret} className="border-red-400 border mt-2 text-red-400  text-sm p-1" >Retirer</button> : null}
                     {
-                    arrets.length > 0 ?
-                    <button type="button" onClick={allDeleteArret} className="border-stone-400 border mt-2 text-stone-400  text-sm p-1" >Tout annuler</button> : null }
+                        arrets.length > 0 ?
+                            <button type="button" onClick={allDeleteArret} className="border-stone-400 border mt-2 text-stone-400  text-sm p-1" >Tout annuler</button> : null}
                 </div>
-             
                 <div className="mt-4">
                     <div className="flex gap-4 mb-1 items-start">
                         <label className="block text-sm font-bold text-gray-900 dark:text-white">Nombre de kilomètre entre les deux points</label>

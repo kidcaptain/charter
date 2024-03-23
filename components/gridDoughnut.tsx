@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-
 import CardDoughnut from "@/components/cardDoughnut";
 
 const GridDoughnut = () => {
@@ -72,13 +71,18 @@ const GridDoughnut = () => {
                 return []
             }
             const data: any[] = await res.json();
+            let comp: number = 0;
+            let comp1: number = 0;
             data.forEach((r) => {
                 if (r.typeVoyage == "simple") {
-                    setTicketSimple(ticketSimple + 1)
+                    comp += 1;
+
                 } else {
-                    setTicketVip(ticketVip + 1)
+                    comp1 += 1;
                 }
             })
+            setTicketVip(comp1)
+            setTicketSimple(comp)
             setIsLoad(true)
         };
         getTicket()
@@ -89,30 +93,31 @@ const GridDoughnut = () => {
                 return []
             }
             const data: any[] = await res.json();
+            let comp: number = 0;
+            let comp1: number = 0;
             data.forEach((r) => {
                 if (r.typeVoyage == "aller-retour") {
-                    setvoyageRetour(voyageRetour + 1)
+                    comp += 1;
                 } else {
-                    setvoyageSimple(voyageSimple + 1)
+                    comp1 += 1;
                 }
             })
+            setvoyageRetour(comp);
+            setvoyageSimple(comp1);
             setIsLoad(true)
         };
         getVoyages()
 
     }, [])
 
-
-            return (
-                <div className="grid-cols-4 gap-4 grid ">
-                    <CardDoughnut id="ticket" val={ticketSimple} val2={ticketVip} color="blue" back1="#0e7490" back2="#15803d" label1="Simple" label2="VIP" title="Ventes de tickets" />
-                    <CardDoughnut id="bus" val={depense} val2={recette} color="blue" back1="#ff6384" back2="#36a2eb" label1="Dépenses" label2="recettes" title="Dépenses et recettes" />
-                    <CardDoughnut id="passager" val={reservationAnnule} val2={reservationConfirme} color="blue" back1="#da3200" back2="#5fd85c" label1="Réservation annulée" label2="Réservation confirmée" title="Réservations" />
-                    <CardDoughnut id="s" val={voyageSimple} val2={voyageRetour} color="blue" back1="#545ef0" back2="" label1="Voyages aller simple" label2="voyages aller-retour" title="Voyages effecutés" />
-                </div>
-            )
-
-
+    return (
+        <div className="grid-cols-4 gap-4 grid ">
+            <CardDoughnut id="ticket" val={ticketSimple} val2={ticketVip} color="blue" back1="#ffffff" back2="#f7b51a" label1="tickets standard" label2="Tickets vip" title="Total ventes de tickets" />
+            <CardDoughnut id="bus" val={depense} val2={recette} color="blue" back1="#ff6384" back2="#36a2eb" label1="Dépenses  (en fcfa)" label2="recettes (en fcfa)" title="Total dépenses et recettes" />
+            <CardDoughnut id="passager" val={reservationAnnule} val2={reservationConfirme} color="blue" back1="#da3200" back2="#5fd85c" label1="Réservation annulée" label2="Réservation confirmée" title="Réservations" />
+            <CardDoughnut id="s" val={voyageSimple} val2={voyageRetour} color="blue" back1="#545ef0" back2="" label1="Voyages aller simple" label2="voyages aller-retour" title="Voyages effecutés" />
+        </div>
+    )
 }
 
 export default GridDoughnut

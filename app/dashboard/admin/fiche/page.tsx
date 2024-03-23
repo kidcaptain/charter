@@ -1,9 +1,7 @@
 "use client"
 
-import FicheDepense from "@/components/ui/ficheDepense";
 import FicheRecette from "@/components/ui/ficheRecette";
 import HelpPopup from "@/components/ui/helpPopup";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Page() {
@@ -81,16 +79,16 @@ export default function Page() {
             tabVoyage.map((j) => {
                 if (e.voyageId == j.id) {
                     voyage = e;
+                    tabEmploye.map((k) => {
+                        if (k.id == j.chauffeurId) {
+                            chauffeur = `${k.nom} ${k.prenom} `
+                        }
+                    })
                 }
             })
             tabBus.map((i) => {
                 if (i.id == e.busId) {
                     bus = i;
-                    tabEmploye.map((k) => {
-                        if (k.id == i.employeId) {
-                            chauffeur = `${k.nom} ${k.prenom} `
-                        }
-                    })
                 }
             })
             total = total + parseInt(e.montant);

@@ -25,6 +25,7 @@ export default function Page() {
     const [tab3, setTab3] = useState<boolean>(false);
     const [reste, setReste] = useState<number>(0)
     const [avance, setAvance] = useState<number>(0)
+    const [sup, setsup] = useState<number>(0)
     const [prixF, setprixF] = useState<number>(0)
     const { data: session, status } = useSession()
     const [typeClass, setTypeClass] = useState<string>("");
@@ -139,7 +140,10 @@ export default function Page() {
             busId: item.busId,
             trajetId: item.trajetId,
             agenceId: item.agenceId,
-            ready: item.ready
+            ready: item.ready,
+            chauffeurId: item.chauffeurId,
+            heureDepart: item.heureDepart,
+            numVoyage: item.numVoyage,
         }
         // console.log(voyageData)
         try {
@@ -164,14 +168,15 @@ export default function Page() {
         const hours = (date.getHours()) < 10 ? `0${date.getHours()}` : `${date.getHours()}`;
         const minutes = (date.getMinutes()) < 10 ? `0${date.getMinutes()}` : `${date.getMinutes()}`;
         const data = {
-            numeroSiege: (item.voyages?.placeDisponible),
-            prixTicket: item.voyages?.prixVoyage,
+            numeroSiege: parseInt(item?.bus?.capacite) - parseInt(item?.voyages?.placeDisponible) + 1,
+            prixTicket: parseInt(`${sup}`) + parseInt(`${prixF}`),
             voyageId: voyageId,
-            typeTicket: typeClass,
+            typeTicket: item?.bus?.typeBus,
             statusTicket: "valide",
             dateCreation: `${year}-${month}-${day}T${hours}:${minutes}`,
             passagerId: id,
-            employeId: 0
+            employeId: 0,
+            destination: dest,
         }
         // console.log(data)
         try {
@@ -467,7 +472,7 @@ export default function Page() {
             <div className=" py-4 flex justify-between items-start mb-2">
                 <h1 className="text-xl text-gray-900">Réservation et achat de tickets</h1>
             </div>
-            <section className={`relative flex  justify-start  ${(!tab && !tab2) ? 'flex-col' : 'flex-row'}`}>
+            <section className={`relative flex gap-4 justify-start items-start ${(!tab && !tab2) ? 'flex-col' : 'flex-row'}`}>
                 <div style={{ width: '100%', minHeight: "100%", backdropFilter: "blur(1px)" }} className=" shadow-2xl max-w-3xl border rounded-md h-full relative overflow-hidden z-10    ">
                     <h4 className="border-b p-4 text-black font-bold uppercase text-xl">
                         Formulaire de ventes et reservation
@@ -576,9 +581,9 @@ export default function Page() {
                                     <div className="mt-4">
 
                                         <div className="flex gap-1">
-                                            <input type="radio" required onChange={e => getMethod(e.target.value)} id="reserver" name="method" value="reserver" className="block p-1  text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
+                                            <input type="radio" required onChange={e =>{ getMethod(e.target.value); setsup(0); setAvance(0)}} id="reserver" name="method" value="reserver" className="block p-1  text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
                                             <label htmlFor="reserver" className="text-sm font-bold text-gray-800">Réserver</label>
-                                            <input type="radio" required onChange={e => getMethod(e.target.value)} id="payer" value="payer" name="method" className="block ml-4 p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
+                                            <input type="radio" required onChange={e =>{ getMethod(e.target.value); setsup(0); setAvance(0)}} id="payer" value="payer" name="method" className="block ml-4 p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
                                             <label htmlFor="payer" className="text-sm font-bold text-gray-800">Payer</label>
                                         </div>
                                     </div>
@@ -594,10 +599,24 @@ export default function Page() {
                                                 </div>
                                                 <div className="mt-4">
                                                     <div className="flex gap-4 mb-1 items-start">
-                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Montant à payer</label>
+                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Prix du ticket</label>
                                                         {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
                                                     </div>
-                                                    <input value={parseInt(item.prixFinal)} disabled type="number" id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200 sm:text-md focus-visible:ring-blue-400 " ue-400  `} />
+                                                    <input value={prixF} type="number" id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200 sm:text-md focus-visible:ring-blue-400 `} />
+                                                </div>
+                                                <div className="mt-4">
+                                                    <div className="flex gap-4 mb-1 items-start">
+                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Frais supplementaire </label>
+                                                        {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                                    </div>
+                                                    <input  type="number" onChange={(e) => setsup(parseInt(e.target.value))} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none  sm:text-md focus-visible:ring-blue-400 `} />
+                                                </div>
+                                                <div className="mt-4">
+                                                    <div className="flex gap-4 mb-1 items-start">
+                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Net à payer </label>
+                                                        {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                                    </div>
+                                                    <input value={sup + prixF} type="number" disabled onChange={(e) => setsup(parseInt(e.target.value))} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200 sm:text-md focus-visible:ring-blue-400 `} />
                                                 </div>
                                                 <div className="mt-4">
                                                     <div className="flex gap-4 mb-1 items-start">
@@ -625,17 +644,24 @@ export default function Page() {
                                                 </div>
                                                 <div className="mt-4">
                                                     <div className="flex gap-4 mb-1 items-start">
-                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Avance versée</label>
+                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Frais supplementaire </label>
                                                         {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
                                                     </div>
-                                                    <input type="number" id="montant" onChange={e => setAvance(parseInt(e.target.value))} max={parseInt(item.prixFinal)} name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " ue-400  `} />
+                                                    <input  type="number" onChange={(e) => setsup(parseInt(e.target.value))} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none  sm:text-md focus-visible:ring-blue-400 `} />
                                                 </div>
                                                 <div className="mt-4">
                                                     <div className="flex gap-4 mb-1 items-start">
-                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">reste à payé</label>
+                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Avance versée</label>
                                                         {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
                                                     </div>
-                                                    <input disabled type="number" onChange={e => setReste(parseInt(e.target.value))} value={parseInt(item.prixFinal) - avance} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " ue-400  `} />
+                                                    <input type="number" id="montant" onChange={e => setAvance(parseInt(e.target.value))} max={prixF} name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 `} />
+                                                </div>
+                                                <div className="mt-4">
+                                                    <div className="flex gap-4 mb-1 items-start">
+                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">reste à payé </label>
+                                                        {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                                    </div>
+                                                    <input disabled type="number" onChange={e => setReste(parseInt(e.target.value))} value={prixF - avance + sup} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 `} />
                                                 </div>
                                                 <div className="mt-4">
                                                     <div className="flex gap-4 mb-1 items-start">
@@ -653,7 +679,7 @@ export default function Page() {
                                                         <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Date de confirmation de la reservation</label>
                                                         {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
                                                     </div>
-                                                    <input type="date" id="dateConfirmation" name="dateConfirmation" onChange={(e) => setDateConfirmation(e.target.value)} className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " ue-400  `} />
+                                                    <input type="date" id="dateConfirmation" name="dateConfirmation" onChange={(e) => setDateConfirmation(e.target.value)} className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 `} />
                                                 </div>
                                             </>
                                         ) : null
@@ -674,16 +700,17 @@ export default function Page() {
                                             client: `${passager?.passager?.nom} ${passager?.passager?.prenom}`,
                                             tel: passager?.passager?.telephone,
                                             depart: getDateFormat(ticket?.voyages?.dateDepart),
-                                            voyage: ticket?.voyages?.numVoyage ?? `VOY${ticket?.voyages?.id}`,
-                                            montant: prixF,
+                                            voyage: `${ ticket?.voyages?.numVoyage.trim() == "" ? "VOY" + ticket?.voyages?.id : ticket?.voyages?.numVoyage.trim() }`,
+                                            montant: parseInt(`${sup}`) + parseInt(`${prixF}`), 
                                             remboursement: 0,
                                             caisse: `GUICHET ${session?.user?.name}`,
                                             numticket: numTicket.toString(),
-                                            type: ticket?.voyage?.typeVoyage,
+                                            type: ticket?.voyages?.typeVoyage,
+                                            bus: `0${ticket?.bus?.id}`,
                                             trajet: `${ticket?.trajet?.lieuDepart} / ${dest == "" ? ticket?.trajet.lieuArrivee : dest}`,
                                             siege: ticket?.bus?.capacite - ticket?.voyages?.placeDisponible + 1
                                         }} />
-                                        <p className="p-4 uppercase">
+                                        <p className="p-4 uppercase text-sm">
                                             client:{passager?.passager?.nom} {passager?.passager?.prenom}, téléphone client:{passager?.passager?.telephone},départ: {getDateFormat(ticket?.voyages?.dateDepart)}, Numèro de bus:{ticket?.bus?.id},
                                             trajet:{ticket?.trajet?.lieuDepart}/{ticket?.trajet.lieuArrivee}, voyageN°: {ticket?.voyages?.id}, numèro de siège:{ticket?.bus?.capacite - ticket?.voyages?.placeDisponible < 10 ? '0' + (ticket?.bus?.capacite - ticket?.voyages?.placeDisponible) : ticket?.bus?.capacite - ticket?.voyages?.placeDisponible}
                                         </p>
@@ -706,63 +733,61 @@ export default function Page() {
                             Recommencer
                         </button>
                     </form>
-
                 </div>
                 {(!tab && !tab2 && !tab3) ? (
-                    <div className=" h-full px-10 py-5" >
+                    <div className=" h-full py-5" >
                         <div className="my-2  font-bold text-blue-400 flex items-center gap-2">
                             <span className="uppercase">Voyages disponibles </span>
-                            <HelpPopup message="Cliquez sur le voyage pour le selectionner." />
+                            {/* <HelpPopup message="Cliquez sur le voyage pour le selectionner." /> */}
                         </div>
                         {
                             !onSearched ? (
-                                <ul className=" grid grid-cols-4 items-start gap-8 relative h-full ">
-                                    {voyages.map((item: any, i: number) => ((item.voyages?.placeDisponible != 0 && compareDate(getDateFormat(item.voyages?.dateDepart)) && item.voyages?.ready != "oui") ?
-                                        <li key={i} className=" hover:translate-y-2 hover:shadow-green-900/50 shadow-2xl rounded-md" >
-                                            <CardVoyage isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={""} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.voyages?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
-
-
+                                <ul className=" grid grid-cols-3 items-start gap-8 relative h-full ">
+                                    {voyages.map((item: any, i: number) => ((item.voyages?.placeDisponible != 0 && compareDate(getDateFormat(item.voyages?.dateDepart)) && item.voyages?.ready != "oui" && item.trajet && item.bus && item.voyages.chauffeurId != 0) ?
+                                        <li key={i}  className="cursor-pointer rounded-xl shadow-xl border" >
+                                            <CardVoyage bus={item.bus.id} isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={""} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.voyages?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
+                                            <hr className={`border-dashed border-2  border-spacing-4 ${item.bus.typeBus == "vip" ? 'border-yellow-400' : 'border-slate-700'} `} />
                                             <div className="p-4 text-sm">
                                                 <h4 className="my-2 text-xl text-stone-400">
                                                     Selectionner l&apos;arrêts
                                                 </h4>
                                                 <ul>
-                                                    <li onClick={() => { setItem({ ...item, prixFinal: item.trajet.prix, dest: "" }); setDest(""); handleItemOnclick(); setprixF(item.trajet.prix) }} className={`p-1 py-2 rounded-md my-1 border border-b-2 grid cursor-pointer grid-cols-2 bg-white hover:bg-stone-100 `}>
+                                                    <li onClick={() => { setItem({ ...item, prixFinal: item.trajet.prix, dest: "" }); setDest(""); handleItemOnclick(); setprixF(item.trajet.prix) }} className={`p-1 py-2 rounded-md my-1 border border-b-2 grid cursor-pointer grid-cols-2 bg-slate-600 text-white hover:bg-slate-800 `}>
                                                         <span >{item.trajet?.lieuDepart} - {item.trajet?.lieuArrivee}</span> <span className="text-right uppercase">{item.trajet.prix} fcfa</span>
                                                     </li>
                                                     {
                                                         item.trajet?.arrets != "" ?
                                                             JSON.parse(item.trajet?.arrets).map((i: any, index: number) => (
-                                                                <li onClick={() => { setItem({ ...item, prixFinal: i.prix, dest: i.nom }); setDest(i.nom); handleItemOnclick(); setprixF(i.prix) }} key={index} className={`p-1 py-2 border rounded-md my-1 cursor-pointer border-b-2 grid grid-cols-2 ${index % 2 == 0 ? 'bg-blue-600 hover:bg-blue-700 text-white border-b-blue-400' : 'bg-white hover:bg-stone-100'}`}>
+                                                                <li onClick={() => { setItem({ ...item, prixFinal: i.prix, dest: i.nom }); setDest(i.nom); handleItemOnclick(); setprixF(i.prix) }} key={index} className={`p-1 py-2 border rounded-md my-1 cursor-pointer border-b-2 grid grid-cols-2 ${index % 2 == 0 ? 'bg-blue-600 hover:bg-blue-700 text-white border-b-blue-400' : 'text-white bg-slate-600 hover:bg-slate-800'}`}>
                                                                     <span>{item.trajet?.lieuDepart} - {i.nom}</span> <span className="text-right uppercase ">{i.prix} fcfa</span>
                                                                 </li>
                                                             ))
                                                             : null
                                                     }
                                                 </ul>
+                                                
                                             </div>
                                         </li> : null
                                     ))}
                                 </ul>
                             ) : (
-                                <ul className=" grid grid-cols-4 gap-8 relative h-full ">
-                                    {voyagesResult.map((item: any, i: number) => (item.voyages?.placeDisponible != 0 && compareDate(getDateFormat(item.voyages?.dateDepart)) && item.voyages?.ready != "oui" ?
-                                        <li key={i} onClick={() => { setItem(item); handleItemOnclick() }} className="cursor-pointer border" >
-                                            <CardVoyage isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={""} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.voyages?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
-
-                                          
+                                <ul className=" grid grid-cols-3 gap-8 relative h-full ">
+                                    {voyagesResult.map((item: any, i: number) => (item.voyages?.placeDisponible != 0 && compareDate(getDateFormat(item.voyages?.dateDepart)) && item.voyages?.ready != "oui" && item.trajet && item.bus && item.voyages.chauffeurId != 0 ?
+                                        <li key={i} className="cursor-pointer shadow-xl rounded-xl border" >
+                                            <CardVoyage bus={item.bus.id} isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={""} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.voyages?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
+                                            <hr className={`border-dashed border-2  border-spacing-4 ${item.bus.typeBus == "vip" ? 'border-yellow-400' : 'border-slate-700'} `} />
                                             <div className="p-4 text-sm">
-                                            <h4 className="my-2 text-xl text-stone-400">
+                                                <h4 className="my-2 text-xl text-stone-400">
                                                     Selectionner l&apos;arrêts
                                                 </h4>
                                                 <ul>
-                                                    <li onClick={() => { setItem({ ...item, prixFinal: item.trajet.prix, dest: "" }); setDest(""); handleItemOnclick(); setprixF(item.trajet.prix) }} className={`p-1 py-2 rounded-md my-1 border border-b-2 grid cursor-pointer grid-cols-2 bg-white hover:bg-stone-100 `}>
+                                                    <li onClick={() => { setItem({ ...item, prixFinal: item.trajet.prix, dest: "" }); setDest(""); handleItemOnclick(); setprixF(item.trajet.prix) }} className={`p-1 py-2 rounded-md my-1 border border-b-2 grid cursor-pointer grid-cols-2 bg-slate-400 hover:bg-slate-500 `}>
                                                         <span >{item.trajet?.lieuDepart} - {item.trajet?.lieuArrivee}</span> <span className="text-right uppercase">{item.trajet.prix} fcfa</span>
                                                     </li>
                                                     {
                                                         item.trajet?.arrets != "" ?
                                                             JSON.parse(item.trajet?.arrets).map((i: any, index: number) => (
-                                                                <li onClick={() => { setItem({ ...item, prixFinal: i.prix, dest: i.nom }); setDest(i.nom); handleItemOnclick(); setprixF(i.prix) }} key={index} className={`p-1 py-2 border rounded-md my-1 cursor-pointer border-b-2 grid grid-cols-2 ${index % 2 == 0 ? 'bg-blue-600 hover:bg-blue-700 text-white border-b-blue-400' : 'bg-white hover:bg-stone-100'}`}>
+                                                                <li onClick={() => { setItem({ ...item, prixFinal: i.prix, dest: i.nom }); setDest(i.nom); handleItemOnclick(); setprixF(i.prix) }} key={index} className={`p-1 py-2 border rounded-md my-1 cursor-pointer border-b-2 grid grid-cols-2 ${index % 2 == 0 ? 'bg-blue-600 hover:bg-blue-700 text-white border-b-blue-400' : 'text-white bg-slate-600 hover:bg-slate-800'}`}>
                                                                     <span>{item.trajet?.lieuDepart} - {i.nom}</span> <span className="text-right uppercase ">{i.prix} fcfa</span>
                                                                 </li>
                                                             ))
@@ -780,23 +805,50 @@ export default function Page() {
                 {(!tab && tab2) ? (
                     <div>
                         {(item != null) ? (
-                            <div className=" p-4">
-                                <h4 className="text-blue-400 my-4 font-medium flex items-center gap-4 "><span className="uppercase">Recapitulatif</span><HelpPopup message="Cliquez sur retour pour changer ces informations." /></h4>
-                                <div className="bg-white shadow-2xl w-96 rounded-md border overflow-hidden">
-                                    <h6 className="p-4 uppercase border-b font-bold">Client</h6>
+                            <div className="bg-white shadow-2xl text-sm p-4">
+                                <h4 className="text-gray-800 mb-4 font-medium flex items-center gap-4 "><span className="uppercase">Recapitulatif</span></h4>
+                                <div className=" w-96 rounded-md border mb-4 overflow-hidden">
+                                    <h6 className="p-4 uppercase border-b bg-blue-500 text-white font-bold">Information du Client</h6>
                                     <ul>
-                                        <li className="py-2 font-semibold  px-4 flex text-gray-700 flex-row justify-between">
+                                        <li className="py-2 font-semibold border-b px-4 flex text-gray-700 flex-row gap-4">
                                             <span>Nom et prénom:</span> <span>{value.nom} {value.prenom}</span>
                                         </li>
-                                        <li className="py-2 px-4 font-semibold flex flex-row text-gray-700 justify-between">
-                                            <span>telephone:</span> <span>{value.tel}</span>
+                                        <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                            <span>Téléphone:</span> <span>{value.tel}</span>
                                         </li>
-                                        <li className="py-2 px-4 font-semibold flex flex-row text-gray-700 justify-between">
-                                            <span>numéro CNI:</span> <span>{value.numCNI}</span>
+                                        <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                            <span>Numéro CNI:</span> <span>{value.numCNI}</span>
+                                        </li>
+                                        <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                            <span>Adresse:</span> <span>{value.adresse}</span>
+                                        </li>
+                                        <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                            <span>Date de naissance:</span> <span>{value.dateNaissance}</span>
+                                        </li>
+                                        <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                            <span>Genre:</span> <span>{value.genre == "m" ? "Homme" : "Femme"}</span>
                                         </li>
                                     </ul>
                                 </div>
-                                <CardVoyage isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.prixFinal} lieuArrive={dest} heureArrive={""} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.voyages              ?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
+                                <div className=" w-96 rounded-md border mb-4 overflow-hidden">
+                                    <h6 className="p-4 uppercase border-b bg-blue-500 text-white font-bold">Voyage</h6>
+                                    <ul>
+                                        <li className="py-2 font-semibold border-b px-4 flex text-gray-700 flex-row gap-4">     
+                                            <span>Trajet:</span> <span>{item.trajet?.lieuDepart} - {dest == "" ? item?.trajet.lieuArrivee : dest}</span>
+                                        </li>
+                                        <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                            <span>Prix du ticket:</span> <span>{item.prixFinal ?? prixF}  FCFA</span>
+                                        </li>
+                                        <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                            <span>Date et heure de départ:</span> <span>Le {getDateFormat(item.voyages?.dateDepart)} à {item.voyages?.heureDepart}</span>
+                                        </li>
+                                        <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                            <span>Bus:</span> <span>BUS-0{item.bus?.id}</span>
+                                        </li>
+
+                                    </ul>
+                                </div>
+
                             </div>
                         ) : null}
                     </div>

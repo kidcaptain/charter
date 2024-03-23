@@ -28,8 +28,6 @@ const VehiculeTable = (props: { childToParent: Function, setData: Function, isAd
         }
     }
 
-
-
     return (
         <div className="bg-white shadow-2xl rounded-md border-2 border-stone-50">
             <h1 className=" p-4 text-gray-900 font-bold uppercase border-b">Nos véhicules</h1>
@@ -92,23 +90,22 @@ const VehiculeTable = (props: { childToParent: Function, setData: Function, isAd
                                     {item.horsService}
                                 </td>
                                 <td className="p-2 border-2 border-stone-700">
-                                    <button type="button" onClick={() => deleteBus(item.id)} className="bg-red-500 text-white text-sm p-1 px-2">Retirer</button>
-                                    <button type="button" onClick={() => props.setData({ action: "edit", item: item })} className="bg-yellow-500 text-white text-sm p-1 px-2">Editer</button>     
-                                    <button type="button" onClick={() => props.setData({ action: "add", item: item })} className="bg-stone-900 hover:bg-black text-white text-sm p-1 px-2">Pièces du véhicule</button>
-                                    <button type="button" onClick={() => props.setData({ action: "horsService", item: item })} className="bg-green-500 text-white text-sm p-1 px-2">Mettre Hors Service</button>
-                                    <button type="button" onClick={() => props.setData({ action: "signal", item: item })} className="bg-cyan-500 text-white text-sm p-1 px-2">Signaler une panne</button>
-                                    <button type="button" onClick={() => props.setData({ action: "fiche", item: item })} className="bg-blue-500 text-white text-sm p-1 px-2 ">Fiche technique </button>
+                                    <button type="button" onClick={() => deleteBus(item.id)} className="bg-red-500 hover:bg-red-400 hover:text-white border-black text-black font-semibold text-sm p-1 px-3 border rounded-md">Retirer</button>
+                                    <button type="button" onClick={() => props.setData({ action: "edit", item: item })} className="bg-yellow-500 hover:bg-yellow-400 hover:text-white mx-2 border-black text-black font-semibold text-sm p-1 px-3 border rounded-md">Editer</button>     
+                                    <button type="button" onClick={() => props.setData({ action: "add", item: item })} className="bg-black hover:bg-black hover:text-white mx-2 border-black text-white font-semibold text-sm p-1 px-3 border rounded-md">Pièces du véhicule</button>
+                                    <button type="button" onClick={() => props.setData({ action: "horsService", item: item })} className="bg-lime-500 hover:bg-lime-400 hover:text-white border-black text-black font-semibold text-sm p-1 px-3 border rounded-md">Mettre Hors Service</button>
+                                    <button type="button" onClick={() => props.setData({ action: "signal", item: item })} className="bg-blue-500 hover:bg-blue-400 mx-2 hover:text-white border-black text-black font-semibold text-sm p-1 px-3 border rounded-md">Signaler une panne</button>
+                                    <button type="button" onClick={() => props.setData({ action: "fiche", item: item })} className="bg-cyan-500 hover:bg-cyan-400 hover:text-white border-black text-black font-semibold text-sm p-1 px-3 border rounded-md ">Fiche technique </button>
+                                    <button type="button" onClick={() => props.setData({ action: "planning", item: item })} className="bg-orange-500 hover:bg-orange-400 mx-2  hover:text-white border-black text-black font-semibold text-sm p-1 px-3 border rounded-md ">Planning </button>
                                     <div className='mt-2'>
                                         {
-                                            props.isAdmin === "admin" ? (<Link href={`/dashboard/admin/vehicles/${item.id}/rapports`} onClick={() => props.setData({ action: "fiche", item: item })} className="bg-purple-600 text-white text-sm p-1 px-2 ">Rapport </Link>) :
-                                                (<Link href={`/dashboard/directeur/vehicules/${item.id}/rapports`} onClick={() => props.setData({ action: "fiche", item: item })} className="bg-purple-600 text-white text-sm p-1 px-2 ">Rapport </Link>)}
-                                        <Link className="bg-green-400 hover:bg-green-600 text-sm p-1 px-2 text-white" href={`/dashboard/admin/vehicles/${item.id}/suivie`}>Fiche de suivie </Link>
-
+                                            props.isAdmin === "admin" ? (<Link href={`/dashboard/admin/vehicles/${item.id}/rapports`} onClick={() => props.setData({ action: "fiche", item: item })} className="bg-purple-500 mx-2 hover:bg-purple-400 hover:text-white border-black text-black font-semibold text-sm p-1 px-3 border rounded-md">Rapport </Link>) :
+                                                (<Link href={`/dashboard/directeur/vehicules/${item.id}/rapports`} onClick={() => props.setData({ action: "fiche", item: item })} className="bg-purple-500 hover:bg-purple-400 mx-2 hover:text-white border-black text-black font-semibold text-sm p-1 px-3 border rounded-md ">Rapport </Link>)}
+                                        <Link className="bg-green-500 hover:bg-green-400 hover:text-white border-black text-black font-semibold text-sm p-1 px-3 border  rounded-md" href={`/dashboard/admin/vehicles/${item.id}/suivie`}>Fiche de suivie </Link>
                                     </div>
                                 </td>
                             </tr>
                         ))}
-
                     </tbody>
                 </table>
             </div>

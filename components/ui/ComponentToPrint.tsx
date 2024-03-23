@@ -1,4 +1,3 @@
-
 import Image from "next/image";
 import React, { useRef } from "react";
 import ReactToPrint from "react-to-print";
@@ -21,6 +20,7 @@ export default function ComponentTicketPrint(props: { item: DataTableProps }) {
         <ComponentToPrint
           client={props.item.client}
           tel={props.item.tel}
+          bus={props.item.bus}
           depart={props.item.depart}
           voyage={props.item.voyage}
           montant={props.item.montant}
@@ -44,6 +44,7 @@ export interface DataTableProps {
   caisse: string;
   numticket: string;
   type: string;
+  bus: string;
   trajet: string;
   siege: number
 }
@@ -72,16 +73,19 @@ class ComponentToPrint extends React.Component<DataTableProps> {
             <h5 className="text-green-600 text-center font-serif italic text-sm underline">Réservation:</h5>
             <h6 className="text-green-600 text-center font-serif text-sm italic">Yaoundé: 6 74 66 20 88 - Douala: 6 74 66 20 88</h6>
             <h2 className="text-center font-bold font-sans">TICKET {this.props.type}</h2>
-            <h2 className="text-center font-bold font-sans">N° {this.props.numticket}</h2>
+            <h2 className="text-center font-bold font-sans">N° 0{this.props.numticket}</h2>
             <h2 className="uppercase text-center"> <span className=" font-bold font-sans">CLT</span>: {this.props.client} </h2>
             <h2 className="uppercase text-center"> <span className=" font-bold font-sans">TEL</span>: {this.props.tel}</h2>
             <h2 className="uppercase text-center"> <span className=" font-bold font-sans">TRAJET</span>: {this.props.trajet}</h2>
             <h2 className="uppercase text-center"> <span className=" font-bold font-sans">DEPART</span>: {this.props.depart}</h2>
-            <h2 className="uppercase text-center"> <span className=" font-bold font-sans">VOY</span>: {this.props.voyage}      <span className=" font-bold font-sans">SIEGE</span>: {this.props.siege}</h2>
-            <h2 className="uppercase text-center"> <span className=" font-bold font-sans">MONTANT</span>: {this.props.montant}</h2>
+            <h2 className="uppercase text-center"> <span className=" font-bold font-sans">SIEGE</span>: 0{this.props.siege}</h2>
+            <h2 className="uppercase text-center"> <span className=" font-bold font-sans">VOY</span>: {this.props.voyage} </h2>
+            <h2 className="uppercase text-center"> <span className=" font-bold font-sans">MONTANT</span>: {this.props.montant} FCFA</h2>
             <h2 className="uppercase text-center"> <span className=" font-bold font-sans">REMBOURSEMENT</span>: {this.props.remboursement}</h2>
+            <h2 className="uppercase text-center"> <span className=" font-bold font-sans">BUS</span>:BUS-{this.props.bus}</h2>
             <h2 className="uppercase text-center"> <span className=" font-bold font-sans">CAISSE</span>: {this.props.caisse}</h2>
             <div className="flex justify-center "><Barcode value={this.props.numticket} /></div>
+            <h6 className="text-center text-xs">Fait le {day}/{month}/{year}</h6>
           </div>
         </div>
       </div>

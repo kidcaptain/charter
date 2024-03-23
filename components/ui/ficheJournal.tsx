@@ -15,7 +15,6 @@ export default function FicheJournal(props: { item: DataFicheJournal }) {
                     trigger={() => <button className="p-2 bg-blue-500 text-sm text-white">Imprimer</button>}
                     content={() => componentRef}
                 />
-
                 {/* component to be printed */}
                 <ComponentToPrint depenses={props.item.depenses} semaineD={props.item.semaineD} semaine={props.item.semaine} date1={props.item.date1} date2={props.item.date2} totalRecette={props.item.totalRecette} totalRecette2={props.item.totalRecette2} recettes={props.item.recettes} ref={(el) => (componentRef = el)} />
             </div>
@@ -163,8 +162,8 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                                             </th>
 
                                             {
-                                                days.map((i: any, index: number) => (
-                                                    <th key={index} colSpan={2}>
+                                                days.map(() => (
+                                                    <th colSpan={2}>
                                                         <div className="grid grid-cols-2">
                                                             <div className="px-3 py-2 border  border-stone-500">
                                                                 INTITULE
@@ -191,9 +190,9 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                                             <th colSpan={2} className=" p-0 ">
                                                 {
 
-                                                    this.props.semaineD.lundi.map((e: Jour, index: number) => (
+                                                    this.props.semaineD.lundi.map((e: Jour) => (
                                                         e.montant > 0 ?
-                                                            <div key={index} className="grid grid-cols-2 items-start">
+                                                            <div className="grid grid-cols-2 items-start">
                                                                 <div className="px-3 py-2 border  border-stone-500">
                                                                     {e.intitule}
                                                                 </div>
@@ -206,9 +205,9 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                                             </th>
                                             <th colSpan={2} className=" p-0 ">
                                                 {
-                                                    this.props.semaineD.mardi.map((e: Jour, index: number  ) => (
+                                                    this.props.semaineD.mardi.map((e: Jour) => (
                                                         e.montant > 0 ?
-                                                            <div key={index} className="grid grid-cols-2 items-start">
+                                                            <div className="grid grid-cols-2 items-start">
                                                                 <div className="px-3 py-2 border  border-stone-500">
                                                                     {e.intitule}
                                                                 </div>
@@ -222,9 +221,9 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                                             </th>
                                             <th colSpan={2}>
                                                 {
-                                                    this.props.semaineD.mercredi.map((e: Jour, index: number) => (
+                                                    this.props.semaineD.mercredi.map((e: Jour) => (
                                                         e.montant > 0 ?
-                                                            <div key={index} className="grid grid-cols-2">
+                                                            <div className="grid grid-cols-2">
                                                                 <div className="px-3 py-2 border  border-stone-500">
                                                                     {e.intitule}
                                                                 </div>
@@ -238,9 +237,9 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                                             </th>
                                             <th colSpan={2}>
                                                 {
-                                                    this.props.semaineD.jeudi.map((e: Jour, index: number) => (
+                                                    this.props.semaineD.jeudi.map((e: Jour) => (
                                                         e.montant > 0 ?
-                                                            <div key={index} className="grid grid-cols-2">
+                                                            <div className="grid grid-cols-2">
                                                                 <div className="px-3 py-2 border  border-stone-500">
                                                                     {e.intitule}
                                                                 </div>
@@ -254,9 +253,9 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                                             </th>
                                             <th colSpan={2}>
                                                 {
-                                                    this.props.semaineD.vendredi.map((e: Jour, index: number) => (
+                                                    this.props.semaineD.vendredi.map((e: Jour) => (
                                                         e.montant > 0 ?
-                                                            <div key={index} className="grid grid-cols-2">
+                                                            <div className="grid grid-cols-2">
                                                                 <div className="px-3 py-2 border  border-stone-500">
                                                                     {e.intitule}
                                                                 </div>
@@ -270,9 +269,9 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                                             </th>
                                             <th colSpan={2}>
                                                 {
-                                                    this.props.semaineD.samedi.map((e: Jour, index: number) => (
+                                                    this.props.semaineD.samedi.map((e: Jour) => (
                                                         e.montant > 0 ?
-                                                            <div key={index} className="grid grid-cols-2">
+                                                            <div className="grid grid-cols-2">
                                                                 <div className="px-3 py-2 border  border-stone-500">
                                                                     {e.intitule}
                                                                 </div>
@@ -287,9 +286,9 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                                             </th>
                                             <th colSpan={2}>
                                                 {
-                                                    this.props.semaineD.dimanche.map((e: Jour, index: number) => (
+                                                    this.props.semaineD.dimanche.map((e: Jour) => (
                                                         e.montant > 0 ?
-                                                            <div key={index} className="grid grid-cols-2">
+                                                            <div className="grid grid-cols-2">
                                                                 <div className="px-3 py-2 border  border-stone-500">
                                                                     {e.intitule}
                                                                 </div>
@@ -357,8 +356,8 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                                             </th>
 
                                             {
-                                                days.map((i: any, index: number) => (
-                                                    <th key={index} colSpan={2}>
+                                                days.map(() => (
+                                                    <th colSpan={2}>
                                                         <div className="grid grid-cols-2">
                                                             <div className="px-3 py-2 border  border-stone-500">
                                                                 INTITULE
@@ -383,9 +382,9 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                                             <th colSpan={2} className=" p-0 ">
                                                 {
 
-                                                    this.props.depenses.lundi.map((e: Jour, index: number) => (
+                                                    this.props.depenses.lundi.map((e: Jour) => (
                                                         e.montant > 0 ?
-                                                            <div key={index} className="grid grid-cols-2 items-start">
+                                                            <div className="grid grid-cols-2 items-start">
                                                                 <div className="px-3 py-2 border  border-stone-500">
                                                                     {e.intitule}
                                                                 </div>
@@ -398,9 +397,9 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                                             </th>
                                             <th colSpan={2} className=" p-0 ">
                                                 {
-                                                    this.props.depenses.mardi.map((e: Jour, index: number) => (
+                                                    this.props.depenses.mardi.map((e: Jour) => (
                                                         e.montant > 0 ?
-                                                            <div key={index} className="grid grid-cols-2 items-start">
+                                                            <div className="grid grid-cols-2 items-start">
                                                                 <div className="px-3 py-2 border  border-stone-500">
                                                                     {e.intitule}
                                                                 </div>
@@ -414,9 +413,9 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                                             </th>
                                             <th colSpan={2}>
                                                 {
-                                                    this.props.depenses.mercredi.map((e: Jour, index: number) => (
+                                                    this.props.depenses.mercredi.map((e: Jour) => (
                                                         e.montant > 0 ?
-                                                            <div key={index} className="grid grid-cols-2">
+                                                            <div className="grid grid-cols-2">
                                                                 <div className="px-3 py-2 border  border-stone-500">
                                                                     {e.intitule}
                                                                 </div>
@@ -430,9 +429,9 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                                             </th>
                                             <th colSpan={2}>
                                                 {
-                                                    this.props.depenses.jeudi.map((e: Jour, index: number) => (
+                                                    this.props.depenses.jeudi.map((e: Jour) => (
                                                         e.montant > 0 ?
-                                                            <div key={index} className="grid grid-cols-2">
+                                                            <div className="grid grid-cols-2">
                                                                 <div className="px-3 py-2 border  border-stone-500">
                                                                     {e.intitule}
                                                                 </div>
@@ -446,9 +445,9 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                                             </th>
                                             <th colSpan={2}>
                                                 {
-                                                    this.props.depenses.vendredi.map((e: Jour, index: number) => (
+                                                    this.props.depenses.vendredi.map((e: Jour) => (
                                                         e.montant > 0 ?
-                                                            <div key={index} className="grid grid-cols-2">
+                                                            <div className="grid grid-cols-2">
                                                                 <div className="px-3 py-2 border  border-stone-500">
                                                                     {e.intitule}
                                                                 </div>
@@ -462,9 +461,9 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                                             </th>
                                             <th colSpan={2}>
                                                 {
-                                                    this.props.depenses.samedi.map((e: Jour, index: number) => (
+                                                    this.props.depenses.samedi.map((e: Jour) => (
                                                         e.montant > 0 ?
-                                                            <div key={index} className="grid grid-cols-2">
+                                                            <div className="grid grid-cols-2">
                                                                 <div className="px-3 py-2 border  border-stone-500">
                                                                     {e.intitule}
                                                                 </div>
@@ -480,9 +479,9 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
 
                                             <th colSpan={2}>
                                                 {
-                                                    this.props.depenses.dimanche.map((e: Jour, index: number) => (
+                                                    this.props.depenses.dimanche.map((e: Jour) => (
                                                         e.montant > 0 ?
-                                                            <div key={index} className="grid grid-cols-2">
+                                                            <div className="grid grid-cols-2">
                                                                 <div className="px-3 py-2 border  border-stone-500">
                                                                     {e.intitule}
                                                                 </div>
@@ -574,7 +573,7 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                                     <th className=" border  text-center border-stone-500">
                                         DEPENSES ANNONCEES
                                     </th>
-                                    <th colSpan={2} contentEditable id="lun" className=" border  border-stone-500">
+                                    <th colSpan={2} contentEditable  id="lun" className=" border  border-stone-500">
                                        
                                     </th>
                                     <th colSpan={2} contentEditable id="mar" className=" border   border-stone-500">

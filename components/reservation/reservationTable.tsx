@@ -56,7 +56,7 @@ export default function ReservationTable() {
                 })
                 tab.push({ passager: passager, voyages: voyage, reservation: r })
             })
-            setReservation(tab)
+            setReservation(tab.reverse())
         }
 
         getReservation()
@@ -123,7 +123,7 @@ export default function ReservationTable() {
                 if (response.ok) {
                     if (validite === "validé") {
                         postTicket(item.reservation.voyageId, item, a)
-                    }else{
+                    } else {
                         editVoyage(item, a)
                     }
                 }
@@ -145,7 +145,10 @@ export default function ReservationTable() {
                 busId: item.busId,
                 trajetId: item.trajetId,
                 agenceId: item?.agenceId,
-                ready: item.ready
+                ready: item.ready,
+                chauffeurId: item.chauffeurId,
+                heureDepart: item.heureDepart,
+                numVoyage: item.numVoyage,
             }
             try {
                 const res = await fetch(`/api/voyages/${item.id}`, {
@@ -159,7 +162,7 @@ export default function ReservationTable() {
                 console.log(error)
             }
         }
-       
+
     }
     const getBus = async (id: number) => {
         const res = await fetch(`/api/bus/${id}`, {
@@ -206,10 +209,6 @@ export default function ReservationTable() {
 
     }
 
-
-
-
-
     return (
         <section className="w-full h-full">
             <div className="col-span-3  h-full  ">
@@ -226,25 +225,25 @@ export default function ReservationTable() {
                     </div>
                     <ul className="overflow-hidden overflow-y-auto p-4" style={{ maxHeight: 400 }}>
                         {reservation.map((item: any, i: number) => (
-                            <li title={item.reservation.statutReservation } key={i} className={` ${(i % 2) == 0 ? ' bg-lime-100' : 'bg-white '} shadow-lg  border my-4 overflow-hidden rounded-xl  items-center  text-sm `}>
+                            <li title={item.reservation.statutReservation} key={i} className={` ${(i % 2) == 0 ? ' bg-lime-100' : 'bg-white '} shadow-lg  border my-4 overflow-hidden rounded-xl  items-center  text-sm `}>
                                 <div className="grid-cols-5 p-3 grid justify-between text-gray-800 items-center font-medium">
-                                    <div >{getDateFormat(item.voyages?.dateDepart ?? "") }</div>
+                                    <div >{getDateFormat(item.voyages?.dateDepart ?? "")}</div>
                                     <div className="w-full">
                                         <span className="first-letter:uppercase" >{item.passager?.nom ?? ""} {item.passager?.prenom ?? ""}</span> <br />
                                         <div className="flex gap-8 items-center" >{item.passager?.adresse ?? ""} <ul><li className="list-disc">{item.passager?.numCNI ?? ""}</li></ul></div>
                                     </div>
-                                   
+
                                     <span className="font-bold" >{item.voyages?.prixVoyage ?? 0} Fcfa</span>
                                     <span className="text-red-500">{item.reservation.dateConfirmation}</span>
                                     <span >{item.voyages?.typeVoyage ?? ""}</span>
 
                                 </div>
                                 <div className={`flex border-t  p-2  gap-2  ${item.reservation.statutReservation === "annulé" ? "bg-red-400" : "bg-white"}`} >
-                                  
+                                    { }
                                     {
                                         item.reservation.statutReservation === "validé" ? (
                                             <div>
-                                                <Link href={"/dashboard/admin/ticket"} className="text-cyan-700 hover:text-white hover:bg-cyan-500 rounded-sm bg-cyan-100 text-xs  p-2">
+                                                <Link href={"/dashboard/caisse/ticket"} className="text-cyan-700 hover:text-white hover:bg-cyan-500 rounded-sm bg-cyan-100 text-xs  p-2">
                                                     Générer le ticket
                                                 </Link>
                                             </div>
@@ -262,14 +261,12 @@ export default function ReservationTable() {
                                             </div>
                                         ) : null
                                     }
-
                                 </div>
                             </li>
                         ))
                         }
                     </ul>
                 </div>
-
             </div>
         </section>
     )

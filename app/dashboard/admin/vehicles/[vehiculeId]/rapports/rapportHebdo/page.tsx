@@ -146,7 +146,6 @@ export default function Page({ params }: { params: IPrams }) {
             if (recette.length > 0) {
                 recette.map( async (j) => {
                     sommeRec = sommeRec + parseInt(j.montant)
-                    const voyage : any[] = await getVoyage(j.voyageId, buss.id)
                     somme+=parseInt(j.montant);
                 })
             }
@@ -184,32 +183,7 @@ export default function Page({ params }: { params: IPrams }) {
         setDate2(tab[6])
         setTotal(somme)
     }
-    useEffect(() => {
 
-    }, [])
-
-    // const onSubmit = async () => {
-    //     const res = await fetch("/api/depenses?date=" + dateUpdate, { cache: "no-store" })
-    //     if (!res.ok) {
-    //         console.log("error")
-    //     }
-    //     const data = await res.json();
-    //     const tabDepense: any[] = await data;
-    //     const tab: any[] = [];
-    //     const tabBus: any[] = [];
-    //     console.log(tabDepense)
-    //     tabDepense.map((i) => {
-    //         if (i.typeDepense === "bus") {
-    //             tabBus.push(i)
-    //         } else {
-    //             tab.push(i)
-    //         }
-    //     })
-
-    //     setDate(dateUpdate)
-    //     setDepenses(tab)
-    //     setDepensesBus(tabBus)
-    // }
     return (
         <div className="p-10 h-full">
             <div className=" py-4 flex lowercase text-sm justify-between items-start mb-2">
@@ -219,8 +193,6 @@ export default function Page({ params }: { params: IPrams }) {
                 <h2 className="p-4  uppercase border-b">
                     Rapport hebdomadaire
                 </h2>
-
-
                     <div className="p-4">
                         <div>
                             <label htmlFor="" className="text-sm font-bold text-gray-900 mr-2">Date</label>
@@ -228,9 +200,7 @@ export default function Page({ params }: { params: IPrams }) {
                             <button type="button" onClick={() => getRapportBus(date)} className=" hover:bg-green-600 inline-block text-xs border p-2 rounded-sm text-white bg-green-500">Génerer</button>
                         </div>
                     </div>
-             
             </div>
-
             <div className="p-4 w-full h-full min-h-full">
                 <RapportHebdo item={{  simple: fiche, date: date1, date2: date2, total: total, bus: bus }} />
             </div>

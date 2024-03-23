@@ -3,7 +3,7 @@ import { prisma } from "@/utils/connect";
 
 export const POST = async (req: Request) => {
   const body = await req.json();
-  const { numeroSiege, prixTicket, typeTicket, statusTicket, dateCreation, voyageId, passagerId, employeId } = body;
+  const { numeroSiege, prixTicket, typeTicket,destination, statusTicket, dateCreation, voyageId, passagerId, employeId } = body;
   const tickets = await prisma.ticket.create({
     data: {
       numeroSiege: parseInt(numeroSiege),
@@ -13,7 +13,8 @@ export const POST = async (req: Request) => {
       statusTicket: statusTicket,
       dateCreation: `${dateCreation}:00.000Z`,
       passagerId: parseInt(passagerId),
-      employeId: parseInt(employeId)
+      employeId: parseInt(employeId),
+      destination: destination
     }
   });
   return NextResponse.json(tickets)
@@ -58,7 +59,8 @@ export const PUT = async (req: Request) => {
         statusTicket: statusTicket,
         dateCreation: `${dateCreation}:00.000Z`,
         passagerId: parseInt(passagerId),
-        employeId: parseInt(employeId)
+        employeId: parseInt(employeId),
+        
       }
     });
     return NextResponse.json(tickets)

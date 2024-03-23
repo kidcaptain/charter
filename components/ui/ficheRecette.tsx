@@ -57,7 +57,7 @@ class ComponentToPrint extends React.Component<DataFicheRecette> {
 
                     <hr className="border-2 border-black" />
                     <div className="text-xl p-4 text-right">
-                        Yaoundé, le <span > {`${year}-${month}-${day}`} </span>
+                        Yaoundé, le <span > {this.props.date} </span>
                     </div>
                     <h2 className="underline text-2xl text-center font-bold">FICHE DES RECETTES JOURNALIERES</h2>
                     <div className="p-4">

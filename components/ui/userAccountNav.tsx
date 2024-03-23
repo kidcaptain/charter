@@ -47,7 +47,7 @@ const UserAccountNav = () => {
 
 
     return (
-        <button onClick={updateUser} className="text-white  bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300  rounded-sm text-sm p-2 px-5 text-center">
+        <button onClick={updateUser} className="text-white  bg-red-500 bg-gradient-to-tr from-orange-500 shadow-md rounded-xl font-semibold hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 text-sm p-2 px-5 text-center">
             Se Déconnecte
         </button>
     )

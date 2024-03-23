@@ -20,8 +20,8 @@ export default function Page() {
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault()
     const signInData = await signIn('credentials', {
-      username: nom,
-      password: mdp,
+      username: nom.trim(),
+      password: mdp.trim(),
       redirect: false,
     });
     setIsLogging(true)
@@ -41,12 +41,12 @@ export default function Page() {
   return (
     <main className="bg-cover  min-h-screen relative p-8 flex items-center  bg-stone-100 bg-gradient-to-t">
       <div className='grid grid-cols-2 absolute z-0 top-0 w-full h-full left-0'>
-          <div className='col-span-1 bg-blue-500'>
-             
-          </div>
-      </div>  
+        <div className='col-span-1 bg-blue-500'>
+
+        </div>
+      </div>
       <div className="mx-auto relative z-10 max-w-4xl ">
-      <h1 className='text-center text-5xl font-bold my-4 '><span className='text-white'>Charter</span> <span className='text-blue-500'>Express</span></h1>
+        <h1 className='text-center text-5xl font-bold my-4 '><span className='text-white'>Charter</span> <span className='text-blue-500'>Express</span></h1>
         <div className='grid grid-cols-2 items-start justify-between m-auto bg-white shadow-2xl border-blue-500   border-2  rounded-md overflow-hidden'>
           <div className='col-span-1 '>
             <Image
@@ -91,6 +91,6 @@ export default function Page() {
         ) : null
       }
 
-    </main> 
+    </main>
   )
 }

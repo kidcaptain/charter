@@ -186,8 +186,8 @@ export default function Voyage({ params }: { params: IPrams }) {
           }
         })
       })
-      if (val.chauffeurId != 0) {
-        const ress = await fetch(`/api/employes/${val.chauffeurId}`, { cache: "no-store" })
+      if (val.employeId != 0) {
+        const ress = await fetch(`/api/employes/${val.employeId}`, { cache: "no-store" })
         const datas = await ress.json();
         setChauffeur(datas.nom + " " + datas.prenom)
       }
@@ -202,13 +202,11 @@ export default function Voyage({ params }: { params: IPrams }) {
     <div className="p-10">
       <div className=" py-4 flex lowercase text-sm justify-between items-start mb-2">
         <h1 className=" text-gray-900"><Link className="hover:text-blue-600" href={"/dashboard/admin/voyages"}>Voyages</Link> / <Link className="hover:text-blue-600" href="#">BORDEREAU DE ROUTE</Link></h1>
-      </div>
-      <div className="shadow-2xl border rounded-md ">
+      </div>    
+      <div className="shadow-2xl mb-4 border rounded-md ">
         <h2 className="p-4 bg-white uppercase border-b font-bold">Bordereau de route </h2>
       </div>
-
       <BordereauRoute item={{ depense: { carburant: parseInt(depense?.carburant), peage: parseInt(depense?.peage), ration: parseInt(depense?.ration), autre: parseInt(depense?.autre) }, bus: bus, trajet: trajet, voyage: voyage, passagers: passagers, chauffeur: chauffeur, agence: agence }} />
-
     </div>
   )
 }

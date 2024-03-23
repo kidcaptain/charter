@@ -15,6 +15,7 @@ export default function Page({ params }: { params: IPrams }) {
 
     const [data, setData] = useState<any>()
     const [trajet, setTrajet] = useState<any>()
+    const [prixD, setprixD] = useState<number>(0);
     const router = useRouter();
     const [popupData, setPopupData] = useState<{ message: string, title?: string, color: string }>({ message: "", title: "", color: "" })
     const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false);
@@ -83,16 +84,16 @@ export default function Page({ params }: { params: IPrams }) {
         e.preventDefault()
 
         let prix: number = 0;
-
-        if (arrets.length > 0) {
-            arrets.map((i) => {
+        let t: any[] = data.tabArret;
+        if (t.length > 0) {
+            t.map((i) => {
                 prix += i.prix;
             })
         } else {
             prix = data.prix;
         }
 
-        const datas = { ...data, prix: prix, arrets: JSON.stringify(data.tabArret) }
+        const datas = { ...data, prix: parseInt(`${prix}`) + parseInt(`${prixD}`), arrets: JSON.stringify(data.tabArret) }
         try {
             const response = await fetch(`/api/trajets?id=${params.trajetId}`, {
                 method: 'PUT',
@@ -164,7 +165,7 @@ export default function Page({ params }: { params: IPrams }) {
                                     Editer un trajet de voyage
                                 </h2>
                                 <div className=" p-4">
-                                    {((data.lieudepart && data.lieudepart != "") && (data.lieuarrivee == data.lieudepart)) ? (<div className="text-xs bg-yellow-100 my-2 p-4">Le lieu de départ et le lieu d&apos;arrivée sont les mêmes</div>) : null}
+                                    {((data.lieudepart && data.lieudepart != "") && (data.lieuarrivee == data.lieudepart)) ? (<div className="text-xs bg-yellow-100 my-2 p-4">Le lieu de départ et le lieu d'arrivée sont pariels</div>) : null}
                                     <div className="mt-4">
                                         <div className="flex gap-4 mb-1 items-start">
                                             <label className="block text-sm font-bold text-gray-900 dark:text-white">Lieu de Départ</label>
@@ -176,8 +177,9 @@ export default function Page({ params }: { params: IPrams }) {
                                         <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Lieu d&apos;arrivée</label>
                                         <input onChange={handleInputChange} value={data.lieuArrivee} type="text" id="large-input" placeholder="Arrivée" name="lieuArrivee" className={className} />
                                     </div>
+                                    <button type="button" onClick={addArret} className="border-blue-400 border mt-4 text-blue-400  text-sm p-1" >Ajouter un arrêt</button>
                                     {
-                                        data.tabArret.length > 0 ? (<fieldset className="py-4">
+                                        data.tabArret?.length > 0 ? (<fieldset className="py-4">
                                             <h3 className="mt-4  font-bold">Arrêts</h3>
                                             {
                                                 data.tabArret.map((i: { nom: string, prix: number }, index: number) => (
@@ -188,16 +190,19 @@ export default function Page({ params }: { params: IPrams }) {
                                                     </div>
                                                 ))
                                             }
+                                            <div className="my-2">
+                                                <label className="block text-sm font-bold text-gray-900 dark:text-white">Prix du dernier arrêt au lieu d'arrivée</label>
+                                                <input onChange={(e) => setprixD(parseInt(e.target.value))} required type="number" min={0} placeholder="prix" name="prixD" className={`block my-1 text-sm w-full p-1.5 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400`} />
+                                            </div>
+                                        </fieldset>) :
 
-                                        </fieldset>) : <div className="my-4">
-
-                                            <label className="block text-sm  font-bold text-gray-900 dark:text-white">Prix du trajet</label>
-
-                                            <input onChange={handleInputChange} value={data.prix} type="number" min={0} id="prix" placeholder="prix" name="prix" className={`block my-1 text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400`} />
-                                        </div>
+                                            <div className="my-4">
+                                                <label className="block text-sm  font-bold text-gray-900 dark:text-white">Prix du trajet</label>
+                                                <input onChange={handleInputChange} value={data.prix} type="number" min={0} id="prix" placeholder="prix" name="prix" className={`block my-1 text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400`} />
+                                            </div>
                                     }
                                     <div className="grid grid-cols-3 gap-1">
-                                        <button type="button" onClick={addArret} className="border-blue-400 border mt-2 text-blue-400  text-sm p-1" >Ajouter un arrêt</button>
+
                                         {
                                             data.tabArret.length > 1 ?
                                                 <button type="button" onClick={deleteArret} className="border-red-400 border mt-2 text-red-400  text-sm p-1" >Retirer</button> : null}
@@ -205,14 +210,6 @@ export default function Page({ params }: { params: IPrams }) {
                                             data.tabArret.length > 0 ?
                                                 <button type="button" onClick={allDeleteArret} className="border-stone-400 border mt-2 text-stone-400  text-sm p-1" >Tout annuler</button> : null}
                                     </div>
-                                    {/* <div className="mt-4">
-                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Heure de Départ</label>
-                                        <input onChange={handleInputChange} value={data.heureDepart} type="time" id="large-input" name="heureDepart" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
-                                    </div>
-                                    <div className="mt-4">
-                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Heure d&apos;arrivée</label>
-                                        <input onChange={handleInputChange} value={data.heureArrivee} type="time" id="large-input" name="heureArrivee" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
-                                    </div> */}
                                     <div className="mt-4">
                                         <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Distance (en kilomètres)</label>
                                         <input onChange={handleInputChange} value={data.distance} type="number" id="large-input" name="distance" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
@@ -241,9 +238,6 @@ export default function Page({ params }: { params: IPrams }) {
                                 </div>
                                 <ul className="flex flex-col">
                                     <li className="border-b p-4 uppercase"><h5 className="font-bold">Trajet</h5><span className=" font-semibold text-gray-700">{trajet.lieuDepart}-{trajet.lieuArrivee}</span></li>
-                                   
-                                    {/* <li className="border-b p-4 uppercase"><h5 className="font-bold">Heure de Départ</h5> <span className=" font-semibold text-gray-700">{trajet.heureDepart}</span></li>
-                                    <li className="border-b p-4 uppercase"><h5 className="font-bold">Heure d&apos;arrivé</h5>  <span className=" font-semibold text-gray-700">{trajet.heureArrivee}</span></li> */}
                                     <li className="border-b p-4 uppercase"><h5 className="font-bold">Distance</h5>  <span className=" font-semibold text-gray-700">{trajet.distance} Km</span></li>
                                     <li className="border-b p-4 uppercase">Les arrêts de voyages</li>
                                     {
@@ -252,15 +246,13 @@ export default function Page({ params }: { params: IPrams }) {
                                                 <li key={index} className={`p-2 px-4 uppercase grid grid-cols-3 text-sm justify-between ${index % 2 == 0 ? 'bg-stone-200 border-b-2 border-stone-400' : 'bg-white border-b '}`}><h5 className="font-bold">Arret n° {index + 1}</h5><span className=" font-semibold text-gray-700">Lieu: {i.nom} </span> <span className=" font-semibold text-gray-700">Prix: {i.prix} fcfa </span></li>
                                             ))) : <li className="border-b p-4 bg-slate-50 text-sm">Aucun arrêts pour ce trajet</li>
                                     }
-                                     <li className="border-b p-4 uppercase"><h5 className="font-bold">Prix total</h5><span className=" font-semibold text-gray-700">{trajet.prix} fcfa</span></li>
+                                    <li className="border-b p-4 uppercase"><h5 className="font-bold">Prix total</h5><span className=" font-semibold text-gray-700">{trajet.prix} fcfa</span></li>
                                 </ul>
-
                             </div>
                         </section>
                     )}
             </div>
             {isOpenPopup ? (<Popup color={popupData?.color} title={popupData.title} message={popupData?.message} onShow={() => setIsOpenPopup(false)} />) : null}
-
         </div>
 
     )

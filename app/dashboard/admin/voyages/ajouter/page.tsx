@@ -1,14 +1,20 @@
 "use client"
 
+import Planning from "@/components/ui/planning";
 import Popup from "@/components/ui/popup";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
+import Image from "next/image";
+import positionSvg from "@/public/images/position.svg"
+import busSvg from "@/public/images/bus-logo.svg"
 
 export default function Page() {
-
+    const [arrets, setArrets] = useState<{ nom: string, prix: number }[]>([])
     const [data, setData] = useState<any>()
     const [bus, setBus] = useState<any[]>([])
     const [agences, setAgences] = useState<any[]>([])
+    const [comVoy, setComVoy] = useState<number>(0)
     const [trajet, setTrajet] = useState<any[]>([])
     const messagesError: string[] = ["La date de départ doit être supérieure ou égale à date d'aujourd'hui!", "La date d'arrivée doit être supérieure ou date égale a la date de départ", "Date incorrect", "Formulaire incomplet!"]
     const [messageError, setMessageError] = useState<string>("");
@@ -16,10 +22,11 @@ export default function Page() {
     const month: number = new Date().getMonth() + 1;
     const year: number = new Date().getFullYear();
     const [employe, setemploye] = useState<any[]>([])
-
+    const [busId, setBusId] = useState<string | undefined>("")
     const [popupData, setPopupData] = useState<{ message: string, title?: string, color: string }>({ message: "", title: "", color: "" })
     const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false);
-
+    const [trajItem, setTrajItem] = useState<any>()
+    const router = useRouter();
     const configPopup = (message: string, color: string, title: string) => {
         setPopupData({ message: message, color: color, title: title })
         setIsOpenPopup(true)
@@ -27,10 +34,35 @@ export default function Page() {
             setIsOpenPopup(false)
         }, 5000);
     }
-
+    const [prixA, setprixA] = useState<number>(0)
+    const viewArret = async (str: string) => {
+        let val = JSON.parse(str).id;
+        const res = await fetch("/api/trajets/" + val, { cache: "no-store" })
+        if (!res.ok) {
+            throw new Error("Failed")
+        }
+        const data = await res.json();
+        setTrajItem(data);
+        if (data) {
+            setArrets(JSON.parse(data.arrets));
+            let compt: number = 0;
+            let po: { nom: string, prix: number }[] = JSON.parse(data.arrets);
+            po.map((t) => {
+                compt += t.prix;
+            })
+            setprixA(compt)
+        } else {
+            setprixA(JSON.parse(str).prix)
+        }
+    }
 
     const handleInputChange = (event: any) => {
         const target = event.target
+        if (target.name == "busId") {
+            const str = target.value;
+            const array = str.split(',').map(Number);
+            setBusId(array[0])
+        }
         const data = target.type === 'checkbox' ? target.checked : target.value
         setData((oldValue: any) => {
             return { ...oldValue, [target.name]: data }
@@ -48,8 +80,20 @@ export default function Page() {
                 } else if (year > d.getFullYear()) {
                     setMessageError(messagesError[0] + "Année incorrect")
                 } else {
-                    setMessageError("");
+                    if (data.dateArrivee) {
+                        const d2 = new Date(data.dateArrivee);
+                        if (d2.getDate() < d.getDate()) {
+                            setMessageError(messagesError[1] + "(Jour incorrect)");
+                        } else if (d2.getMonth() + 1 < d.getMonth() + 1) {
+                            setMessageError(messagesError[1] + "(Mois incorrect)");
+                        } else if (d2.getFullYear() < d.getFullYear()) {
+                            setMessageError(messagesError[1] + "Année incorrect")
+                        } else {
+                            setMessageError("");
+                        }
+                    }
                 }
+
                 break;
             case "dateArrivee":
                 const depart: any = document.getElementById("dateDepart");
@@ -78,10 +122,51 @@ export default function Page() {
         const str = data.busId;
         const array = str.split(',').map(Number);
         let trajet = JSON.parse(data.trajetId);
-        if (messageError == "") {
+        const res = await fetch("/api/voyages", { cache: "no-store" })
+        if (!res.ok) {
+            throw new Error("Failed")
+        }
+        let bol: boolean = false;
+        let bol2: boolean = true;
+        const datas: any[] = await res.json();
+        if (datas.length > 0) {
+            datas.forEach((i) => {
+                if (bol2) {
+                    if (i.dateArrivee != data?.dateDepart && parseInt(i.busId) == parseInt(array[0])) {
+                        bol = false;
+                        let dateA = `${i.dateArrivee}`;
+                        let dateD = `${data?.dateDepart}`;
+                        if (parseInt(`${dateA[0]}${dateA[1]}${dateA[2]}${dateA[3]}`) <= parseInt(`${dateD[0]}${dateD[1]}${dateD[2]}${dateD[3]}`)) {
+                            if (parseInt(`${dateA[5]}${dateA[6]}`) <= parseInt(`${dateD[5]}${dateD[6]}`)) {
+                                if (parseInt(`${dateA[8]}${dateA[9]}`) <= parseInt(`${dateD[8]}${dateD[9]}`)) {
+                                    bol = true;
+                                } else {
+                                    bol = false;
+                                    bol2 = false;
+                                }
+                            } else {
+                                bol = false;
+                            }
+                        } else {
+                            bol = false;
+                        }
+                    } else {
+                        bol = true;
+                    }
+                }
+            })
+        } else {
+            bol = true
+        }
+        if (!data.dateArrivee) {
+            router.refresh()
+        }
+
+        if (messageError == "" && bol) {
             const voyage = {
                 agenceId: data.agenceId,
                 dateDepart: data.dateDepart,
+                dateArrivee: data.dateArrivee,
                 busId: `${array[0]}`,
                 trajetId: trajet.id,
                 typeVoyage: data.typeVoyage,
@@ -91,7 +176,9 @@ export default function Page() {
                 heureDepart: data.heureDepart,
                 numVoyage: data.numVoyage,
             }
-            console.log(voyage)
+
+
+
             try {
                 const response = await fetch('/api/voyages', {
                     method: 'POST',
@@ -108,7 +195,12 @@ export default function Page() {
                 configPopup("Une erreur c'est produite veuillez actualiser la page et reessayer!", "yellow", "")
             }
         } else {
-            configPopup("Veuillez remplir correctement les informations!", "red", "")
+
+            if (!bol) {
+                alert("Bus indisponible veuillez selectionner une plage horaire valide!")
+            } else if (messageError == "") {
+                configPopup("Veuillez remplir correctement les informations!", "red", "")
+            }
         }
     }
 
@@ -116,6 +208,15 @@ export default function Page() {
 
 
     useEffect(() => {
+        const getVoyage = async () => {
+            const res = await fetch("/api/voyages", { cache: "no-store" })
+            if (!res.ok) {
+                throw new Error("Failed")
+            }
+            const data: any[] = await res.json();
+            setComVoy(data.length)
+        };
+        getVoyage()
         const getTrajet = async () => {
             const res = await fetch("/api/trajets", { cache: "no-store" })
             if (!res.ok) {
@@ -176,9 +277,8 @@ export default function Page() {
             <div className=" py-4 flex justify-between items-start mb-2">
                 <h1 className="text-xl text-gray-900">Programmer un voyage </h1>
             </div>
-            <div className="max-w-2xl m-auto">
-                <div className="">
-
+            <div className="grid gap-4 items-start grid-cols-3 m-auto">
+                <div className=" col-span-1">
                     <form onSubmit={HandlerSubmit} className="col-span-1 bg-white shadow-xl rounded-sm  ">
                         <h2 className=" text-gray-100 p-4 bg-green-500  uppercase">
                             Formulaire
@@ -189,33 +289,39 @@ export default function Page() {
                                     {messageError != "" ? messageError : null}
                                 </span>
                             </div>
+                            <h3>Voyage N°{comVoy + 1}</h3>
                             <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Numéro Voyage</label>
-                                <input onChange={handleInputChange}  required type="text" id="numVoyage" placeholder="Identifiant du voyage" name="numVoyage" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
-                            </div>
-                            <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Date de Départ</label>
-                                <input onChange={e => { checkDates(e.target); handleInputChange(e) }} required type="date" id="dateDepart" placeholder="Départ" name="dateDepart" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
-                            </div>
-                            <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Heure de Départ</label>
-                                <input onChange={handleInputChange}  required type="time" id="heureDepart" placeholder="Heure de départ" name="heureDepart" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Numérotation du Voyage</label>
+                                <input onChange={handleInputChange} required type="text" id="numVoyage" placeholder={`EXP: VOY${comVoy + 1}`} name="numVoyage" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
                             <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Bus</label>
                                 <select id="busId" name="busId" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option></option>
                                     {bus.map((item: any, i: number) => (
-                                        <option key={i} value={[item.id, item.capacite]}>{item.marque} {item.modele} ({item.typeBus})</option>
+                                        <option key={i} value={[item.id, item.capacite]}>Bus: N°0{item.busId} {item.marque} {item.modele} ({item.typeBus})</option>
                                     ))}
                                 </select>
                             </div>
                             <div className="mt-4">
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Date de Départ</label>
+                                <input onChange={e => { checkDates(e.target); handleInputChange(e) }} required type="date" id="dateDepart" placeholder="Départ" name="dateDepart" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
+                            </div>
+                            <div className="mt-4">
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Date de Arrivée</label>
+                                <input onChange={e => { checkDates(e.target); handleInputChange(e) }} required type="date" id="dateArrivee" placeholder="Départ" name="dateArrivee" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
+                            </div>
+                            <div className="mt-4">
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Heure de Départ</label>
+                                <input onChange={handleInputChange} required type="time" id="heureDepart" placeholder="Heure de départ" name="heureDepart" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
+                            </div>
+
+                            <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Trajet</label>
-                                <select id="trajetId" name="trajetId" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
+                                <select id="trajetId" name="trajetId" required onChange={(e) => { handleInputChange(e); viewArret(e.target.value) }} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option></option>
                                     {trajet.map((item: any, i: number) => (
-                                        <option key={i} value={JSON.stringify({ id: item.id, prix: item.prix })}>{item.lieuDepart} - {item.lieuArrivee}</option>
+                                        <option key={i} value={JSON.stringify({ id: item.id, prix: item.prix })}>N°0{item.id} ({item.lieuDepart} - {item.lieuArrivee} {JSON.parse(item.arrets).length == 0 ? "" : JSON.parse(item.arrets).map((i: any, k: number) => `- ${i.nom} `)}) {JSON.parse(item.arrets).length == 0 ? "Aucun arrêt" : ""}</option>
                                     ))}
                                 </select>
                             </div>
@@ -228,7 +334,7 @@ export default function Page() {
                                     ))}
                                 </select>
                             </div>
-                          
+
                             <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Type de voyages:</label>
                                 <select id="typeVoyage" name="typeVoyage" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
@@ -261,6 +367,70 @@ export default function Page() {
                         </div>
                     </form>
                     {isOpenPopup ? (<Popup color={popupData?.color} title={popupData.title} message={popupData?.message} onShow={() => setIsOpenPopup(false)} />) : null}
+                </div>
+                <div className="col-span-2">
+                    {
+                        data?.busId ?
+                            (<div>
+                                <h2>Disponibilité du bus</h2>
+                                <Planning id={busId} />
+                            </div>) : null
+                    }
+                    {
+                        data?.trajetId ?
+                            (
+
+                                <div className="w-full overflow-hidden bg-white border rounded-md  ">
+                                    <h2 className="p-4 "> Trajet {trajItem?.id}</h2>
+                                    <div className=" m-auto relative " style={{ width: 600 }}>
+                                        <div className='flex p-4 py-8 items-center gap-4 overflow-x-auto'>
+                                            <div className='flex items-center gap-4'>
+                                                <div className='text-center'>
+                                                    <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
+                                                        <Image width={35} height={35} alt='' src={busSvg} />
+                                                    </div>
+                                                    <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{trajItem?.lieuDepart} </h4>
+                                                </div>
+
+                                            </div>
+                                            {
+                                                arrets.map((i: any, index: number) => (
+                                                    <div key={index} className='flex items-center gap-4'>
+                                                        <div>
+                                                            <hr className=' border-dashed border-2 border-yellow-300' />
+                                                            <span className='text-xs'>
+                                                                {i.prix}Fcfa
+                                                            </span>
+                                                        </div>
+                                                        <div className='text-center'>
+                                                            <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
+                                                                <Image width={35} height={35} alt='' src={positionSvg} />
+                                                            </div>
+                                                            <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{i.nom}</h4>
+                                                        </div>
+
+                                                    </div>
+                                                ))
+                                            }
+                                            <div className='flex items-center gap-4'>
+                                                <div>
+                                                    <hr className=' border-dashed border-2 border-yellow-300' />
+                                                    <span className='text-xs'>
+                                                        {parseInt(trajItem?.prix) - prixA} Fcfa
+                                                    </span>
+                                                </div>
+                                                <div className='text-center'>
+                                                    <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
+                                                        <Image width={35} height={35} alt='' src={busSvg} />
+                                                    </div>
+                                                    <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{trajItem?.lieuArrivee}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : null
+                    }
                 </div>
             </div>
 

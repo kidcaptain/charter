@@ -24,24 +24,26 @@ export const GET = async (req: NextRequest) => {
 export const POST = async (req: Request) => {
   const body = await req.json();
   // const date = new Date()
-  const { lieudepart, lieuarrivee, prix, arrets, distance } = body;
-      const trajets = await prisma.trajet.create({
-        data: {
-          lieuArrivee: lieuarrivee,
-          lieuDepart: lieudepart,
-          distance: parseInt(distance),
-          prix:   parseInt(prix),
-          arrets: arrets
-        }
-      });
+  const { lieudepart, lieuarrivee, distance, prix, arrets } = body;
+  const trajets = await prisma.trajet.create({
+    data: {
+      lieuArrivee: lieuarrivee,
+      lieuDepart: lieudepart,
+      distance: parseInt(distance),
+      prix:   parseInt(prix),
+      arrets: arrets
+    }
+  });
   return NextResponse.json(trajets)
 }
 
 export const PUT = async (req: Request) => {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
+
   const body = await req.json();
-  const { lieuDepart, lieuArrivee, prix, arrets, distance } = body;
+
+  const { lieuDepart, lieuArrivee, distance, prix, arrets } = body;
   try {
     const trajets = await prisma.trajet.update({
       where: { id: parseInt(`${id}`)  },

@@ -20,8 +20,8 @@ export default function Page() {
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault()
     const signInData = await signIn('credentials', {
-      username: nom,
-      password: mdp,
+      username: nom.trim(),
+      password: mdp.trim(),
       redirect: false,
     });
     setIsLogging(true)

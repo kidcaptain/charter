@@ -43,13 +43,14 @@ model Employe {
   imageCNIRecto      String   @default("")
   imageCNIVerso      String   @default("")
 }
+
 model Voyage {
   id              Int      @id @default(autoincrement())
   dateDepart      DateTime
   dateArrivee     DateTime @default(now())
   placeDisponible Int
   typeVoyage      String
-  prixVoyage      Decimal
+  prixVoyage      Int
   busId           String
   trajetId        Int
   agenceId        Int
@@ -79,7 +80,6 @@ model Reservation {
   avance            Int @default(0)
   dateConfirmation  String  @default("")
 }
-
 
 model Bus {
   id               Int    @id @default(autoincrement())
@@ -125,6 +125,7 @@ model Ticket {
   dateCreation DateTime
   passagerId   Int
   employeId    Int
+  destination  String @default("")
 }
 
 model TrackingVehicule {
@@ -235,7 +236,6 @@ model Facture {
   ext          String
   montant      Int
 }   
-
 
 model Piece {
   id          Int  @id @default(autoincrement())

@@ -10,6 +10,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@daypilot/daypilot-lite-react": "^3.21.0",
     "@ducanh2912/next-pwa": "^10.2.5",
     "@next-auth/prisma-adapter": "^1.0.7",
     "@prisma/client": "^5.8.1",
@@ -25,7 +26,8 @@
     "react-barcode": "^1.5.0",
     "react-dom": "^18",
     "react-to-print": "^2.14.15",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

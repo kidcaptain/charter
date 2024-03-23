@@ -106,8 +106,8 @@ export default function Page() {
                                     <th className="p-2 border ">
                                         {item.numeroSiege}
                                     </th>
-                                    <td className="p-2 border">
-                                        {item.prixTicket}
+                                    <td className="p-2 border text-right">
+                                        {item.prixTicket} Fcfa
                                     </td>
                                     <td className="p-2 border">
                                         {item.typeTicket}

@@ -59,7 +59,7 @@ const EditFormVehicule = (props: { childToParent: Function, id?: string }) => {
                 throw new Error("Failed")
             }
             const val = await res.json();
-            setBus({ ...val }); 
+            setBus({ ...val });
             setValue({ ...val });
         };
         getData();
@@ -99,7 +99,7 @@ const EditFormVehicule = (props: { childToParent: Function, id?: string }) => {
                         <label className="  text-sm font-bold text-gray-800 dark:text-white">Marque</label>
                         <input type="text" name="marque" onChange={handleInputChange} value={value.marque} required id="marque" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                     </div>
-                    <div className="mt-2">  
+                    <div className="mt-2">
                         <label className="  text-sm font-bold text-gray-800 dark:text-white">Modèle</label>
                         <input type="text" name="modele" required onChange={handleInputChange} value={value.modele} id="modele" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                     </div>
@@ -112,10 +112,8 @@ const EditFormVehicule = (props: { childToParent: Function, id?: string }) => {
                     </div>
                     <div className="mt-2">
                         <label className="  text-sm font-bold text-gray-800 dark:text-white">Capacité</label>
-                        <input type="number" required onChange={handleInputChange} id="capacite" value={value.capacite} name="capacite" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
+                        <input type="number" min={1} required onChange={handleInputChange} id="capacite" value={value.capacite} name="capacite" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                     </div>
-               
-                 
                 </div>
                 <div className="p-4">
                     <button type="submit" className="text-white text-sm hover:bg-cyan-700 rounded-sm bg-cyan-500 p-2">
@@ -124,7 +122,6 @@ const EditFormVehicule = (props: { childToParent: Function, id?: string }) => {
                     <button onClick={() => props.childToParent({ isClose: true, isCompleted: false })} className="text-white text-sm bg-stone-700 p-2">Fermer</button>
                 </div>
             </form>
-            
         </div>
     )
 }

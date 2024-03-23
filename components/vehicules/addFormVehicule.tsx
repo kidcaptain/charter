@@ -7,21 +7,11 @@ import Image from "next/image";
 import svg from '@/public/images/valide.svg'
 
 const AddFormVehicule = (props: { childToParent: Function }) => {
-
     const [value, setValue] = useState<any>()
-    const [chauffeurs, setChauffeurs] = useState<any[]>([]);
-
     const className: string = "text-sm font-bold text-gray-800 dark:text-white";
     const className2: string = "block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400";
-
-    const [popupData, setPopupData] = useState<{ message: string, title?: string, color: string }>({ message: "", title: "", color: "" })
-    const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false);
-
-    const date = new Date();
-
     const HandlerSubmit = async (e: any) => {
         e.preventDefault()
-        // const employeId = value.employeId ? value.employeId : 0
         const datas = {
             marque: value.marque,
             modele: value.modele,
@@ -53,40 +43,6 @@ const AddFormVehicule = (props: { childToParent: Function }) => {
             return { ...oldValue, [target.name]: value }
         })
     }
-
-    useEffect(() => {
-        const getPoste = async () => {
-            const res = await fetch("/api/postes?titre=chauffeur", { cache: "no-store" })
-            if (!res.ok) {
-                console.log("error")
-            }
-            const data = await res.json();
-            return data
-        };
-        const getChauffeur = async () => {
-            const postes: any[] = await getPoste();
-            if (postes.length > 0) {
-                postes.map(async (item: any) => {
-                    const res = await fetch(`/api/employes?posteId=${item.id}`, { cache: "no-store" })
-                    if (!res.ok) {
-                        console.log("error")
-                    }
-                    const data = await res.json();
-                    setChauffeurs(data)
-                })
-            }
-        };
-        getChauffeur();
-    }, [])
-
-    const configPopup = (message: string, color: string, title: string) => {
-        setPopupData({ message: message, color: color, title: title })
-        setIsOpenPopup(true)
-        setTimeout(() => {
-            setIsOpenPopup(false)
-        }, 5000);
-    }
-
 
     return (
         <div className="fixed bg-black/60 z-10 top-0 left-0 flex justify-center items-center w-full h-full">
@@ -120,16 +76,13 @@ const AddFormVehicule = (props: { childToParent: Function }) => {
                             <option value="simple">Simple</option>
                         </select>
                     </div>
-                 
                     <div className="mt-4">
                         <div className="flex gap-4 mb-1 items-start">
                             <label className={className}>Capacité(<span className="text-red-500">*</span>)</label>
                             {((value?.capacite && value?.capacite != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null}
                         </div>
-                        <input type="number" required onChange={handleInputChange} id="capacite" name="capacite" className={`block text-sm w-full p-2  ${((value?.capacite && value?.capacite > 0)) ? "bg-green-50 ring-green-400/50 ring-4" : null} text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 `} />
+                        <input type="number" min={1} required onChange={handleInputChange} id="capacite" name="capacite" className={`block text-sm w-full p-2  ${((value?.capacite && value?.capacite > 0)) ? "bg-green-50 ring-green-400/50 ring-4" : null} text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 `} />
                     </div>
-                 
-                  
                 </div>
                 <div className="p-4">
                     <button type="submit" className="text-white text-sm hover:bg-blue-700 rounded-sm bg-blue-500 p-2">
@@ -141,7 +94,6 @@ const AddFormVehicule = (props: { childToParent: Function }) => {
                     <button onClick={() => props.childToParent({ isClose: true, isCompleted: false })} className="text-white text-sm bg-stone-700 hover:bg-stone-600 p-2">Fermer</button>
                 </div>
             </form>
-            {isOpenPopup ? (<Popup color={popupData?.color} title={popupData.title} message={popupData?.message} onShow={() => setIsOpenPopup(false)} />) : null}
         </div>
     )
 }

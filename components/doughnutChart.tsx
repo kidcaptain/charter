@@ -1,9 +1,8 @@
 
 import React from "react";
 import Chart from "chart.js";
-import { title } from "process";
 
-export default function DoughnutChart(props: { val: number,back1: string, back2: string, label1: string, label2: string, val2: number, id: string}) {
+export default function DoughnutChart(props: { val: number, back1: string, back2: string, label1: string, label2: string, val2: number, id: string }) {
     React.useEffect(() => {
         var config = {
             type: "doughnut",
@@ -79,17 +78,16 @@ export default function DoughnutChart(props: { val: number,back1: string, back2:
         if (doc) {
             var ctx = doc.getContext("2d");
         }
-       
         // @ts-ignore
         window.myLine = new Chart(ctx, config);
-    }, [props.val, props.val2]);
+    });
     return (
         <>
             <div className="relative h-full text-gray-800 flex flex-col min-w-0 break-words w-full">
                 <div className="">
                     {/* Chart */}
-                    <div className="relative h-350-px m-auto    " style={{ height: 300 }}>
-                        <canvas id={`line-chart-${props.id}`}></canvas>
+                    <div className="relative h-350-px m-auto" style={{ height: 300 }}>
+                        <canvas id={`line-chart-${props.id}`} className="shadow-2xl rounded-2xl p-5"></canvas>
                     </div>
                 </div>
             </div>
