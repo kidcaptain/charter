@@ -36,7 +36,8 @@ export const PUT = async (req: Request, { params }: { params: { id: string } }) 
                 typeTicket: typeTicket,
                 statusTicket: statusTicket,
                 dateCreation: `${dateCreation}:00.000Z`,
-                passagerId: parseInt(passagerId)
+                passagerId: parseInt(passagerId),
+                
             }
         });
         return NextResponse.json({ message: ticket })
