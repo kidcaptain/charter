@@ -21,7 +21,7 @@ const NewVoyageList = () => {
             <div className="p-4 text-left overflow-y-auto" style={{ height: 550 }}>
                 {voyages.map((item: any, i: number) => (
                     <div key={i} className='my-4'>
-                        <CardVoyage id={item.voyages?.id} isHidden={false} isVip={true} agence="" date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
+                       {/* : <CardVoyage id={item.voyages?.id} isHidden={false} isVip={true} agence="" date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} /> */}
                     </div>
                 ))}
             </div>
