@@ -162,8 +162,8 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                                             </th>
 
                                             {
-                                                days.map(() => (
-                                                    <th colSpan={2}>
+                                                days.map((e, index: number) => (
+                                                    <th  key={index} colSpan={2}>
                                                         <div className="grid grid-cols-2">
                                                             <div className="px-3 py-2 border  border-stone-500">
                                                                 INTITULE
@@ -356,8 +356,8 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
                                             </th>
 
                                             {
-                                                days.map(() => (
-                                                    <th colSpan={2}>
+                                                days.map((e, index: number) => (
+                                                    <th key={index} colSpan={2}>
                                                         <div className="grid grid-cols-2">
                                                             <div className="px-3 py-2 border  border-stone-500">
                                                                 INTITULE
