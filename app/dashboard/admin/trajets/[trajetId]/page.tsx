@@ -165,7 +165,7 @@ export default function Page({ params }: { params: IPrams }) {
                                     Editer un trajet de voyage
                                 </h2>
                                 <div className=" p-4">
-                                    {((data.lieudepart && data.lieudepart != "") && (data.lieuarrivee == data.lieudepart)) ? (<div className="text-xs bg-yellow-100 my-2 p-4">Le lieu de départ et le lieu d'arrivée sont pariels</div>) : null}
+                                    {((data.lieudepart && data.lieudepart != "") && (data.lieuarrivee == data.lieudepart)) ? (<div className="text-xs bg-yellow-100 my-2 p-4">Le lieu de départ et le lieu d&apos;arrivée sont pariels</div>) : null}
                                     <div className="mt-4">
                                         <div className="flex gap-4 mb-1 items-start">
                                             <label className="block text-sm font-bold text-gray-900 dark:text-white">Lieu de Départ</label>
@@ -191,7 +191,7 @@ export default function Page({ params }: { params: IPrams }) {
                                                 ))
                                             }
                                             <div className="my-2">
-                                                <label className="block text-sm font-bold text-gray-900 dark:text-white">Prix du dernier arrêt au lieu d'arrivée</label>
+                                                <label className="block text-sm font-bold text-gray-900 dark:text-white">Prix du dernier arrêt au lieu d&apos;arrivée</label>
                                                 <input onChange={(e) => setprixD(parseInt(e.target.value))} required type="number" min={0} placeholder="prix" name="prixD" className={`block my-1 text-sm w-full p-1.5 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400`} />
                                             </div>
                                         </fieldset>) :

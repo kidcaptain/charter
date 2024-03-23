@@ -122,7 +122,7 @@ const TrajetAddForm = (props: { childToParent: Function }) => {
                             ))
                         }
                         <div className="my-2">
-                            <label className="block text-sm font-bold text-gray-900 dark:text-white">Prix du dernier arrêt au lieu d'arrivée</label>
+                            <label className="block text-sm font-bold text-gray-900 dark:text-white">Prix du dernier arrêt au lieu d&apos;arrivée</label>
                             <input onChange={(e) => setprixD(parseInt(e.target.value))} required type="number" min={0} placeholder="prix" name="prixD" className={`block my-1 text-sm w-full p-1.5 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400`} />
                         </div>
                         

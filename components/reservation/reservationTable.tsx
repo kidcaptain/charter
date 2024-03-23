@@ -243,7 +243,7 @@ export default function ReservationTable() {
                                     {
                                         item.reservation.statutReservation === "validé" ? (
                                             <div>
-                                                <Link href={"/dashboard/caisse/ticket"} className="text-cyan-700 hover:text-white hover:bg-cyan-500 rounded-sm bg-cyan-100 text-xs  p-2">
+                                                <Link href={"/dashboard/admin/ticket"} className="text-cyan-700 hover:text-white hover:bg-cyan-500 rounded-sm bg-cyan-100 text-xs  p-2">
                                                     Générer le ticket
                                                 </Link>
                                             </div>
