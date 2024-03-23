@@ -122,7 +122,7 @@ export default function ModalTrajet(props: { isOpen: boolean, childToParent: Fun
                                                     {voyages.map((item: any, i: number) => (
                                                         ((item.bus.typeBus == props.typeBus) && (item.voyages?.typeVoyage == props.typeVoyage) && (item.voyages?.trajetId == parseInt(trajet))) ? (
                                                             <li key={i} className="my-2" onClick={() => { props.childToParent({ val: !props.isOpen, item: item }); props.setData(item); setOnsearched(false) }} >
-                                                                <CardVoyage isHidden={true} id={item.voyages?.id} isVip={true} agence="" date={getDate(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
+                                                                {/* <CardVoyage isHidden={true} id={item.voyages?.id} isVip={true} agence="" date={getDate(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} /> */}
                                                             </li>
                                                         ) : null
                                                     ))}
@@ -133,7 +133,7 @@ export default function ModalTrajet(props: { isOpen: boolean, childToParent: Fun
                                                     {voyagesResult.map((item: any, i: number) => (
                                                         (getDateFormat(item.voyages?.dateDepart) == dateDepart) ? (
                                                             <li key={i} className="my-2" onClick={() => { props.childToParent({ val: !props.isOpen, item: item }); props.setData(item); setOnsearched(false) }} >
-                                                                <CardVoyage isHidden={true} id={item.voyages?.id} isVip={true} agence="" date={getDate(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
+                                                                {/* <CardVoyage isHidden={true} id={item.voyages?.id} isVip={true} agence="" date={getDate(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={item.trajet?.heureArrivee} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.trajet?.heureDepart} placeDisponible={item.voyages?.placeDisponible} /> */}
                                                             </li>
                                                         ) : null
                                                     ))}
