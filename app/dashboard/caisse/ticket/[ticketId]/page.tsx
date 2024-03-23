@@ -5,16 +5,29 @@ import { useEffect, useState } from "react";
 import { getDateFormat } from "@/functions/actionsClient";
 import Link from "next/link";
 import ComponentTicketPrint from "@/components/ui/ComponentToPrint";
+import { useSession } from "next-auth/react";
 
 export default function Page({ params }: { params: { ticketId: string } }) {
     const [isOpenEditForm, setIsOpenEditForm] = useState<boolean>(false);
     const [data, setData] = useState<any>();
     const [ticket, setTicket] = useState<any>();
+    const { data: session, status } = useSession()
+    const [numTicket, setNumTicket] = useState<number>(0);
 
+    const replace  = (str: string) => {
+      return  str.replaceAll("-", "")
+    }
     const date = new Date()
 
     useEffect(() => {
-
+        const getLenghtTicket = async () => {
+            const res = await fetch("/api/ticket", { cache: "no-store" })
+            if (!res.ok) {
+                return null
+            }
+            const data: any[] = await res.json();
+            setNumTicket(data.length)
+        }
         const getVoyage = async (id: number) => {
             const response = await fetch(`/api/voyages/${id}`, {
                 method: 'GET',
@@ -23,6 +36,8 @@ export default function Page({ params }: { params: { ticketId: string } }) {
             const res = await response.json()
             return res
         }
+
+    
 
         const getPassager = async (id: number) => {
             const response = await fetch(`/api/passagers/${id}`, {
@@ -54,14 +69,10 @@ export default function Page({ params }: { params: { ticketId: string } }) {
                 const tabVoyage = await getVoyage(a.voyageId);
                 const tabPassager = await getPassager(a.passagerId);
                 const tabTrajet = await getTrajet(tabVoyage.trajetId)
-                console.log(tabVoyage)
-                console.log(tabPassager)
-                console.log(tabTrajet)
-
                 setTicket({passager: tabPassager, voyage: tabVoyage, ticket: a, trajet: tabTrajet})
-                console.log(ticket)
-            }else{
                 console.log(a)
+            }else{
+                // console.log(a)
             }
            } catch (error) {
             console.log(error)
@@ -81,22 +92,27 @@ export default function Page({ params }: { params: { ticketId: string } }) {
                     {ticket ?
                         (
                             <ComponentTicketPrint item={{
-                                client: `${ticket?.passager?.nom} ${ticket?.passager?.prenom}`,
-                                tel: ticket?.passager?.telephone,
-                                depart: getDateFormat(ticket?.voyage?.dateDepart),
-                                voyage: `C${ticket?.voyage?.id}`,
-                                montant: ticket?.voyage?.prixVoyage,
+                             
+                                client: `${ticket?.passager?.nom ?? ""} ${ticket?.passager?.prenom ?? ""}`,
+                                tel: ticket?.passager?.telephone ?? "Pas disponible",
+                                depart: getDateFormat(ticket?.voyage?.dateDepart ?? "Pas disponible"),
+                                voyage: `${ ticket?.voyage?.numVoyage.trim() == "" ? "VOY" + ticket?.voyage?.id : ticket?.voyage?.numVoyage.trim() }`,
+                                montant: ticket?.ticket?.prixTicket ?? 0,
                                 remboursement: 0,
-                                caisse: `GUICHET ${ticket?.user?.name}`,
-                                numticket: params.ticketId,
-                                type: ticket?.voyage?.typeVoyage,
-                                trajet: `${ticket?.trajet?.lieuDepart} / ${ticket?.trajet.lieuArrivee}`,
-                                siege: ticket?.voyage?.placeDisponible
+                                caisse: `GUICHET ${session?.user?.name ?? "Pas disponible"}`,
+                                numticket: params.ticketId ?? 0,
+                                bus: `0${ticket?.voyage?.busId}`,
+                                type: ticket?.voyage?.typeVoyage ?? "Pas disponible",
+                                trajet: `${ticket?.trajet?.lieuDepart ?? "Pas disponible"} / ${ticket?.trajet.destination == "" ? ticket?.trajet.lieuArrivee : ticket?.trajet.destination}`,
+                                siege: ticket?.ticket?.numeroSiege ?? 0
                             }} />
                         )
                         : null}
                     <div>
-
+                    <p className="p-4 uppercase text-sm">
+                                            client: {ticket?.passager?.nom} {ticket?.passager?.prenom}, téléphone client: {ticket?.passager?.telephone},départ: {getDateFormat(ticket?.voyage?.dateDepart)}, Numèro de bus:{ticket?.bus?.id},
+                                            trajet: {ticket?.trajet?.lieuDepart}/{ticket?.trajet.lieuArrivee}, voyage N°: {ticket?.voyage?.id}, numèro de siège: 0{ticket?.ticket?.numeroSiege}, Numéro voyage: {ticket?.voyage?.numVoyage}
+                                        </p>
                     </div>
                 </section>
             </div>
