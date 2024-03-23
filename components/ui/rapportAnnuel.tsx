@@ -106,7 +106,7 @@ class ComponentToPrint extends React.Component<DataRapportAnnuel> {
                         </table>
                         <div className="mt-5 flex justify-between ">
                             <div className="flex items-center gap-4">
-                                <span className="font-bold">TOTAL SUR L'ANNEE</span>
+                                <span className="font-bold">TOTAL SUR L&apos;ANNEE</span>
                                 <div className="">
                                     {this.props.total} FCFA
                                 </div>
