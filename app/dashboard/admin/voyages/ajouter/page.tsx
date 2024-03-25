@@ -8,6 +8,7 @@ import { FormEvent, useEffect, useState } from "react";
 import Image from "next/image";
 import positionSvg from "@/public/images/position.svg"
 import busSvg from "@/public/images/bus-logo.svg"
+import PlanningChauffeur from "@/components/ui/planningChauffeur";
 
 export default function Page() {
     const [arrets, setArrets] = useState<{ nom: string, prix: number }[]>([])
@@ -26,6 +27,7 @@ export default function Page() {
     const [popupData, setPopupData] = useState<{ message: string, title?: string, color: string }>({ message: "", title: "", color: "" })
     const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false);
     const [trajItem, setTrajItem] = useState<any>()
+    const [numVoyage, setNumVoyage] = useState<string>("")
     const router = useRouter();
     const configPopup = (message: string, color: string, title: string) => {
         setPopupData({ message: message, color: color, title: title })
@@ -70,50 +72,15 @@ export default function Page() {
     }
 
     const checkDates = (val: any) => {
-        switch (val.name) {
-            case "dateDepart":
-                const d = new Date(val.value);
-                if (day > d.getDate()) {
-                    setMessageError(messagesError[0] + "(Jour incorrect)");
-                } else if (month > d.getMonth() + 1) {
-                    setMessageError(messagesError[0] + "(Mois incorrect)");
-                } else if (year > d.getFullYear()) {
-                    setMessageError(messagesError[0] + "Année incorrect")
-                } else {
-                    if (data.dateArrivee) {
-                        const d2 = new Date(data.dateArrivee);
-                        if (d2.getDate() < d.getDate()) {
-                            setMessageError(messagesError[1] + "(Jour incorrect)");
-                        } else if (d2.getMonth() + 1 < d.getMonth() + 1) {
-                            setMessageError(messagesError[1] + "(Mois incorrect)");
-                        } else if (d2.getFullYear() < d.getFullYear()) {
-                            setMessageError(messagesError[1] + "Année incorrect")
-                        } else {
-                            setMessageError("");
-                        }
-                    }
-                }
-
-                break;
-            case "dateArrivee":
-                const depart: any = document.getElementById("dateDepart");
-                if (depart.value) {
-                    const d = new Date(depart.value);
-                    const d2 = new Date(val.value);
-                    if (d2.getDate() < d.getDate()) {
-                        setMessageError(messagesError[1] + "(Jour incorrect)");
-                    } else if (d2.getMonth() + 1 < d.getMonth() + 1) {
-                        setMessageError(messagesError[1] + "(Mois incorrect)");
-                    } else if (d2.getFullYear() < d.getFullYear()) {
-                        setMessageError(messagesError[1] + "Année incorrect")
-                    } else {
-                        setMessageError("");
-                    }
-                }
-                break;
-            default:
-                setMessageError("");
-                break;
+        const d = new Date(val.value);
+        if (day > d.getDate()) {
+            setMessageError(messagesError[0] + "(Jour incorrect)");
+        } else if (month > d.getMonth() + 1) {
+            setMessageError(messagesError[0] + "(Mois incorrect)");
+        } else if (year > d.getFullYear()) {
+            setMessageError(messagesError[0] + "Année incorrect")
+        } else {
+            setMessageError("")
         }
     }
 
@@ -122,6 +89,7 @@ export default function Page() {
         const str = data.busId;
         const array = str.split(',').map(Number);
         let trajet = JSON.parse(data.trajetId);
+        let agence = JSON.parse(data.agenceId);
         const res = await fetch("/api/voyages", { cache: "no-store" })
         if (!res.ok) {
             throw new Error("Failed")
@@ -129,52 +97,43 @@ export default function Page() {
         let bol: boolean = false;
         let bol2: boolean = true;
         const datas: any[] = await res.json();
-        if (datas.length > 0) {
-            datas.forEach((i) => {
-                if (bol2) {
-                    if (i.dateArrivee != data?.dateDepart && parseInt(i.busId) == parseInt(array[0])) {
-                        bol = false;
-                        let dateA = `${i.dateArrivee}`;
-                        let dateD = `${data?.dateDepart}`;
-                        if (parseInt(`${dateA[0]}${dateA[1]}${dateA[2]}${dateA[3]}`) <= parseInt(`${dateD[0]}${dateD[1]}${dateD[2]}${dateD[3]}`)) {
-                            if (parseInt(`${dateA[5]}${dateA[6]}`) <= parseInt(`${dateD[5]}${dateD[6]}`)) {
-                                if (parseInt(`${dateA[8]}${dateA[9]}`) <= parseInt(`${dateD[8]}${dateD[9]}`)) {
-                                    bol = true;
-                                } else {
-                                    bol = false;
-                                    bol2 = false;
-                                }
-                            } else {
-                                bol = false;
-                            }
-                        } else {
-                            bol = false;
-                        }
-                    } else {
-                        bol = true;
-                    }
-                }
-            })
-        } else {
-            bol = true
-        }
-        if (!data.dateArrivee) {
-            router.refresh()
-        }
+        // if (datas.length > 0) {
+        //     datas.forEach((i) => {
+        //         if (bol2) {
+        //             if (i.heureArrivee != data?.heureDepart && parseInt(i.busId) == parseInt(array[0])) {
+        //                 bol = false;
+        //                 let dateA = `${i.heureArrivee}`;
+        //                 let dateD = `${data?.heureDepart}`;
+        //                 if (parseInt(`${dateA[0]}${dateA[1]}`) <= parseInt(`${dateD[3]}${dateD[4]}`)) {
+        //                     bol = true;
+        //                 } else {
+        //                     bol = false;
+        //                 }
+        //             } else {
+        //                 bol = true;
+        //             }
+        //         }
+        //     })
+        // } else {
+        //     bol = true
+        // }
+        // if (!data.dateArrivee) {
+        //     router.refresh()
+        // }
 
-        if (messageError == "" && bol) {
+        if (messageError == "") {
             const voyage = {
-                agenceId: data.agenceId,
+                agenceId: agence.id,
                 dateDepart: data.dateDepart,
-                dateArrivee: data.dateArrivee,
+                heureArrivee: data.heureArrivee,
                 busId: `${array[0]}`,
                 trajetId: trajet.id,
-                typeVoyage: data.typeVoyage,
+                typeVoyage: "",
                 prixVoyage: trajet.prix,
                 placeDisponible: array[1],
                 chauffeurId: data.chauffeurId ?? 0,
                 heureDepart: data.heureDepart,
-                numVoyage: data.numVoyage,
+                numVoyage: numVoyage,
             }
 
 
@@ -269,6 +228,13 @@ export default function Page() {
 
 
 
+    function generateMumVoy(value: string) {
+        let agence: { id: number, nom: string } = JSON.parse(value);
+        if (agence) {
+            setNumVoyage(`${agence?.nom[0].toUpperCase()}${agence?.nom[1].toUpperCase()}${agence?.nom[3].toUpperCase()}${year}${month}${day}${comVoy}`);
+        }
+    }
+
     return (
         <div className=" w-full p-10">
             <div className=" py-2 flex justify-between items-start">
@@ -289,11 +255,8 @@ export default function Page() {
                                     {messageError != "" ? messageError : null}
                                 </span>
                             </div>
-                            <h3>Voyage N°{comVoy + 1}</h3>
-                            <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Numérotation du Voyage</label>
-                                <input onChange={handleInputChange} required type="text" id="numVoyage" placeholder={`EXP: VOY${comVoy + 1}`} name="numVoyage" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
-                            </div>
+                            <h3 className="text-center uppercase text-xl">Muméro voyage {numVoyage}</h3>
+
                             <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Bus</label>
                                 <select id="busId" name="busId" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
@@ -304,18 +267,27 @@ export default function Page() {
                                 </select>
                             </div>
                             <div className="mt-4">
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Chauffeur</label>
+                                <select id="chauffeurId" name="chauffeurId" onChange={handleInputChange} className="block w-full text-sm p-2 uppercase text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
+                                    <option></option>
+                                    {employe.map((item: any, i: number) => (
+                                        <option key={i} value={item.id}>{item.nom} {item.prenom}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Date de Départ</label>
                                 <input onChange={e => { checkDates(e.target); handleInputChange(e) }} required type="date" id="dateDepart" placeholder="Départ" name="dateDepart" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
-                            <div className="mt-4">
-                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Date de Arrivée</label>
-                                <input onChange={e => { checkDates(e.target); handleInputChange(e) }} required type="date" id="dateArrivee" placeholder="Départ" name="dateArrivee" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
-                            </div>
+
                             <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Heure de Départ</label>
                                 <input onChange={handleInputChange} required type="time" id="heureDepart" placeholder="Heure de départ" name="heureDepart" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                             </div>
-
+                            <div className="mt-4">
+                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Heure d&apos;Arrivée</label>
+                                <input onChange={handleInputChange} required type="time" id="heureArrivee" placeholder="Départ" name="heureArrivee" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
+                            </div>
                             <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Trajet</label>
                                 <select id="trajetId" name="trajetId" required onChange={(e) => { handleInputChange(e); viewArret(e.target.value) }} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
@@ -327,31 +299,23 @@ export default function Page() {
                             </div>
                             <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Agence</label>
-                                <select id="agenceId" name="agenceId" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
+                                <select id="agenceId" name="agenceId" required onChange={(e) => { handleInputChange(e); generateMumVoy(e.target.value) }} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option></option>
                                     {agences.map((item: any, i: number) => (
-                                        <option key={i} value={item.id}>{item.nom} ({item.adresse})</option>
+                                        <option key={i} value={JSON.stringify({ id: item.id, nom: item.nom })}>{item.nom} ({item.adresse})</option>
                                     ))}
                                 </select>
                             </div>
 
-                            <div className="mt-4">
+                            {/* <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Type de voyages:</label>
                                 <select id="typeVoyage" name="typeVoyage" required onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                     <option></option>
                                     <option value="aller-retour">Aller-Retour</option>
                                     <option value="aller simple">Aller Simple</option>
                                 </select>
-                            </div>
-                            <div className="mt-4">
-                                <label className="  text-sm uppercase">Attribuer un chauffeur</label>
-                                <select id="chauffeurId" name="chauffeurId" onChange={handleInputChange} className="block w-full text-sm p-2 uppercase text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
-                                    <option></option>
-                                    {employe.map((item: any, i: number) => (
-                                        <option key={i} value={item.id}>{item.nom} {item.prenom}</option>
-                                    ))}
-                                </select>
-                            </div>
+                            </div> */}
+
                             {/* <div className="mt-4">
                                 <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Prix du voyage</label>
                                 <input onChange={handleInputChange} required type="number" id="prixVoyage" name="prixVoyage" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
@@ -368,73 +332,80 @@ export default function Page() {
                     </form>
                     {isOpenPopup ? (<Popup color={popupData?.color} title={popupData.title} message={popupData?.message} onShow={() => setIsOpenPopup(false)} />) : null}
                 </div>
-             <div className="col-span-2">
-             {
-                    data?.busId ?
-                        (<div>
-                            <h2>Disponibilité du bus</h2>
-                            <Planning id={busId} />
-                        </div>) : null
-                }
-                {
-                    data?.trajetId ?
-                        (
+                <div className="col-span-2">
+                    {
+                        data?.busId ?
+                            (<div className="bg-yellow-500 text-white">
+                                <h2 className="p-2">Disponibilité du bus</h2>
+                                <Planning id={busId} />
+                            </div>) : null
+                    }
+                    {
+                        data?.chauffeurId ?
+                            (<div className="bg-blue-500 text-white">
+                                <h2 className="p-2">Disponibilité du chauffeur</h2>
+                                <PlanningChauffeur id={data?.chauffeurId} />
+                            </div>) : null
+                    }
+                    {
+                        data?.trajetId ?
+                            (
 
-                            <div className="w-full overflow-hidden bg-white border rounded-md  ">
-                               <h2 className="p-4 "> Trajet {trajItem?.id}</h2>
-                                <div className=" m-auto relative " style={{ width: 600 }}>
-                                    <div className='flex p-4 py-8 items-center gap-4 overflow-x-auto'>
-                                        <div className='flex items-center gap-4'>
-                                            <div className='text-center'>
-                                                <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
-                                                    <Image width={35} height={35} alt='' src={busSvg} />
-                                                </div>
-                                                <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{trajItem?.lieuDepart} </h4>
-                                            </div>
-
-                                        </div>
-                                        {
-                                            arrets.map((i: any, index: number) => (
-                                                <div key={index} className='flex items-center gap-4'>
-                                                    <div>
-                                                        <hr className=' border-dashed border-2 border-yellow-300' />
-                                                        <span className='text-xs'>
-                                                            {i.prix}Fcfa
-                                                        </span>
+                                <div className="w-full mt-2 overflow-hidden bg-white border-2 rounded-md  ">
+                                    <h2 className="p-4 border-b "> Trajet {trajItem?.id}</h2>
+                                    <div className=" m-auto relative " style={{ width: 600 }}>
+                                        <div className='flex p-4 py-8 items-center gap-4 overflow-x-auto'>
+                                            <div className='flex items-center gap-4'>
+                                                <div className='text-center'>
+                                                    <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
+                                                        <Image width={35} height={35} alt='' src={busSvg} />
                                                     </div>
-                                                    <div className='text-center'>
-                                                        <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
-                                                            <Image width={35} height={35} alt='' src={positionSvg} />
+                                                    <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{trajItem?.lieuDepart} </h4>
+                                                </div>
+
+                                            </div>
+                                            {
+                                                arrets.map((i: any, index: number) => (
+                                                    <div key={index} className='flex items-center gap-4'>
+                                                        <div>
+                                                            <hr className=' border-dashed border-2 border-yellow-300' />
+                                                            <span className='text-xs'>
+                                                                {i.prix}Fcfa
+                                                            </span>
                                                         </div>
-                                                        <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{i.nom}</h4>
+                                                        <div className='text-center'>
+                                                            <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
+                                                                <Image width={35} height={35} alt='' src={positionSvg} />
+                                                            </div>
+                                                            <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{i.nom}</h4>
+                                                        </div>
+
                                                     </div>
-
+                                                ))
+                                            }
+                                            <div className='flex items-center gap-4'>
+                                                <div>
+                                                    <hr className=' border-dashed border-2 border-yellow-300' />
+                                                    <span className='text-xs'>
+                                                        {parseInt(trajItem?.prix) - prixA} Fcfa
+                                                    </span>
                                                 </div>
-                                            ))
-                                        }
-                                        <div className='flex items-center gap-4'>
-                                            <div>
-                                                <hr className=' border-dashed border-2 border-yellow-300' />
-                                                <span className='text-xs'>
-                                                    {parseInt(trajItem?.prix) - prixA} Fcfa
-                                                </span>
-                                            </div>
-                                            <div className='text-center'>
-                                                <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
-                                                    <Image width={35} height={35} alt='' src={busSvg} />
+                                                <div className='text-center'>
+                                                    <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
+                                                        <Image width={35} height={35} alt='' src={busSvg} />
+                                                    </div>
+                                                    <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{trajItem?.lieuArrivee}</h4>
                                                 </div>
-                                                <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{trajItem?.lieuArrivee}</h4>
-                                            </div>
 
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
 
-                            </div>
-
-                        ) : null
-                }
-             </div>
+                            ) : null
+                    }
+                </div>
             </div>
 
         </div>

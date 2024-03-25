@@ -144,12 +144,6 @@ export const LinksAdmin : {label: string, selected: boolean, icon: string, link:
         link: "/dashboard/admin/fiche",
     },
     {
-        label: "Reservations",
-        selected: false,
-        icon: reservation,
-        link: "/dashboard/admin/reservations",
-    },
-    {
         label: "Depenses et productions",
         selected: false,
         icon: depense,

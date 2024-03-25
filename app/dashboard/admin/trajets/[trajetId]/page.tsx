@@ -93,7 +93,7 @@ export default function Page({ params }: { params: IPrams }) {
             prix = data.prix;
         }
 
-        const datas = { ...data, prix: parseInt(`${prix}`) + parseInt(`${prixD}`), arrets: JSON.stringify(data.tabArret) }
+        const datas = { ...data, distance: 0, prix: parseInt(`${prix}`) + parseInt(`${prixD}`), arrets: JSON.stringify(data.tabArret) }
         try {
             const response = await fetch(`/api/trajets?id=${params.trajetId}`, {
                 method: 'PUT',
@@ -210,10 +210,7 @@ export default function Page({ params }: { params: IPrams }) {
                                             data.tabArret.length > 0 ?
                                                 <button type="button" onClick={allDeleteArret} className="border-stone-400 border mt-2 text-stone-400  text-sm p-1" >Tout annuler</button> : null}
                                     </div>
-                                    <div className="mt-4">
-                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Distance (en kilomètres)</label>
-                                        <input onChange={handleInputChange} value={data.distance} type="number" id="large-input" name="distance" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
-                                    </div>
+                                
                                     <div className="mt-4 flex gap-4">
                                         <button type="submit" className="text-white text-sm flex px-4  hover:shadow-md  hover:bg-cyan-700 rounded-sm bg-cyan-500 p-2">
                                             Modifier
@@ -238,7 +235,7 @@ export default function Page({ params }: { params: IPrams }) {
                                 </div>
                                 <ul className="flex flex-col">
                                     <li className="border-b p-4 uppercase"><h5 className="font-bold">Trajet</h5><span className=" font-semibold text-gray-700">{trajet.lieuDepart}-{trajet.lieuArrivee}</span></li>
-                                    <li className="border-b p-4 uppercase"><h5 className="font-bold">Distance</h5>  <span className=" font-semibold text-gray-700">{trajet.distance} Km</span></li>
+                                    
                                     <li className="border-b p-4 uppercase">Les arrêts de voyages</li>
                                     {
                                         trajet.arrets != "" ?

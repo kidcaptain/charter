@@ -105,7 +105,9 @@ export default function Page() {
                     montant: totalChargeNet,
                     date: `${year}-${month}-${day}T00:00:00.000Z`,
                     typeDepense: "salaire",
-                    idTypeDepense: "0"
+                    idTypeDepense: "0",
+                    motif: "",
+                    piece: ""
                 }
                 // console.log(dates)
                 const res = await fetch('/api/depenses', {

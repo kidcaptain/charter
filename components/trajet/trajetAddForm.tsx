@@ -48,8 +48,7 @@ const TrajetAddForm = (props: { childToParent: Function }) => {
         } else {
             prix = data.prix;
         }
-        const datas = { ...data, prix: parseInt(`${prix}`) + parseInt(`${prixD}`), arrets: JSON.stringify(arrets) }
-
+        const datas = { ...data, distance: 0, prix: parseInt(`${prix}`) + parseInt(`${prixD}`), arrets: JSON.stringify(data.tabArret) }
         try {
             const response = await fetch('/api/trajets', {
                 method: 'POST',
@@ -140,13 +139,7 @@ const TrajetAddForm = (props: { childToParent: Function }) => {
                         arrets.length > 0 ?
                             <button type="button" onClick={allDeleteArret} className="border-stone-400 border mt-2 text-stone-400  text-sm p-1" >Tout annuler</button> : null}
                 </div>
-                <div className="mt-4">
-                    <div className="flex gap-4 mb-1 items-start">
-                        <label className="block text-sm font-bold text-gray-900 dark:text-white">Nombre de kilomètre entre les deux points</label>
-                        {((data?.distance && parseInt(data?.distance) > 0)) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null}
-                    </div>
-                    <input onChange={handleInputChange} required type="number" id="distance" name="distance" className={`${className} ${((data?.distance && data?.distance != "") && parseInt(data?.distance) > 0) ? "bg-green-50 ring-green-400/30 ring-4" : ""}`} />
-                </div>
+       
                 <div className="mt-4 flex gap-4">
                     <button type="submit" className="text-white text-sm flex px-4  hover:shadow-md  hover:bg-blue-700 rounded-sm bg-blue-500   p-2">
                         Enregistrer

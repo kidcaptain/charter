@@ -26,6 +26,7 @@ export default function Page() {
     const [reste, setReste] = useState<number>(0)
     const [avance, setAvance] = useState<number>(0)
     const [sup, setsup] = useState<number>(0)
+    const [vipP, setVipP] = useState<number>(0)
     const [prixF, setprixF] = useState<number>(0)
     const { data: session, status } = useSession()
     const [typeClass, setTypeClass] = useState<string>("");
@@ -49,6 +50,7 @@ export default function Page() {
     const [employe, setEmploye] = useState<any>()
     const [passager, setPassager] = useState<any>(null)
     const [agence, setAgence] = useState<any>(null);
+    const [ty, setTy] = useState<string>("");
     const [numTicket, setNumTicket] = useState<number>(0);
     const [trajets, setTrajets] = useState<any[]>([]);
     const [isReady, setIsReady] = useState<boolean>(false);
@@ -133,9 +135,9 @@ export default function Page() {
         // if (item.placeDisponible != 0) {
         const voyageData = {
             dateDepart: getDateFormat(item.dateDepart),
-            dateArrivee: getDateFormat(item.dateArrivee),
+            heureArrivee: item.heureArrivee,
             placeDisponible: (parseInt(item.placeDisponible) - 1) < 0 ? 0 : (parseInt(item.placeDisponible) - 1),
-            typeVoyage: item.typeVoyage,
+            typeVoyage: value.typeVoyage,
             prixVoyage: item.prixVoyage,
             busId: item.busId,
             trajetId: item.trajetId,
@@ -286,15 +288,18 @@ export default function Page() {
     }
     const HandlerSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        const date = new Date()
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
+        const day = (date.getDate()) < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
         if (item.voyages?.placeDisponible != 0) {
-
             if (item != null) {
                 try {
                     const e = {
                         nom: value.nom,
                         prenom: value.prenom,
                         adresse: value.adresse,
-                        dateNaissance: value.dateNaissance,
+                        dateNaissance: value.dateNaissance ?? `${year}-${month}-${day}T00:00:00.000Z`,
                         genre: value.genre,
                         telephone: value.tel,
                         email: "",
@@ -321,6 +326,7 @@ export default function Page() {
                     }
                 } catch (err) {
                     console.log(err)
+                    alert()
                     configPopup("Erreur d'enregistrement veillez reessayer!!", "red", "Error d'enregistrement")
                 }
             } else {
@@ -372,7 +378,11 @@ export default function Page() {
         setIsOpenPopup(val)
     }
     const handleNextTab = () => {
-        if (value?.nom && value?.prenom && value?.adresse && value?.dateNaissance && value?.genre && value?.numCNI) {
+        if (item?.bus?.typeBus != "simple") {
+            setVipP(5000)
+        }
+        getMethod("payer")
+        if (value?.nom && value?.prenom && value?.adresse && value?.genre && value?.numCNI) {
             setTab2(true)
             setTab(false)
         } else {
@@ -468,11 +478,11 @@ export default function Page() {
         setOnsearched(false);
     }
     return (
-        <section className="w-full h-full relative p-10 ">
-            <div className=" py-4 flex justify-between items-start mb-2">
+        <section className="w-full h-full relative  ">
+            <div className=" py-4 p-10 flex justify-between items-start mb-2">
                 <h1 className="text-xl text-gray-900">Réservation et achat de tickets</h1>
             </div>
-            <section className={`relative flex gap-4 justify-start items-start ${(!tab && !tab2) ? 'flex-col' : 'flex-row'}`}>
+            <section className={`relative p-5 flex gap-4 justify-start items-start ${(!tab && !tab2) ? 'flex-col' : 'flex-row'}`}>
                 <div style={{ width: '100%', minHeight: "100%", backdropFilter: "blur(1px)" }} className=" shadow-2xl max-w-3xl border rounded-md h-full relative overflow-hidden z-10    ">
                     <h4 className="border-b p-4 text-black font-bold uppercase text-xl">
                         Formulaire de ventes et reservation
@@ -537,24 +547,25 @@ export default function Page() {
                             </div>
                             <div className={`${(tab && !tab2) ? 'block' : 'hidden'}`}>
                                 <h4 className="text-blue-400 font-medium flex items-center gap-4 uppercase"> <div className="bg-blue-400 flex justify-center items-center w-4 h-4 text-black p-4 rounded-full">2</div> Information du client  <HelpPopup message="Remplir correctement tout les informations demandées." /></h4>
+                              
                                 <div className="mt-2">
-                                    <label className={`block mb-1 text-sm  font-bold text-gray-800 ${(validator && (value.nom == undefined)) ? "ring-2 ring-red-500" : ""}`}>Nom</label>
+                                    <label className={`block mb-1 text-sm  font-bold text-gray-800 ${(validator && (value.nom == undefined)) ? "ring-2 ring-red-500" : ""}`}>Nom  <span className="text-red-500">*</span> </label>
                                     <input type="text" required autoComplete="off" onChange={handleInputChange} placeholder="Nom" name="nom" id="nom" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
                                 </div>
                                 <div className="mt-2">
-                                    <label className="block mb-1 text-sm font-bold text-gray-800">Prénom</label>
+                                    <label className="block mb-1 text-sm font-bold text-gray-800">Prénom <span className="text-red-500">*</span></label>
                                     <input type="text" required autoComplete="off" id="prenom" name="prenom" placeholder="Prénom" onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
                                 </div>
                                 <div className="mt-2">
-                                    <label className="block mb-1 text-sm font-bold text-gray-800">Adresse</label>
+                                    <label className="block mb-1 text-sm font-bold text-gray-800">Adresse <span className="text-red-500">*</span></label>
                                     <input type="text" required autoComplete="off" id="adresse" name="adresse" placeholder="Adresse" onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
                                 </div>
                                 <div className="mt-2">
                                     <label className="block mb-1 text-sm font-bold text-gray-800">Date de naissance</label>
-                                    <input type="date" required id="datenaissance" name="dateNaissance" placeholder="Date de Naissance" onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
+                                    <input type="date" id="datenaissance" name="dateNaissance" placeholder="Date de Naissance" onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
                                 </div>
                                 <div className="mt-2">
-                                    <label className="block mb-1 text-sm font-bold text-gray-800">Genre</label>
+                                    <label className="block mb-1 text-sm font-bold text-gray-800">Genre <span className="text-red-500">*</span></label>
                                     <div className="flex gap-4">
                                         <input type="radio" onChange={handleInputChange} id="genrem" name="genre" value="m" className="block p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
                                         <label htmlFor="genrem" className="text-sm font-bold text-gray-800">Homme</label>
@@ -563,11 +574,11 @@ export default function Page() {
                                     </div>
                                 </div>
                                 <div className="mt-2">
-                                    <label className="block mb-1 text-sm font-bold text-gray-800">Numèro de téléphone:</label>
+                                    <label className="block mb-1 text-sm font-bold text-gray-800">Numèro de téléphone <span className="text-red-500">*</span></label>
                                     <input type="tel" id="tel" autoComplete="off" name="tel" onChange={handleInputChange} aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none focus-visible:ring-blue-400" placeholder="620456789" required />
                                 </div>
                                 <div className="mt-2">
-                                    <label className="block mb-1 text-sm font-bold text-gray-800">Numèro de CNI:</label>
+                                    <label className="block mb-1 text-sm font-bold text-gray-800">Numèro de CNI <span className="text-red-500">*</span></label>
                                     <input type="text" id="numCNI" autoComplete="off" name="numCNI" onChange={handleInputChange} aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none focus-visible:ring-blue-400" required />
                                 </div>
                                 <div className="mt-4">
@@ -578,112 +589,78 @@ export default function Page() {
                             <div className={`px-4 ${(!tab && tab2) ? 'block' : 'hidden'}`}>
                                 <div className="mt-2">
                                     <h4 className="text-blue-400 font-medium flex items-center gap-4 "> <div className="bg-blue-400 flex justify-center items-center w-4 h-4 text-black p-4 rounded-full">3</div><span className="uppercase">Fiche de recette</span><HelpPopup message="Remplir correctement tout les informations demandées." /></h4>
-                                    <div className="mt-4">
-
-                                        <div className="flex gap-1">
-                                            <input type="radio" required onChange={e =>{ getMethod(e.target.value); setsup(0); setAvance(0)}} id="reserver" name="method" value="reserver" className="block p-1  text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
-                                            <label htmlFor="reserver" className="text-sm font-bold text-gray-800">Réserver</label>
-                                            <input type="radio" required onChange={e =>{ getMethod(e.target.value); setsup(0); setAvance(0)}} id="payer" value="payer" name="method" className="block ml-4 p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
-                                            <label htmlFor="payer" className="text-sm font-bold text-gray-800">Payer</label>
+                                    <div>
+                                        <div className="mt-4">
+                                            <div className="flex gap-4 mb-1 items-start">
+                                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Service</label>
+                                                {/* {((data?.nom && data?.nom != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                            </div>
+                                            <input value={"Achat de ticket de bus"} disabled type="text" id="nom" placeholder="Nom" name="nom" className={`block text-sm w-full p-2 text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200  sm:text-md focus-visible:ring-blue-400  `} />
                                         </div>
+                                        <div className="mt-4">
+                                            <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Type de voyages:</label>
+                                            <select id="typeVoyage" name="typeVoyage" required onChange={(e) => { setTy(e.target.value); if (e.target.value == "aller-retour") { setsup(prixF); } else { setsup(0) } }} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
+                                                <option></option>
+                                                <option value="aller-retour">Aller-Retour</option>
+                                                <option value="aller simple">Aller Simple</option>
+                                            </select>
+                                        </div>
+                                        <div className="mt-4">
+                                            <div className="flex gap-4 mb-1 items-start">
+                                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Prix du ticket</label>
+                                                {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                            </div>
+                                            <input value={prixF} type="number" id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200 sm:text-md focus-visible:ring-blue-400 `} />
+                                        </div>
+                                        {
+                                            ty == "aller-retour" ? (
+                                                <>
+                                                    <div className="mt-4">
+                                                        <div className="flex gap-4 mb-1 items-start">
+                                                            <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Prix retour</label>
+                                                            {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                                        </div>
+                                                        <input type="number" value={sup} disabled onChange={(e) => setsup(parseInt(e.target.value))} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 bg-gray-200 rounded-sm focus:ring-2  focus:outline-none  sm:text-md focus-visible:ring-blue-400 `} />
+                                                    </div>
+                                                </>
+                                            ) : null
+                                        }
+
+                                        {
+                                            item?.bus?.typeBus != "simple" ? (
+                                                <>
+                                                    <div className="mt-4">
+                                                        <div className="flex gap-4 mb-1 items-start">
+                                                            <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Prix vip</label>
+                                                            {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                                        </div>
+                                                        <input type="number" value={vipP} disabled onChange={(e) => setVipP(parseInt(e.target.value))} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 bg-gray-200 rounded-sm focus:ring-2  focus:outline-none  sm:text-md focus-visible:ring-blue-400 `} />
+                                                    </div>
+                                                </>
+                                            ) : null
+                                        }
+                                        <div className="mt-4">
+                                            <div className="flex gap-4 mb-1 items-start">
+                                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Net à payer </label>
+                                                {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                            </div>
+                                            <input value={sup + prixF + vipP} type="number" disabled onChange={(e) => setsup(parseInt(e.target.value))} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200 sm:text-md focus-visible:ring-blue-400 `} />
+                                        </div>
+                                        <div className="mt-4">
+                                            <div className="flex gap-4 mb-1 items-start">
+                                                <label htmlFor="typePaiement" className="block mb-1 text-sm font-medium text-gray-900 ">Type De Paiement</label>
+                                                {/* {((data?.typePaiement && data?.typePaiement != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                            </div>
+                                            <select name="typePaiement" required onChange={(e) => setTypePaiement(e.target.value)} autoComplete="off" className={`block w-full p-2 uppercase text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400  `} id="typePaiement">
+                                                <option value="" ></option>
+                                                <option value="cash" >Cash</option>
+                                                <option value="orange money" >Orange money</option>
+                                                <option value="mobile money" >Mtn Mobile money</option>
+                                            </select>
+                                        </div>
+
                                     </div>
-                                    {
-                                        (method == "payer" && item) ? (
-                                            <>
-                                                <div className="mt-4">
-                                                    <div className="flex gap-4 mb-1 items-start">
-                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Service</label>
-                                                        {/* {((data?.nom && data?.nom != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
-                                                    </div>
-                                                    <input value={"Achat de ticket de bus"} disabled type="text" id="nom" placeholder="Nom" name="nom" className={`block text-sm w-full p-2 text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200  sm:text-md focus-visible:ring-blue-400  `} />
-                                                </div>
-                                                <div className="mt-4">
-                                                    <div className="flex gap-4 mb-1 items-start">
-                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Prix du ticket</label>
-                                                        {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
-                                                    </div>
-                                                    <input value={prixF} type="number" id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200 sm:text-md focus-visible:ring-blue-400 `} />
-                                                </div>
-                                                <div className="mt-4">
-                                                    <div className="flex gap-4 mb-1 items-start">
-                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Frais supplementaire </label>
-                                                        {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
-                                                    </div>
-                                                    <input  type="number" onChange={(e) => setsup(parseInt(e.target.value))} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none  sm:text-md focus-visible:ring-blue-400 `} />
-                                                </div>
-                                                <div className="mt-4">
-                                                    <div className="flex gap-4 mb-1 items-start">
-                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Net à payer </label>
-                                                        {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
-                                                    </div>
-                                                    <input value={sup + prixF} type="number" disabled onChange={(e) => setsup(parseInt(e.target.value))} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200 sm:text-md focus-visible:ring-blue-400 `} />
-                                                </div>
-                                                <div className="mt-4">
-                                                    <div className="flex gap-4 mb-1 items-start">
-                                                        <label htmlFor="typePaiement" className="block mb-1 text-sm font-medium text-gray-900 ">Type De Paiement</label>
-                                                        {/* {((data?.typePaiement && data?.typePaiement != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
-                                                    </div>
-                                                    <select name="typePaiement" required onChange={(e) => setTypePaiement(e.target.value)} autoComplete="off" className={`block w-full p-2 uppercase text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400  `} id="typePaiement">
-                                                        <option value="" ></option>
-                                                        <option value="cash" >Cash</option>
-                                                        <option value="mobile money" >Mobile money</option>
-                                                    </select>
-                                                </div>
-                                            </>
-                                        ) : null
-                                    }
-                                    {
-                                        method == "reserver" && item ? (
-                                            <>
-                                                <div className="mt-4">
-                                                    <div className="flex gap-4 mb-1 items-start">
-                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Service</label>
-                                                        {/* {((data?.nom && data?.nom != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
-                                                    </div>
-                                                    <input value={"reservation de ticket de bus"} disabled type="text" id="nom" placeholder="Nom" name="nom" className={`block text-sm w-full p-2 text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200  sm:text-md focus-visible:ring-blue-400  `} />
-                                                </div>
-                                                <div className="mt-4">
-                                                    <div className="flex gap-4 mb-1 items-start">
-                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Frais supplementaire </label>
-                                                        {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
-                                                    </div>
-                                                    <input  type="number" onChange={(e) => setsup(parseInt(e.target.value))} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none  sm:text-md focus-visible:ring-blue-400 `} />
-                                                </div>
-                                                <div className="mt-4">
-                                                    <div className="flex gap-4 mb-1 items-start">
-                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Avance versée</label>
-                                                        {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
-                                                    </div>
-                                                    <input type="number" id="montant" onChange={e => setAvance(parseInt(e.target.value))} max={prixF} name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 `} />
-                                                </div>
-                                                <div className="mt-4">
-                                                    <div className="flex gap-4 mb-1 items-start">
-                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">reste à payé </label>
-                                                        {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
-                                                    </div>
-                                                    <input disabled type="number" onChange={e => setReste(parseInt(e.target.value))} value={prixF - avance + sup} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 `} />
-                                                </div>
-                                                <div className="mt-4">
-                                                    <div className="flex gap-4 mb-1 items-start">
-                                                        <label htmlFor="typePaiement" className="block mb-1 text-sm font-medium text-gray-900 ">Type De Paiement</label>
-                                                        {/* {((data?.typePaiement && data?.typePaiement != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
-                                                    </div>
-                                                    <select name="typePaiement" required autoComplete="off" onChange={(e) => setTypePaiement(e.target.value)} className={`block w-full p-2 uppercase text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400  `} id="typePaiement">
-                                                        <option value="" ></option>
-                                                        <option value="cash" >Cash</option>
-                                                        <option value="mobile money" >Mobile money</option>
-                                                    </select>
-                                                </div>
-                                                <div className="mt-4">
-                                                    <div className="flex gap-4 mb-1 items-start">
-                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Date de confirmation de la reservation</label>
-                                                        {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
-                                                    </div>
-                                                    <input type="date" id="dateConfirmation" name="dateConfirmation" onChange={(e) => setDateConfirmation(e.target.value)} className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 `} />
-                                                </div>
-                                            </>
-                                        ) : null
-                                    }
+
                                     <div className="mt-4">
                                         <button type="button" onClick={() => { setTab(true); setTab2(false); setMethod("") }} className=" p-2 px-3 rounded-md hover:bg-stone-400 text-sm hover:text-white border border-stone-500 text-stone-500 font-bold">Retour</button>
                                         <button type="submit" onClick={validationTab} className=" mx-2 p-2 px-3 rounded-md hover:bg-blue-400 hover:text-white border border-blue-500 text-sm text-blue-500 font-bold">Valider</button>
@@ -700,8 +677,8 @@ export default function Page() {
                                             client: `${passager?.passager?.nom} ${passager?.passager?.prenom}`,
                                             tel: passager?.passager?.telephone,
                                             depart: getDateFormat(ticket?.voyages?.dateDepart),
-                                            voyage: `${ ticket?.voyages?.numVoyage.trim() == "" ? "VOY" + ticket?.voyages?.id : ticket?.voyages?.numVoyage.trim() }`,
-                                            montant: parseInt(`${sup}`) + parseInt(`${prixF}`), 
+                                            voyage: `${ticket?.voyages?.numVoyage.trim() == "" ? "VOY" + ticket?.voyages?.id : ticket?.voyages?.numVoyage.trim()}`,
+                                            montant: parseInt(`${sup}`) + parseInt(`${prixF}`),
                                             remboursement: 0,
                                             caisse: `GUICHET ${session?.user?.name}`,
                                             numticket: numTicket.toString(),
@@ -711,8 +688,15 @@ export default function Page() {
                                             siege: ticket?.bus?.capacite - ticket?.voyages?.placeDisponible + 1
                                         }} />
                                         <p className="p-4 uppercase text-sm">
-                                            client:{passager?.passager?.nom} {passager?.passager?.prenom}, téléphone client:{passager?.passager?.telephone},départ: {getDateFormat(ticket?.voyages?.dateDepart)}, Numèro de bus:{ticket?.bus?.id},
-                                            trajet:{ticket?.trajet?.lieuDepart}/{ticket?.trajet.lieuArrivee}, voyageN°: {ticket?.voyages?.id}, numèro de siège:{ticket?.bus?.capacite - ticket?.voyages?.placeDisponible < 10 ? '0' + (ticket?.bus?.capacite - ticket?.voyages?.placeDisponible) : ticket?.bus?.capacite - ticket?.voyages?.placeDisponible}
+                                            client:{passager?.passager?.nom} {passager?.passager?.prenom},
+                                            téléphone client:{passager?.passager?.telephone},
+                                            départ: {getDateFormat(ticket?.voyages?.dateDepart)},
+                                            Numéro de bus: 0{ticket?.bus?.id},
+                                            trajet: {ticket?.trajet?.lieuDepart}/{dest == "" ? ticket?.trajet.lieuArrivee : dest},
+                                            voyage: {ticket?.voyages?.numVoyage.trim() == "" ? "VOY" + ticket?.voyages?.id : ticket?.voyages?.numVoyage.trim()},
+                                            numèro de siège:{ticket?.bus?.capacite - ticket?.voyages?.placeDisponible + 1},
+                                            numéro ticket: {numTicket.toString()},
+                                            caisse: GUICHET {session?.user?.name}
                                         </p>
                                     </div>
                                 ) : null}
@@ -742,9 +726,9 @@ export default function Page() {
                         </div>
                         {
                             !onSearched ? (
-                                <ul className=" grid grid-cols-3 items-start gap-8 relative h-full ">
+                                <ul className=" grid grid-cols-3 items-start gap-2 relative h-full ">
                                     {voyages.map((item: any, i: number) => ((item.voyages?.placeDisponible != 0 && compareDate(getDateFormat(item.voyages?.dateDepart)) && item.voyages?.ready != "oui" && item.trajet && item.bus && item.voyages.chauffeurId != 0) ?
-                                        <li key={i}  className="cursor-pointer rounded-xl shadow-xl border" >
+                                        <li key={i} className="cursor-pointer rounded-xl shadow-xl border" >
                                             <CardVoyage bus={item.bus.id} isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={""} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.voyages?.heureDepart} placeDisponible={item.voyages?.placeDisponible} />
                                             <hr className={`border-dashed border-2  border-spacing-4 ${item.bus.typeBus == "vip" ? 'border-yellow-400' : 'border-slate-700'} `} />
                                             <div className="p-4 text-sm">
@@ -765,7 +749,7 @@ export default function Page() {
                                                             : null
                                                     }
                                                 </ul>
-                                                
+
                                             </div>
                                         </li> : null
                                     ))}
@@ -802,6 +786,10 @@ export default function Page() {
                         }
                     </div>
                 ) : null}
+                {
+
+
+                }
                 {(!tab && tab2) ? (
                     <div>
                         {(item != null) ? (
@@ -833,7 +821,7 @@ export default function Page() {
                                 <div className=" w-96 rounded-md border mb-4 overflow-hidden">
                                     <h6 className="p-4 uppercase border-b bg-blue-500 text-white font-bold">Voyage</h6>
                                     <ul>
-                                        <li className="py-2 font-semibold border-b px-4 flex text-gray-700 flex-row gap-4">     
+                                        <li className="py-2 font-semibold border-b px-4 flex text-gray-700 flex-row gap-4">
                                             <span>Trajet:</span> <span>{item.trajet?.lieuDepart} - {dest == "" ? item?.trajet.lieuArrivee : dest}</span>
                                         </li>
                                         <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
@@ -854,6 +842,7 @@ export default function Page() {
                     </div>
                 ) : null}
             </section>
+
             {/* ) : (<div>
                     <Image src={svg} width={15} height={15} alt="Loader" className="animate-spin" /> <p className="text-white">Chargement du formulaire...</p>
                 </div>)} */}

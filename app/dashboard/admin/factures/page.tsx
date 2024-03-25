@@ -162,8 +162,6 @@ export default function Page() {
                                         <a  href={`${item.src}`} download={`${item.nom}${item.ext}`} className="text-white text-xs mt-4 hover:bg-red-700 rounded-sm bg-red-500  p-2">
                                             Telecharger
                                         </a>
-
-
                                     </td>
                                 </tr>
                             ))

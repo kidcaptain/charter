@@ -53,7 +53,7 @@ const PassagerTable = (props: { childToParent: Function, setData: Function, agen
                                 Téléphone
                             </th>
                             <th scope="col" className="p-4 py-3 border-b-2">
-                                Email
+                                CNI
                             </th>
                             {/* <th scope="col" className="p-4 py-3 border-b-2">
                                 Actions
@@ -85,7 +85,7 @@ const PassagerTable = (props: { childToParent: Function, setData: Function, agen
                                     {item.telephone}
                                 </td>
                                 <td className=" p-4 py-2">
-                                    {item.email}
+                                    {item.numCNI}
                                 </td>
 
                                 {/* <td className=" p-4 py-2 flex flex-row items-start">

@@ -1,6 +1,9 @@
+
+import { getDateFormat } from "@/functions/actionsClient";
 import Image from "next/image";
 import React, { useRef, useState } from "react";
 import ReactToPrint from "react-to-print";
+import InputForm from "./inputForm";
 
 export default function BordereauRoute(props: { item: DataBordereau }) {
     let componentRef: any = useRef();
@@ -92,12 +95,12 @@ class ComponentToPrint extends React.Component<DataBordereau> {
                                 <th scope="col" className="p-2 border border-black  ">
                                     Tarif
                                 </th>
-                                <th scope="col" className="p-2 border border-black  ">
+                                {/* <th scope="col" className="p-2 border border-black  ">
                                     Manut.
-                                </th>
-                                <th scope="col" className="p-2 border border-black">
+                                </th> */}
+                                {/* <th scope="col" className="p-2 border border-black">
                                     Prix Total
-                                </th>
+                                </th> */}
                                 <th scope="col" className="p-2 border border-black">
                                     N° Billet
                                 </th>
@@ -117,15 +120,11 @@ class ComponentToPrint extends React.Component<DataBordereau> {
                                         <td className="border p-2 border-black">
                                             {i.passager?.numCNI ?? ""}
                                         </td>
-                                        <td className="border p-2 border-black">
-
-                                        </td>
+                                      
                                         <td className="p-2  border  border-black text-right ">
                                             {i.ticket?.prixTicket ?? 0} FCFA
                                         </td>
-                                        <td className="p-2  border  border-black text-right ">
-
-                                        </td>
+                                      
                                         <td className="p-2 border border-black text-right">
                                             {this.props.voyage?.prixVoyage ?? 0} FCFA
                                         </td>
@@ -143,16 +142,18 @@ class ComponentToPrint extends React.Component<DataBordereau> {
                         <div className=""><div className="font-bold  uppercase py-2 ">Signature</div> </div>
                         <div className="flex items-center gap-5"><div className="font-bold uppercase py-2 ">Chef d&apos;agence </div> {this.props.agence?.chef ?? ""} </div>
                         <div className="flex items-center gap-5"><div className="font-bold  uppercase py-2 ">Nom du chauffeur</div> {this.props.chauffeur ?? ""} </div>
-                        <div className=""><div className="font-bold uppercase py-2 ">Chef d&apos;agence arrivée </div> </div>
+                        <div className="flex items-center gap-5"><div className="font-bold uppercase py-2 ">Chef d&apos;agence arrivée </div> <InputForm type="time" name="" text={`${hour}:${minute}`} onChange={() => {}} /> </div>
                         <div className="flex items-center gap-5"><div className="font-bold uppercase py-2 ">Heure d&apos;arrivée</div> {this.props.trajet?.heureArrivee ?? ""}</div>
-                        <div className=""><div className="font-bold uppercase py-2 ">Observations</div></div>
+                        <div className="flex items-center gap-5"><div className="font-bold uppercase py-2 ">Observations</div> <InputForm type="text" name="" text={`aucune`} onChange={() => {}} /></div>
                     </div>
                     <div className="  text-xs font-bold text-center bg-stone-100">
-                        <div className=" grid grid-cols-2"><div className="font-bold uppercase p-2 border border-stone-600">Carburant</div> <div className=" uppercase border border-stone-600">{this.props.depense.carburant ?? ""}</div> </div>
-                        <div className=" grid grid-cols-2"><div className="font-bold uppercase p-2 border border-stone-600">Peage</div> <div className="uppercase border border-stone-600">{this.props.depense.peage ?? ""}</div></div>
-                        <div className=" grid grid-cols-2"><div className="font-bold uppercase p-2 border border-stone-600">Ration</div> <div className="uppercase border border-stone-600">{this.props.depense.ration ?? ""}</div></div>
-                        <div className=" grid grid-cols-2"><div className="font-bold uppercase p-2 border border-stone-600">Autres depenses</div> <div className=" uppercase border border-stone-600">{this.props.depense.autre ?? ""}</div></div>
+                        <div className=" grid grid-cols-2"><div className="font-bold uppercase p-2 border border-stone-600">Carburant</div> <div className=" uppercase border border-stone-600">{this.props.depense.carburant ?? ""} fcfa</div> </div>
+                        <div className=" grid grid-cols-2"><div className="font-bold uppercase p-2 border border-stone-600">Peage</div> <div className="uppercase border border-stone-600">{this.props.depense.peage ?? ""} fcfa</div></div>
+                        <div className=" grid grid-cols-2"><div className="font-bold uppercase p-2 border border-stone-600">Ration</div> <div className="uppercase border border-stone-600">{this.props.depense.ration ?? ""} fcfa</div></div>
+                        <div className=" grid grid-cols-2"><div className="font-bold uppercase p-2 border border-stone-600">Autres depenses</div> <div className=" uppercase border border-stone-600">{this.props.depense.autre ?? ""} fcfa</div></div>
+                        <div className=" grid grid-cols-2"><div className="font-bold uppercase p-2 border border-stone-600">Recette brut</div> <div className=" uppercase border border-stone-600">{total} FCFA</div></div>
                         <div className=" grid grid-cols-2"><div className="font-bold uppercase p-2 border border-stone-600">Recette nette</div> <div className=" uppercase border border-stone-600">{total - this.props.depense.carburant ?? 0- this.props.depense.peage ?? 0 - this.props.depense.ration ?? 0 - this.props.depense.autre ?? 0} Fcfa</div></div>
+
                     </div>
                 </div>
             </div>

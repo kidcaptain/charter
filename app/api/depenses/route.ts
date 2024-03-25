@@ -45,7 +45,7 @@ export const GET = async (req: NextRequest) => {
 
 export const POST = async (req: Request) => {
     const body = await req.json();
-    const { agenceId, description, montant, date, typeDepense, idTypeDepense } = body;
+    const { agenceId,piece, motif, description, montant, date, typeDepense, idTypeDepense } = body;
     try {
         const employe = await prisma.depense.create({
             data: {
@@ -54,7 +54,9 @@ export const POST = async (req: Request) => {
                 montant: parseInt(montant),
                 date: `${date}`,
                 typeDepense: typeDepense,
-                idTypeDepense: idTypeDepense
+                idTypeDepense: idTypeDepense,
+                motif: motif,
+                piece: piece
             }
         });
         return NextResponse.json(employe)

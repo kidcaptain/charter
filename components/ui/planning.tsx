@@ -153,8 +153,14 @@ const Planning = (props: { id: string | undefined }) => {
             tabVoyages.map((r, index: number) => {
                 if ((parseInt(r.busId) === busData.id)) {
                     tabTrajets.map((i) => {
+                        const dates1 = new Date(r.dateDepart);
+                        let year = dates1.getFullYear();
+                        let month = dates1.getMonth() + 1;
+                        let day = dates1.getDate();
+                        const daym2 = (day) < 10 ? `0${day}` : `${day}`;
+                        const monthm2 = (month) < 10 ? `0${month}` : `${month}`;
                         if (r.trajetId == i.id) {
-                            tab.push({ id: index, text: `Voyage N°${r.numVoyage} de ${i.lieuDepart} à ${i.lieuArrivee}`, start: r.dateDepart, end: r.dateArrivee, backColor: "#f1c232", })
+                            tab.push({ id: index, text: `Voyage N°${r.numVoyage} de ${i.lieuDepart} à ${i.lieuArrivee}`,  start: `${year}-${daym2}-${monthm2}T${r.heureDepart}:00`, end: `${year}-${daym2}-${monthm2}T${r.heureDepart}:00`, backColor: "#f1c232", })
                         }
                     })
                 }

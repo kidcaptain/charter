@@ -48,8 +48,9 @@ model Voyage {
   id              Int      @id @default(autoincrement())
   dateDepart      DateTime
   dateArrivee     DateTime @default(now())
+  heureArrivee    String @default("")
   placeDisponible Int
-  typeVoyage      String
+  typeVoyage      String @default("")
   prixVoyage      Int
   busId           String
   trajetId        Int
@@ -144,6 +145,8 @@ model Depense {
   date        DateTime
   typeDepense String
   idTypeDepense   String @default("")
+  motif     String @default("")
+  piece     String @default("")
 }
 
 model Utilisateur {
