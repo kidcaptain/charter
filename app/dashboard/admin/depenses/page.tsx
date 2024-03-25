@@ -353,7 +353,7 @@ export default function Page() {
                                     <select id="idTypeDepense" name="idTypeDepense" onChange={handleInputChange} className="block text-xs w-full p-2 uppercase text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                         <option></option>
                                         {bus.map((item: any, i: number) => (
-                                            <option key={i + 1} value={item.id}>{item.modele}</option>
+                                            <option key={i + 1} value={item.id}>N°0{item.id} ({item.modele}-{item.marque})</option>
                                         ))}
                                     </select>
                                 </div>
@@ -381,7 +381,7 @@ export default function Page() {
                                     <select id="idTypeDepense" name="idTypeDepense" onChange={handleInputChange} className="block text-xs w-full p-2 uppercase text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 ">
                                         <option></option>
                                         {voyage.map((item: any, i: number) => (
-                                            (parseInt(item.agenceId) == parseInt(value?.agenceId) && value?.agenceId) ? (<option key={i + 1} value={item.id}>N° Voyage {item.id} Départ le {getDateFormat(item.dateDepart)}</option>) : null
+                                            (parseInt(item.agenceId) == parseInt(value?.agenceId) && value?.agenceId) ? (<option key={i + 1} value={item.id}>N°{item.numVoyage}</option>) : null
 
                                         ))}
                                     </select>
