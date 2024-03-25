@@ -153,14 +153,8 @@ const Planning = (props: { id: string | undefined }) => {
             tabVoyages.map((r, index: number) => {
                 if ((parseInt(r.busId) === busData.id)) {
                     tabTrajets.map((i) => {
-                        const dates1 = new Date(r.dateDepart);
-                        let year = dates1.getFullYear();
-                        let month = dates1.getMonth() + 1;
-                        let day = dates1.getDate();
-                        const daym2 = (day) < 10 ? `0${day}` : `${day}`;
-                        const monthm2 = (month) < 10 ? `0${month}` : `${month}`;
                         if (r.trajetId == i.id) {
-                            tab.push({ id: index, text: `Voyage N°${r.numVoyage} de ${i.lieuDepart} à ${i.lieuArrivee}`,  start: `${year}-${daym2}-${monthm2}T${r.heureDepart}:00`, end: `${year}-${daym2}-${monthm2}T${r.heureDepart}:00`, backColor: "#f1c232", })
+                            tab.push({ id: index, text: `Voyage N°${r.numVoyage} de ${i.lieuDepart} à ${i.lieuArrivee}`, start: r.dateDepart, end: r.dateArrivee, backColor: "#f1c232", })
                         }
                     })
                 }
@@ -220,7 +214,7 @@ const Planning = (props: { id: string | undefined }) => {
                     emptyData() : (
 
                         <>
-                            <div>
+                            <div className="p-2">
                                 <label htmlFor="" className=" mb-1 text-sm  text-gray-900 font-bold">Sélectionner le mois</label>
                                 <input onChange={(e) => { setDates(`${e.target.value}-01`) }} required autoComplete="off" type="month" id="dateDepart" name="dateDepart" className="block w-96 p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-sm focus-visible:ring-blue-400 " />
                             </div>

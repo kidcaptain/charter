@@ -272,10 +272,8 @@ const PlanningChauffeur = (props: { id: string | undefined }) => {
                 vo.length == 0 ?
                     emptyData() : (
                         <>
-                            <div className={"toolbar"}>
-                                {/* <ResourceGroups onChange={(args: any) => setSelected(args.selected)} items={[]}></ResourceGroups> */}
-                                <span>Day:</span>
-                                {/* <button className="bg-blue-400 text-sm p-2 hover:bg-blue-500" onClick={ev => previous()}>Semaine Précédente</button> */}
+                            <div className={"toolbar p-2 "}>
+                              
                                 <button className="bg-blue-500 text-sm p-2 hover:bg-blue-600" onClick={ev => setDates(new DayPilot.Date.today())}>Date d&lsquo;aujourd&lsquo;hui</button>
                                 <button className="bg-blue-500 mx-2 text-sm p-2 hover:bg-blue-600" onClick={next}>Semaine suivante</button>
                             </div>
