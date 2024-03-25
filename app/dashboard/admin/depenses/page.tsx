@@ -405,7 +405,6 @@ export default function Page() {
                     <div className="p-4">
                         <Link href="/dashboard/admin/depenses/hebdomadaires" className="text-stone-800 border bg-gray-100 hover:bg-gray-300 text-xs p-2 rounded-sm">Fiches de dépenses hebdomadaires</Link>
                         <Link href="/dashboard/admin/depenses/Journalieres" className="text-stone-800 border bg-gray-100 hover:bg-gray-300 text-xs p-2 rounded-sm">Fiches de dépenses Journalières</Link>
-                        +  {/* <Link href="/dashboard/admin/journal" className="text-stone-800 border bg-gray-100 hover:bg-gray-300 text-xs p-2 rounded-sm">Rapport des dépenses</Link> */}
                         <button type="button" onClick={getDepense} className="text-stone-800 border bg-blue-400 hover:bg-blue-500 text-xs p-2 rounded-sm">Actualiser</button>
                     </div>
                     <div className="p-4 overflow-y-auto" style={{ maxHeight: 500 }}>

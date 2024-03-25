@@ -347,7 +347,7 @@ const VoyageTable = (props: { childToParent: Function }) => {
                                     {getDate(item.voyages?.dateArrivee)}
                                 </td>
                                 <td>
-                                    <button type="button" onClick={() => { viewArret(item.trajet?.arrets, item.trajet?.prix); setTrajItem(item.trajet) }} className='bg-cyan-600 text-xs hover:bg-cyan-700 p-1 px-2 text-white '>Afficher les traifs du voyage</button>
+                                    <button type="button" onClick={() => { viewArret(item.trajet?.arrets, item.trajet?.prix); setTrajItem(item.trajet) }} className='bg-cyan-600 text-xs hover:bg-cyan-700 p-1 px-2 text-white '>Afficher les tarifs du voyage</button>
                                     <button type="button" onClick={() => view(item.voyages.id)} className='bg-cyan-400 text-xs hover:bg-cyan-500 p-1 px-2 text-white '>Bordereau de route</button>
 
                                     {
