@@ -156,14 +156,14 @@ const GridDataComponent = () => {
                 <Link href={'/dashboard/admin/ticket'} className='text-green-400 font-semibold  text-xs'>Voir le rapport</Link>
 
             </div >
-            <div className="shadow-xl border text-blue-500 p-4 rounded-md overflow-hidden hover:translate-y-1 ease-linear transition-all">
+            {/* <div className="shadow-xl border text-blue-500 p-4 rounded-md overflow-hidden hover:translate-y-1 ease-linear transition-all">
                 <div className='bg-white w-14 h-14 items-center justify-center flex rounded-2xl shadow-2xl'>
                     <Image src={reservationsvg} width={40} height={40} alt='User Image' />
                 </div>
                 <h1 className=" pt-4 text-sm font-bold uppercase">Reservations ({reservation})</h1>
                 <Link href={'/dashboard/admin/reservations'} className='text-green-400 font-semibold  text-xs'>Voir le rapport</Link>
 
-            </div >
+            </div > */}
         </div>
     )
 }

@@ -114,7 +114,7 @@ const GridDoughnut = () => {
         <div className="grid-cols-4 gap-4 grid ">
             <CardDoughnut id="ticket" val={ticketSimple} val2={ticketVip} color="blue" back1="#ffffff" back2="#f7b51a" label1="tickets standard" label2="Tickets vip" title="Total ventes de tickets" />
             <CardDoughnut id="bus" val={depense} val2={recette} color="blue" back1="#ff6384" back2="#36a2eb" label1="Dépenses  (en fcfa)" label2="recettes (en fcfa)" title="Total dépenses et recettes" />
-            <CardDoughnut id="passager" val={reservationAnnule} val2={reservationConfirme} color="blue" back1="#da3200" back2="#5fd85c" label1="Réservation annulée" label2="Réservation confirmée" title="Réservations" />
+            {/* <CardDoughnut id="passager" val={reservationAnnule} val2={reservationConfirme} color="blue" back1="#da3200" back2="#5fd85c" label1="Réservation annulée" label2="Réservation confirmée" title="Réservations" /> */}
             <CardDoughnut id="s" val={voyageSimple} val2={voyageRetour} color="blue" back1="#545ef0" back2="" label1="Voyages aller simple" label2="voyages aller-retour" title="Voyages effecutés" />
         </div>
     )
