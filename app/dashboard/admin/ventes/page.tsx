@@ -22,6 +22,7 @@ export default function Page() {
     const router = useRouter()
     const [tab, setTab] = useState<boolean>(false);
     const [tab2, setTab2] = useState<boolean>(false);
+    const [passagers, setPassagers] = useState<any[]>([])
     const [tab3, setTab3] = useState<boolean>(false);
     const [reste, setReste] = useState<number>(0)
     const [avance, setAvance] = useState<number>(0)
@@ -80,21 +81,9 @@ export default function Page() {
         setMethod(val)
     }
     const validationTab = () => {
-        switch (method) {
-            case "payer":
-                setTab(false)
-                setTab2(false)
-                setTab3(true)
-                break;
-            case "reserver":
-                setTab(false)
-                setTab2(false)
-                setTab3(false)
-                break;
-            default:
-                alert("Cochez l'une des deux options")
-                break;
-        }
+        setTab(false)
+        setTab2(false)
+        setTab3(true)
     }
     // Functions
     const handleInputChange = (event: any) => {
@@ -394,7 +383,14 @@ export default function Page() {
     }
 
     useEffect(() => {
-
+  const getPassagers = async () => {
+            const res = await fetch("/api/passagers", { cache: "no-store" })
+            if (!res.ok) {
+                throw new Error("Failed")
+            }
+            const data = await res.json();
+            setPassagers(data)
+        };
         const getTrajet2 = async () => {
             const res = await fetch("/api/trajets", { cache: "no-store" })
             if (!res.ok) {
@@ -477,6 +473,17 @@ export default function Page() {
     const reset = () => {
         setOnsearched(false);
     }
+        const [pas, setPas] = useState<any>();
+
+    const checkPassager = (str: string) => {
+        passagers.map((e) => {
+            if (e.numCNI == str.toUpperCase()) {
+                setPas(e)
+                setTab2(true)
+                setTab(false)
+            }
+        })
+    }
     return (
         <section className="w-full h-full relative  ">
             <div className=" py-4 p-10 flex justify-between items-start mb-2">
@@ -547,7 +554,10 @@ export default function Page() {
                             </div>
                             <div className={`${(tab && !tab2) ? 'block' : 'hidden'}`}>
                                 <h4 className="text-blue-400 font-medium flex items-center gap-4 uppercase"> <div className="bg-blue-400 flex justify-center items-center w-4 h-4 text-black p-4 rounded-full">2</div> Information du client  <HelpPopup message="Remplir correctement tout les informations demandées." /></h4>
-                              
+                               <div className="mt-2">
+                                    <label className="block mb-1 text-sm font-bold text-gray-800">Numèro de CNI <span className="text-red-500">*</span></label>
+                                    <input type="text" id="numCNI" autoComplete="off" onBlur={e => checkPassager(e.target.value)} name="numCNI" onChange={handleInputChange} aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none focus-visible:ring-blue-400" required />
+                                </div>
                                 <div className="mt-2">
                                     <label className={`block mb-1 text-sm  font-bold text-gray-800 ${(validator && (value.nom == undefined)) ? "ring-2 ring-red-500" : ""}`}>Nom  <span className="text-red-500">*</span> </label>
                                     <input type="text" required autoComplete="off" onChange={handleInputChange} placeholder="Nom" name="nom" id="nom" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
@@ -577,10 +587,7 @@ export default function Page() {
                                     <label className="block mb-1 text-sm font-bold text-gray-800">Numèro de téléphone <span className="text-red-500">*</span></label>
                                     <input type="tel" id="tel" autoComplete="off" name="tel" onChange={handleInputChange} aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none focus-visible:ring-blue-400" placeholder="620456789" required />
                                 </div>
-                                <div className="mt-2">
-                                    <label className="block mb-1 text-sm font-bold text-gray-800">Numèro de CNI <span className="text-red-500">*</span></label>
-                                    <input type="text" id="numCNI" autoComplete="off" name="numCNI" onChange={handleInputChange} aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none focus-visible:ring-blue-400" required />
-                                </div>
+                               
                                 <div className="mt-4">
                                     <button type="button" onClick={() => { setTab(false); setTab2(false) }} className=" p-2 px-3 rounded-md hover:bg-stone-400 hover:text-white border border-stone-500 text-stone-500 font-bold">Recommencer</button>
                                     <button type="button" onClick={handleNextTab} className=" mx-2 p-2 px-3 rounded-md hover:bg-blue-400 hover:text-white border border-blue-500 text-blue-500 font-bold">Continuer</button>
