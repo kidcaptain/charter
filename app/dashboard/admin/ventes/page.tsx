@@ -694,17 +694,18 @@ export default function Page() {
                                             trajet: `${ticket?.trajet?.lieuDepart} / ${dest == "" ? ticket?.trajet.lieuArrivee : dest}`,
                                             siege: ticket?.bus?.capacite - ticket?.voyages?.placeDisponible + 1
                                         }} />
-                                        <p className="p-4 uppercase text-sm">
-                                            client:{passager?.passager?.nom} {passager?.passager?.prenom},
-                                            téléphone client:{passager?.passager?.telephone},
-                                            départ: {getDateFormat(ticket?.voyages?.dateDepart)},
-                                            Numéro de bus: 0{ticket?.bus?.id},
-                                            trajet: {ticket?.trajet?.lieuDepart}/{dest == "" ? ticket?.trajet.lieuArrivee : dest},
-                                            voyage: {ticket?.voyages?.numVoyage.trim() == "" ? "VOY" + ticket?.voyages?.id : ticket?.voyages?.numVoyage.trim()},
-                                            numèro de siège:{ticket?.bus?.capacite - ticket?.voyages?.placeDisponible + 1},
-                                            numéro ticket: {numTicket.toString()},
-                                            caisse: GUICHET {session?.user?.name}
-                                        </p>
+                                        <ul className="p-4 uppercase text-center text-sm">
+                                            <li>client: {passager?.passager?.nom} {passager?.passager?.prenom}</li>
+                                            <li>téléphone client:{passager?.passager?.telephone}</li>
+                                            <li>départ:{getDateFormat(ticket?.voyages?.dateDepart)}</li>
+                                            <li>Numéro de bus: 0{ticket?.bus?.id}</li>
+                                            <li>trajet: {ticket?.trajet?.lieuDepart}/{dest == "" ? ticket?.trajet.lieuArrivee : dest}</li>
+                                            <li>voyage: {ticket?.voyages?.numVoyage.trim() == "" ? "VOY" + ticket?.voyages?.id : ticket?.voyages?.numVoyage.trim()}</li>
+                                            <li>numèro de siège:{ticket?.bus?.capacite - ticket?.voyages?.placeDisponible + 1}</li>
+                                            <li>numéro ticket: {numTicket.toString()}</li>
+                                            <li>caisse: GUICHET {session?.user?.name}</li>
+                                        </ul>
+                                      
                                     </div>
                                 ) : null}
                             </div>
