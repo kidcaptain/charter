@@ -8,6 +8,7 @@ import busSvg from "@/public/images/bus-logo.svg"
 
 import { getDateFormat } from '@/functions/actionsClient';
 import HelpPopup from '../ui/helpPopup';
+import DropDown from '../ui/dropdown';
 const VoyageTable = (props: { childToParent: Function }) => {
     const [voyages, setVoyage] = useState<any[]>([])
     const [bol, setBol] = useState<boolean>(false)
@@ -16,6 +17,29 @@ const VoyageTable = (props: { childToParent: Function }) => {
     const router = useRouter()
     const [trajItem, setTrajItem] = useState<any>()
     const [prixA, setprixA] = useState<number>(0)
+    const actionsVoyageAnnule = [
+        { action: "tarif", text: "Afficher les tarifs" },
+        { action: "bordereau", text: "Consulter le bordereau de route" },
+        { action: "list", text: "Lister les passagers" },
+        { action: "edit", text: "Editer" },
+        { action: "confirm", text: "Confirmer le voyage" },
+        { action: "delete", text: "Supprimer" },
+    ]
+    const actionsVoyageConfirmer = [
+        { action: "tarif", text: "Afficher les tarifs" },
+        { action: "bordereau", text: "Consulter le bordereau de route" },
+        { action: "list", text: "Lister les passagers" },
+        { action: "edit", text: "Editer" },
+        { action: "cancel", text: "Annuler la confirmation" },
+        { action: "delete", text: "Supprimer" },
+    ]
+    const actionsVoyage = [
+        { action: "tarif", text: "Afficher les tarifs" },
+        { action: "bordereau", text: "Consulter le bordereau de route" },
+        { action: "list", text: "Lister les passagers" },
+        { action: "edit", text: "Editer" },
+        { action: "delete", text: "Supprimer" },
+    ]
     const compareDate = (value: string) => {
         const date = new Date(value);
         const date2 = new Date();
@@ -143,7 +167,7 @@ const VoyageTable = (props: { childToParent: Function }) => {
         if (item.chauffeurId != 0) {
             const voyage = {
                 dateDepart: getDateFormat(item.dateDepart),
-                dateArrivee: getDateFormat(item.dateArrivee),
+                heureArrivee: item.heureArrivee,
                 busId: item.busId,
                 trajetId: item.trajetId,
                 typeVoyage: item.typeVoyage,
@@ -180,7 +204,7 @@ const VoyageTable = (props: { childToParent: Function }) => {
         if (item.chauffeurId != 0) {
             const voyage = {
                 dateDepart: getDateFormat(item.dateDepart),
-                dateArrivee: getDateFormat(item.dateArrivee),
+                heureArrivee: item.heureArrivee,
                 busId: item.busId,
                 trajetId: item.trajetId,
                 typeVoyage: item.typeVoyage,
@@ -215,12 +239,25 @@ const VoyageTable = (props: { childToParent: Function }) => {
         const day = (date.getDate()) < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
         return `${year}-${month}-${day}`
     }
+    const deleteVoyage = async (id: number) => {
+        if (confirm("Confimer la suppression")) {
+            const res = await fetch(`/api/voyages/${id}`, { method: "DELETE", cache: "no-store" })
+            if (!res.ok) {
+                props.childToParent(false)
+            } else {
+                props.childToParent(true)
+            }
+        }
+    }
 
     const edit = (str: number) => {
         props.childToParent({ id: str, action: "edit" })
     }
     const view = (str: string) => {
         props.childToParent({ id: str, action: "view" })
+    }
+    const list = (str: string) => {
+        props.childToParent({ id: str, action: "list" })
     }
     const classVoyage = (numb: number, str: string, date: string) => {
         const dates = new Date();
@@ -243,21 +280,12 @@ const VoyageTable = (props: { childToParent: Function }) => {
         }
     }
     return (
-        <section className=" bg-white h-full w-full shadow-xl rounded-sm p-4">
-
-            <div className='py-4 flex'>
-                <HelpPopup message="Les voyages affichés en rouge sont celle où la date de départ est passée." />
-            </div>
-
-            <div className="relative overflow-x-auto">
+        <section className=" bg-white h-full w-full shadow-2xl rounded-md">
+            <div className="">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-900 dark:text-gray-400">
                     <thead className="text-sm border text-gray-700  dark:text-gray-400">
                         <tr>
-                            <th rowSpan={1} scope="row" colSpan={1} className="border-b-2 p-2 border ">
-                                <div className="items-center flex justify-between ">
-                                    #Id
-                                </div>
-                            </th>
+
                             <th rowSpan={1} scope="row" colSpan={1} className="border-b-2 p-2 border ">
                                 <div className="items-center flex justify-between ">
                                     NumVoyage
@@ -270,7 +298,7 @@ const VoyageTable = (props: { childToParent: Function }) => {
                             </th>
                             <th rowSpan={1} colSpan={1} className="border-b-2 p-2 border ">
                                 <div className=" items-center flex justify-between ">
-                                    Numéro du Véhicule(Bus)
+                                    Code d&apos;immatriculation du Bus
                                 </div>
                             </th>
                             <th rowSpan={1} colSpan={1} className="border-b-2 p-2 border ">
@@ -302,7 +330,13 @@ const VoyageTable = (props: { childToParent: Function }) => {
                             </th>
                             <th className="border-b-2 p-2  border ">
                                 <div className="items-center flex justify-between ">
-                                    Date d&apos;arrivée
+                                    Heure de Départ
+
+                                </div>
+                            </th>
+                            <th className="border-b-2 p-2  border ">
+                                <div className="items-center flex justify-between ">
+                                    Heure d&apos;arrivée
 
                                 </div>
                             </th>
@@ -312,67 +346,170 @@ const VoyageTable = (props: { childToParent: Function }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {voyages.map((item: any, i: number) => (
-                            <tr key={i} title={`${item.voyages?.placeDisponible == 0 ? 'Plein' : ''}`} className={"relative" + classVoyage(item.voyages?.placeDisponible, item.voyages?.ready, getDateFormat(item.voyages?.dateDepart))}>
-                                <th className="p-1 px-2 border  text-center">
-                                    {item.voyages?.id}
-                                </th>
-                                <th className="p-1 px-2 border ">
-                                    {item.voyages?.numVoyage}
-                                </th>
-                                <th className="p-1 px-2 border ">
-                                    {item.trajet?.lieuDepart ?? "Aucun trajet n'est assigné à se voyage"} - {item.trajet?.lieuArrivee ?? ""}
-                                </th>
-                                <td className="p-1 px-2 border">
-                                    Bus-0{item.bus?.id} ({item.bus?.marque ?? ""}  {item.bus?.modele ?? "Aucun bus n'est assigné à se voyage!"})
-                                </td>
-                                <td className="p-1 px-2 border">
-                                    {item.bus?.typeBus}
-                                </td>
-                                <td className="p-1 px-2 border">
-                                    <span> {item.employe?.nom}    {item.employe?.prenom}</span>
+                        {voyages.map((item: any, i: number) => {
+                            return (
+                                <tr key={i} title={`${item.voyages?.placeDisponible == 0 ? 'Plein' : ''}`} className={"relative" + classVoyage(item.voyages?.placeDisponible, item.voyages?.ready, getDateFormat(item.voyages?.dateDepart))}>
 
-                                </td>
-                                <td className="p-1 px-2 border ">
-                                    {item.voyages?.placeDisponible}
-                                </td>
-                                <td className="p-1 px-2 border">
-                                    {item.placeOccupees}
-                                </td>
+                                    <th className="p-1 px-2 border ">
+                                        {item.voyages?.numVoyage}
+                                    </th>
+                                    <th className="p-1 px-2 border ">
+                                        {item.trajet?.lieuDepart ?? "Aucun trajet n'est assigné à se voyage"} - {item.trajet?.lieuArrivee ?? ""}
+                                    </th>
+                                    <td className="p-1 px-2 border">
+                                        BUS - {item.bus?.immatriculation ?? "Aucun bus n'est assigné à se voyage!"}
+                                    </td>
+                                    <td className="p-1 px-2 border">
+                                        {item.bus?.typeBus}
+                                    </td>
+                                    <td className="p-1 px-2 border">
+                                        <span> {item.employe?.nom}    {item.employe?.prenom}</span>
 
-                                <td className="p-1 px-2 border">
-                                    {getDate(item.voyages?.dateDepart)}
-                                </td>
-                                <td className="p-1 px-2 border">
-                                    {getDate(item.voyages?.dateArrivee)}
-                                </td>
-                                <td>
-                                    <button type="button" onClick={() => { viewArret(item.trajet?.arrets, item.trajet?.prix); setTrajItem(item.trajet) }} className='bg-cyan-600 text-xs hover:bg-cyan-700 p-1 px-2 text-white '>Afficher les tarifs du voyage</button>
-                                    <button type="button" onClick={() => view(item.voyages.id)} className='bg-cyan-400 text-xs hover:bg-cyan-500 p-1 px-2 text-white '>Bordereau de route</button>
+                                    </td>
+                                    <td className="p-1 px-2 border ">
+                                        {parseInt(item.voyages?.placeDisponible ?? 0) - parseInt(item.voyages?.placesOccupees ?? 0)}
+                                    </td>
+                                    <td className="p-1 px-2 border">
+                                        {item.voyages?.placesOccupees ?? 0}
+                                    </td>
 
-                                    {
-                                        item.voyages?.ready == "non" && compareDate(getDateFormat(item.voyages?.dateDepart)) ? (
-                                            <>
-                                                <button type="button" onClick={() => edit(item.voyages.id)} className='bg-yellow-400 text-xs p-1 px-2 hover:bg-yellow-500'>Editer</button>
-                                                <button type="button" onClick={() => ready(item.voyages)} className='bg-green-400 text-xs p-1 px-2 hover:bg-green-500'>Confirmer</button>
-                                            </>
-                                        ) : null
-                                    }
+                                    <td className="p-1 px-2 border">
+                                        {getDate(item.voyages?.dateDepart)}
+                                    </td>
+                                    <td className="p-1 px-2 border">
+                                        {item.voyages?.heureDepart}
+                                    </td>
+                                    <td className="p-1 px-2 border">
+                                        {item.voyages?.heureArrivee}
+                                    </td>
+                                    <td className='relative'>
+                                        {/* 
+                                        <button type="button" onClick={() => { }} className='bg-cyan-600 text-xs hover:bg-cyan-700 p-1 px-2 text-white '>Afficher les traifs du voyage</button>
+                                        <button type="button" onClick={() => } className='bg-cyan-400 text-xs hover:bg-cyan-500 p-1 px-2 text-white '>Bordereau de route</button>
+                                        <button type="button" onClick={() => } className='bg-yellow-400 text-xs p-1 px-2 hover:bg-yellow-500'>Editer</button> */}
+                                        {
+                                            item.voyages?.ready == "non" && compareDate(getDateFormat(item.voyages?.dateDepart)) ? (
+                                                <DropDown left='40' array={actionsVoyageConfirmer} onEmit={(action: string) => {
+                                                    switch (action) {
+                                                        case "delete":
+                                                            deleteVoyage(item.voyages?.id)
+                                                            break;
+                                                        case "bordereau":
+                                                            view(item.voyages?.id)
+                                                            break;
+                                                        case "tarif":
+                                                            viewArret(item.trajet?.arrets, item.trajet?.prix); setTrajItem(item.trajet);
+                                                            break;
+                                                        case "edit":
+                                                            edit(item.voyages.id)
+                                                            break;
+                                                        case "confirm":
+                                                            ready(item.voyages)
+                                                            break;
+                                                        case "list":
+                                                            list(item.voyages.id)
+                                                            break;
+                                                        default:
+                                                            alert("Action non disponible")
+                                                            break;
+                                                    }
+                                                }} />
+                                            ) : null}
+                                        {
+                                            item.voyages?.ready == "non" && !compareDate(getDateFormat(item.voyages?.dateDepart)) ? (
+                                                <DropDown left='40' array={actionsVoyage} onEmit={(action: string) => {
+                                                    switch (action) {
+                                                        case "delete":
+                                                            deleteVoyage(item.voyages?.id)
+                                                            break;
+                                                        case "bordereau":
+                                                            view(item.voyages?.id)
+                                                            break;
+                                                        case "tarif":
+                                                            viewArret(item.trajet?.arrets, item.trajet?.prix); setTrajItem(item.trajet);
+                                                            break;
+                                                        case "edit":
+                                                            edit(item.voyages.id)
+                                                            break;
+                                                        case "confirm":
+                                                            ready(item.voyages)
+                                                            break;
+                                                        case "list":
+                                                            list(item.voyages.id)
+                                                            break;
+                                                        default:
+                                                            alert("Action non disponible")
+                                                            break;
+                                                    }
+                                                }} />
+                                            ) : null}
 
-                                    {
-                                        item.voyages?.ready == "oui" && compareDate(getDateFormat(item.voyages?.dateDepart)) ? (
-                                            <button type="button" onClick={() => noready(item.voyages)} className='bg-red-400 text-xs p-1 px-2 hover:bg-red-500'>Annuler</button>
-                                        ) : null
-                                    }
-                                </td>
-                            </tr>
-                        ))}
+
+
+                                        {item.voyages?.ready == "oui" && compareDate(getDateFormat(item.voyages?.dateDepart)) ? (
+                                            <DropDown left='40' array={actionsVoyageAnnule} onEmit={(action: string) => {
+                                                switch (action) {
+                                                    case "delete":
+                                                        deleteVoyage(item.voyages?.id);
+                                                        break;
+                                                    case "bordereau":
+                                                        view(item.voyages?.id);
+                                                        break;
+                                                    case "tarif":
+                                                        viewArret(item.trajet?.arrets, item.trajet?.prix); setTrajItem(item.trajet);
+                                                        break;
+                                                    case "edit":
+                                                        edit(item.voyages.id);
+                                                        break;
+                                                    case "cancel":
+                                                        noready(item.voyages);
+                                                        break;
+                                                    case "list":
+                                                        list(item.voyages.id)
+                                                        break;
+                                                    default:
+                                                        alert("Action non disponible");
+                                                        break;
+                                                }
+                                            }} />
+                                        ) : null}
+                                        {item.voyages?.ready == "oui" && !compareDate(getDateFormat(item.voyages?.dateDepart)) ? (
+                                            <DropDown left='40' array={actionsVoyageAnnule} onEmit={(action: string) => {
+                                                switch (action) {
+                                                    case "delete":
+                                                        deleteVoyage(item.voyages?.id);
+                                                        break;
+                                                    case "bordereau":
+                                                        view(item.voyages?.id);
+                                                        break;
+                                                    case "tarif":
+                                                        viewArret(item.trajet?.arrets, item.trajet?.prix); setTrajItem(item.trajet);
+                                                        break;
+                                                    case "edit":
+                                                        edit(item.voyages.id);
+                                                        break;
+                                                    case "cancel":
+                                                        noready(item.voyages);
+                                                        break;
+                                                    case "list":
+                                                        list(item.voyages.id)
+                                                        break;
+                                                    default:
+                                                        alert("Action non disponible");
+                                                        break;
+                                                }
+                                            }} />
+                                        ) : null}
+                                    </td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             </div>
             {
                 bol ? (
-                    <div className='fixed z-0 top-0 left-0 flex justify-center items-center bg-black/30 w-full h-full'>
+                    <div className='fixed z-30 top-0 left-0 flex justify-center items-center bg-black/30 w-full h-full'>
                         <div className="w-full  max-w-2xl overflow-hidden bg-white shadow-2xl rounded-md  ">
                             <h2 className=" text-gray-100 text-sm p-4 bg-blue-500 bg-gradient-to-tr from-blue-700 uppercase">
                                 Arrets
@@ -420,17 +557,21 @@ const VoyageTable = (props: { childToParent: Function }) => {
                                             </div>
                                             <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{trajItem.lieuArrivee}</h4>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
+
                             <div className='p-4'>
                                 <button onClick={close} className='border  p-1 rounded-md   mt-4 text-sm px-4 bg-stone-700 text-white'>Fermer</button>
+
                             </div>
                         </div>
                     </div>
                 ) : null
             }
         </section>
+
     )
 }
 
