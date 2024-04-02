@@ -25,7 +25,7 @@ export const DELETE = async (req: Request, { params }: { params: { id: string } 
 export const PUT = async (req: Request, { params }: { params: { id: string } }) => {
     const { id } = params;
     const body = await req.json();
-    const { numeroSiege, prixTicket, typeTicket, statusTicket, dateCreation, voyageId, passagerId } = body;
+    const { numeroSiege, prixTicket, typeTicket, destination, statusTicket, dateCreation, voyageId, passagerId } = body;
     try {
         const ticket = await prisma.ticket.update({
             where: { id: parseInt(id) },
@@ -37,7 +37,7 @@ export const PUT = async (req: Request, { params }: { params: { id: string } }) 
                 statusTicket: statusTicket,
                 dateCreation: `${dateCreation}:00.000Z`,
                 passagerId: parseInt(passagerId),
-                
+                destination: destination
             }
         });
         return NextResponse.json({ message: ticket })

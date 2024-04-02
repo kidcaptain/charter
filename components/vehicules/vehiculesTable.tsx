@@ -1,9 +1,26 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import DropDown from '../ui/dropdown';
+import { mkConfig, generateCsv, download } from 'export-to-csv';
+import { Vehicules } from '@/app/dashboard/admin/vehicles/[vehiculeId]/page';
+
 
 const VehiculeTable = (props: { childToParent: Function, setData: Function, isAdmin: string }) => {
 
-    const [bus, setBus] = useState<any[]>([])
+    const [bus, setBus] = useState<Vehicules[]>([])
+    const csvConfig = mkConfig({ useKeysAsHeaders: true });
+
+    const arrayAction = [
+        { action: "edit", text: "Editer" },
+        { action: "add", text: "Afficher les pièces du véhicule" },
+        { action: "horsService", text: "Mettre Hors Service" },
+        { action: "signal", text: "Signaler une panne" },
+        { action: "fiche", text: "Afficher la fiche technique" },
+        { action: "planning", text: "Consulter le planning" },
+        { action: "suivie", text: "Afficher la fiche de suivie" },
+        { action: "rapport", text: "Consulter les rapports" },
+        { action: "delete", text: "Supprimer" },
+    ]
 
     useEffect(() => {
         const getData = async () => {
@@ -16,7 +33,11 @@ const VehiculeTable = (props: { childToParent: Function, setData: Function, isAd
         };
         getData();
     }, [bus])
-
+    // const titleKeys = Object.keys(bus[0]);
+    // const refinedData = [];
+    // refinedData.push(titleKeys);
+    
+    // const csv = generateCsv(csvConfig)(bus);
     const deleteBus = async (id: number) => {
         if (confirm("Confimer la suppression")) {
             const res = await fetch(`/api/bus/${id}`, { method: "DELETE", cache: "no-store" })
@@ -28,15 +49,22 @@ const VehiculeTable = (props: { childToParent: Function, setData: Function, isAd
         }
     }
 
+
+
     return (
         <div className="bg-white shadow-2xl rounded-md border-2 border-stone-50">
             <h1 className=" p-4 text-gray-900 font-bold uppercase border-b">Nos véhicules</h1>
-            <div className="p-4 relative overflow-x-auto">
-                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead className="text-sm text-gray-700 uppercase dark:text-gray-400">
+
+            <div className="p-4 relative ">
+                {/* <button onClick={() => download(csvConfig)(csv)}>Télécharger la liste</button> */}
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
+                    <thead className="text-sm text-gray-700 uppercase ">
                         <tr>
                             <th scope="col" className="p-2 border-2 border-stone-800 ">
                                 Id#
+                            </th>
+                            <th scope="col" className="p-2 border-2 border-stone-800">
+                                Immatriculation
                             </th>
                             <th scope="col" className="p-2 border-2 border-stone-800">
                                 Marque
@@ -47,16 +75,16 @@ const VehiculeTable = (props: { childToParent: Function, setData: Function, isAd
                             <th scope="col" className="p-2 border-2 border-stone-800">
                                 Type de Bus
                             </th>
-                           
+
                             <th scope="col" className="p-2 border-2 border-stone-800">
                                 Capacité
                             </th>
-                           
+
                             <th scope="col" className="p-2 border-2 border-stone-800">
                                 Pannes
                             </th>
                             <th scope="col" className="p-2 border-2 border-stone-800">
-                                En hors service
+                                hors service
                             </th>
                             <th scope="col" className="p-2 border-2 border-stone-800">
                                 Actions
@@ -65,10 +93,13 @@ const VehiculeTable = (props: { childToParent: Function, setData: Function, isAd
                     </thead>
                     <tbody>
                         {bus.map((item: any, index: number) => (
-                            <tr key={index} className={`border-b border-gray-200 dark:border-gray-700 ${item.horsService == "oui" ? "bg-red-50 text-stone-900" : "bg-white"}`}>
+                            <tr key={index} className={` border-gray-200 text-center uppercase  ${item.horsService == "oui" ? "bg-red-500 text-white " : "bg-white text-stone-900"}`}>
                                 <th scope="row" className="p-2 border-2 border-stone-700">
                                     {index + 1}
                                 </th>
+                                <td className="p-2 border-2 border-stone-700">
+                                    {item.immatriculation}
+                                </td>
                                 <td className="p-2 border-2 border-stone-700">
                                     {item.marque}
                                 </td>
@@ -78,34 +109,29 @@ const VehiculeTable = (props: { childToParent: Function, setData: Function, isAd
                                 <td className="p-2 border-2 border-stone-700">
                                     {item.typeBus}
                                 </td>
-                               
+
                                 <td className="p-2 border-2 border-stone-700">
                                     {item.capacite}
                                 </td>
-                              
+
                                 <td className="p-2 border-2 border-stone-700">
                                     {item.panneVehicule}
                                 </td>
-                                <td className={`p-2 border-2 border-stone-700 ${item.horsService == "oui" ? "text-red-500 font-bold" : "text-stone-500"}`}>
+                                <td className={`p-2 border-2 lef border-stone-700 ${item.horsService == "oui" ? "text-stone-800 font-bold" : "text-stone-500"}`}>
                                     {item.horsService}
                                 </td>
-                                <td className="p-2 border-2 border-stone-700">
-                                    <button type="button" onClick={() => deleteBus(item.id)} className="bg-red-500 hover:bg-red-400 hover:text-white border-black text-black font-semibold text-sm p-1 px-3 border rounded-md">Retirer</button>
-                                    <button type="button" onClick={() => props.setData({ action: "edit", item: item })} className="bg-yellow-500 hover:bg-yellow-400 hover:text-white mx-2 border-black text-black font-semibold text-sm p-1 px-3 border rounded-md">Editer</button>     
-                                    <button type="button" onClick={() => props.setData({ action: "add", item: item })} className="bg-black hover:bg-black hover:text-white mx-2 border-black text-white font-semibold text-sm p-1 px-3 border rounded-md">Pièces du véhicule</button>
-                                    <button type="button" onClick={() => props.setData({ action: "horsService", item: item })} className="bg-lime-500 hover:bg-lime-400 hover:text-white border-black text-black font-semibold text-sm p-1 px-3 border rounded-md">Mettre Hors Service</button>
-                                    <button type="button" onClick={() => props.setData({ action: "signal", item: item })} className="bg-blue-500 hover:bg-blue-400 mx-2 hover:text-white border-black text-black font-semibold text-sm p-1 px-3 border rounded-md">Signaler une panne</button>
-                                    <button type="button" onClick={() => props.setData({ action: "fiche", item: item })} className="bg-cyan-500 hover:bg-cyan-400 hover:text-white border-black text-black font-semibold text-sm p-1 px-3 border rounded-md ">Fiche technique </button>
-                                    <button type="button" onClick={() => props.setData({ action: "planning", item: item })} className="bg-orange-500 hover:bg-orange-400 mx-2  hover:text-white border-black text-black font-semibold text-sm p-1 px-3 border rounded-md ">Planning </button>
-                                    <div className='mt-2'>
-                                        {
-                                            props.isAdmin === "admin" ? (<Link href={`/dashboard/admin/vehicles/${item.id}/rapports`} onClick={() => props.setData({ action: "fiche", item: item })} className="bg-purple-500 mx-2 hover:bg-purple-400 hover:text-white border-black text-black font-semibold text-sm p-1 px-3 border rounded-md">Rapport </Link>) :
-                                                (<Link href={`/dashboard/directeur/vehicules/${item.id}/rapports`} onClick={() => props.setData({ action: "fiche", item: item })} className="bg-purple-500 hover:bg-purple-400 mx-2 hover:text-white border-black text-black font-semibold text-sm p-1 px-3 border rounded-md ">Rapport </Link>)}
-                                        <Link className="bg-green-500 hover:bg-green-400 hover:text-white border-black text-black font-semibold text-sm p-1 px-3 border  rounded-md" href={`/dashboard/admin/vehicles/${item.id}/suivie`}>Fiche de suivie </Link>
-                                    </div>
+                                <td className=" border relative border-b-2 border-r-2 border-stone-700 flex gap-1 flex-wrap">
+                                    <DropDown array={arrayAction} left="0" onEmit={(action: string) => {
+                                        if (action == "delete") {
+                                            deleteBus(item.id)
+                                        } else {
+                                            props.setData({ action: action, item: item })
+                                        }
+                                    }} />
                                 </td>
                             </tr>
                         ))}
+
                     </tbody>
                 </table>
             </div>

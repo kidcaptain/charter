@@ -25,7 +25,7 @@ export const DELETE = async (req: Request, { params }: { params: { id: string } 
 export const PUT = async (req: Request, { params }: { params: { id: string } }) => {
     const { id } = params;
     const body = await req.json();
-    const {chauffeurId, numVoyage, heureDepart, agenceId, dateDepart, heureArrivee, placeDisponible, typeVoyage, prixVoyage, busId, trajetId, ready } = body;
+    const {chauffeurId, numVoyage, heureDepart, agenceId, dateDepart, heureArrivee, placeDisponible, placesOccupees, prixVoyage, busId, trajetId, ready } = body;
     try {
         const voyage = await prisma.voyage.update({
             where: { id: parseInt(id) },
@@ -34,9 +34,9 @@ export const PUT = async (req: Request, { params }: { params: { id: string } }) 
                 dateDepart: `${dateDepart}T00:00:00.000Z`,
                 heureArrivee: heureArrivee,
                 placeDisponible: parseInt(placeDisponible),
-                typeVoyage: typeVoyage,
+                placesOccupees: parseInt(placesOccupees),
                 prixVoyage: parseInt(prixVoyage),
-                busId: busId,
+                busId: `${busId}`,
                 trajetId: parseInt(trajetId),
                 ready: ready,
                 chauffeurId: parseInt(chauffeurId),

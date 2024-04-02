@@ -42,6 +42,22 @@ export default function Page({ params }: { params: IPrams }) {
         const data = await res.json();
         return data
     };
+    const getTrajet = async (id: number) => {
+        const res = await fetch("/api/trajets/" + id, { cache: "no-store" })
+        if (!res.ok) {
+            console.log("error")
+        }
+        const data = await res.json();
+        return data
+    };
+    const getTicket = async () => {
+        const res = await fetch("/api/ticket", { cache: "no-store" })
+        if (!res.ok) {
+            console.log("error")
+        }
+        const data = await res.json();
+        return data
+    };
     const getEmploye = async (id: number) => {
         const res = await fetch(`/api/employes/${id}`, { cache: "no-store" })
         if (!res.ok) {
@@ -61,22 +77,31 @@ export default function Page({ params }: { params: IPrams }) {
             const t = 7 - date.getDay();
             const bus = await getBus();
             setBus(bus);
-           
+
             const recette: any[] = await getLigneRecette(bus.id, `${year}-${month}-${day}`);
             const voyages: any[] = await getVoyage(bus.id, `${year}-${month}-${day}`);
+
             let compte: number = 0;
-    
+            let tick: string = "";
             let c: string = ""
             if (recette.length > 0) {
                 recette.map((j) => {
                     voyages.map(async (i) => {
-                        if (i.id === j.voyageId) { 
+                        if (i.id === j.voyageId) {
                             compte = compte + parseInt(j.montant);
                             const d = await getEmploye(i.chauffeurId);
-                            if (d) { 
-                                tab.push({ voyage: i, recette: j, chauffeur: `${d.nom} ${d.prenom}` })
-                            }else{ 
-                                tab.push({ voyage: i, recette: j, chauffeur: "" })
+                            const trajet: any = await getTrajet(i.trajetId);
+                            const ticket: any[] = await getTicket();
+
+                            ticket.map(async (o) => {
+                                if (o.voyageID == i.id) {
+                                    tick = o.destination
+                                }
+                            })
+                            if (d) {
+                                tab.push({ voyage: i, recette: j, chauffeur: `${d.nom} ${d.prenom}`, trajet: trajet, ticket: tick })
+                            } else {
+                                tab.push({ voyage: i, recette: j, chauffeur: "", trajet: trajet, ticket: tick })
                             }
                         }
                     })
@@ -85,7 +110,7 @@ export default function Page({ params }: { params: IPrams }) {
             setTotal(compte)
             setFiche(tab)
             router.refresh()
-        }else{
+        } else {
             alert("Selectionner une date!")
         }
     }

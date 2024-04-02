@@ -5,13 +5,12 @@ export const GET = async (req: NextRequest) => {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
   const dateDepart = searchParams.get("dateDepart");
-  const typeVoyage = searchParams.get("typeVoyage");
   const busId = searchParams.get("busId");
   const trajetId = searchParams.get("trajetId");
 
   try {
-    if (typeVoyage && busId && trajetId) {
-      const voyage = await prisma.voyage.findMany({ where: { typeVoyage: typeVoyage, busId: busId, trajetId: parseInt(trajetId) } });
+    if (busId && trajetId) {
+      const voyage = await prisma.voyage.findMany({ where: { busId: busId, trajetId: parseInt(trajetId) } });
       return new NextResponse(JSON.stringify(voyage), { status: 200 });
     } else if (id && busId) {
       const voyage = await prisma.voyage.findMany({ where: { id: parseInt(id), busId: busId } });
@@ -34,19 +33,20 @@ export const GET = async (req: NextRequest) => {
 export const POST = async (req: Request) => {
   const body = await req.json();
   // const date = new Date()
-  const {chauffeurId, numVoyage, heureDepart, agenceId, dateDepart, placeDisponible, typeVoyage, prixVoyage, busId, trajetId } = body;
+  const { chauffeurId, numVoyage, heureDepart, heureArrivee, agenceId, dateDepart, placeDisponible, placesOccupees, prixVoyage, busId, trajetId } = body;
   const voyages = await prisma.voyage.create({
     data: {
       agenceId: parseInt(agenceId),
       dateDepart: `${dateDepart}T00:00:00.000Z`,
       placeDisponible: parseInt(placeDisponible),
-      typeVoyage: typeVoyage,
+      placesOccupees: parseInt(placesOccupees),
       prixVoyage: parseInt(prixVoyage),
       busId: busId,
       trajetId: parseInt(trajetId),
       chauffeurId: parseInt(chauffeurId),
       heureDepart: heureDepart,
-      numVoyage: numVoyage
+      numVoyage: numVoyage,
+      heureArrivee: heureArrivee,
     }
   });
   return NextResponse.json(voyages)
@@ -58,7 +58,7 @@ export const PUT = async (req: Request) => {
 
   const body = await req.json();
 
-  const {chauffeurId,heureArrivee,  numVoyage, heureDepart, agenceId, dateDepart, placeDisponible, typeVoyage, prixVoyage, busId, trajetId, ready, employeId } = body;
+  const { chauffeurId, heureArrivee, numVoyage, heureDepart, agenceId, dateDepart, placeDisponible, placesOccupees, prixVoyage, busId, trajetId, ready, employeId } = body;
   try {
     const voyages = await prisma.voyage.update({
       where: { id: parseInt(`${id}`) },
@@ -67,7 +67,7 @@ export const PUT = async (req: Request) => {
         dateDepart: `${dateDepart}T00:00:00.000Z`,
         heureArrivee: heureArrivee,
         placeDisponible: parseInt(placeDisponible),
-        typeVoyage: typeVoyage,
+        placesOccupees: parseInt(placesOccupees),
         prixVoyage: parseInt(prixVoyage),
         busId: busId,
         trajetId: parseInt(trajetId),

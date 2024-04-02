@@ -33,6 +33,8 @@ export default function Page() {
 
             const datas = {
                 dateTransaction: `${year}-${month}-${day}`,
+                passagerId: 0,
+                voyageId: 0,
                 ...data
             }
             const response = await fetch('/api/recette', {

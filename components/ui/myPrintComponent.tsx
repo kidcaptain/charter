@@ -2,6 +2,8 @@
 import Image from "next/image";
 import React, { useRef } from "react";
 import ReactToPrint from "react-to-print";
+import InputForm from "./inputForm";
+import SelectForm from "./selectForm";
 
 export default function PrintComponent(props: { item: DataPrintComponent }) {
     let componentRef: any = useRef();
@@ -16,7 +18,7 @@ export default function PrintComponent(props: { item: DataPrintComponent }) {
                 />
 
                 {/* component to be printed */}
-                <ComponentToPrint depenses={props.item.depenses} agence={props.item.agence} recettes={props.item.recettes} ref={(el) => (componentRef = el)} />
+                <ComponentToPrint depenses={props.item.depenses} caissier={props.item.caissier} chef={props.item.chef} agence={props.item.agence} recettes={props.item.recettes} ref={(el) => (componentRef = el)} />
             </div>
         </>
     );
@@ -24,7 +26,9 @@ export default function PrintComponent(props: { item: DataPrintComponent }) {
 interface DataPrintComponent {
     depenses: any[],
     recettes: any[],
-    agence: any
+    agence: any,
+    caissier: any[],
+    chef: string
 }
 class ComponentToPrint extends React.Component<DataPrintComponent> {
 
@@ -87,17 +91,17 @@ class ComponentToPrint extends React.Component<DataPrintComponent> {
                                                     <th className="px-3 py-4 border border-stone-800">
                                                         {i}
                                                     </th>
-                                                    <th className=" border  px-3 py-4 border-stone-800">
-                                                        {parseInt(this.props?.recettes[index]?.montant).toString() == "NaN" ? 0 : parseInt(this.props?.recettes[index]?.montant).toString()}
+                                                    <th className=" border w-40 px-3 py-4 border-stone-800">
+                                                        {parseInt(this.props?.recettes[index]?.montant).toString() == "NaN" ? 0 : parseInt(this.props?.recettes[index]?.montant).toString()} Fcfa
                                                     </th>
                                                     <th className=" border px-3 py-4 border-stone-800">
-                                                        {parseInt(this.props?.depenses[index]?.montant).toString() == "NaN" ? 0 : parseInt(this.props?.depenses[index]?.montant).toString()}
+                                                        {parseInt(this.props?.depenses[index]?.montant).toString() == "NaN" ? 0 : parseInt(this.props?.depenses[index]?.montant).toString()} Fcfa
                                                     </th>
                                                     <th className=" border border-stone-800">
                                                         <input type="text" className="w-full h-full px-3 py-4 focus-within:outline-none bg-stone-50" />
                                                     </th>
-                                                    <th className=" border border-stone-800">
-                                                        <input type="text" className="w-full h-full px-3 py-4 focus-within:outline-none bg-stone-50" />
+                                                    <th className=" border border-stone-800 px-3 py-4 ">
+                                                        <SelectForm text="aucun" array={this.props.caissier} onChange={() => { }} name="s" />
                                                     </th>
                                                     <th className=" border border-stone-800">
                                                         <input type="text" className="w-full h-full px-3 py-4 focus-within:outline-none bg-stone-50" />
@@ -115,13 +119,13 @@ class ComponentToPrint extends React.Component<DataPrintComponent> {
                                         Totaux
                                     </th>
                                     <th className="border  px-3 py-4 border-stone-800">
-                                    {totalBrut}
+                                        {totalBrut} FCFA
                                     </th>
                                     <th className="border px-3 py-4 border-stone-800">
-                                        {totalDepense}
+                                        {totalDepense} FCFA
                                     </th>
                                     <th className="border border-stone-800">
-                                        <input type="text" className="w-full h-full px-3 py-4 focus-within:outline-none bg-stone-50" />
+                                      
                                     </th>
                                     <th className="border border-stone-800">
                                         <input type="text" className="w-full h-full px-3 py-4 focus-within:outline-none bg-stone-50" />
@@ -132,44 +136,15 @@ class ComponentToPrint extends React.Component<DataPrintComponent> {
                                 </tr>
                             </tfoot>
                         </table>
-                        <div className="mt-5">
-                            <div className="w-1/2 text-sm text-left rtl:text-right text-gray-800 ">
-                                <div className="grid grid-cols-2">
-                                    <div className=" p-1 border border-stone-800">Banque</div>
-                                    <div className=" p-1 border border-stone-800"><input type="text" className="w-full h-full p-1 focus-within:outline-none bg-stone-50" /></div>
-                                </div>
-                                <div className="grid grid-cols-2">
-                                    <div className=" p-1 border border-stone-800">Audives dépenses</div>
-                                    <div className=" p-1 border border-stone-800"><input type="text" className="w-full h-full p-1 focus-within:outline-none bg-stone-50" /></div>
-                                </div>
-                                <div className="grid grid-cols-2">
-                                    <div className=" p-1 border border-stone-800"></div>
-                                    <div className=" p-1 border border-stone-800"><input type="text" className="w-full h-full p-1 focus-within:outline-none bg-stone-50" /></div>
-                                </div>
-                                <div className="grid grid-cols-2">
-                                    <div className=" p-1 border border-stone-800"></div>
-                                    <div className=" p-1 border border-stone-800"><input type="text" className="w-full h-full p-1 focus-within:outline-none bg-stone-50" /></div>
-                                </div>
-                                <div className="grid grid-cols-2">
-                                    <div className=" p-1 border border-stone-800"></div>
-                                    <div className=" p-1 border border-stone-800"><input type="text" className="w-full h-full p-1 focus-within:outline-none bg-stone-50" /></div>
-                                </div>
-                                <div className="grid grid-cols-2">
-                                    <div className=" p-1 border border-stone-800"></div>
-                                    <div className=" p-1 border border-stone-800"><input type="text" className="w-full h-full p-1 focus-within:outline-none bg-stone-50" /></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mt-5 flex justify-between">
+
+                        <div className="mt-5 flex justify-between items-center">
                             <div>
-                                <label className="font-bold">Chef d&apos;agence: {this.props.agence?.chef}</label>
-                              
-                            
+                                <label className="font-semibold uppercase">Chef d&apos;agence: {this.props.chef}</label>
                             </div>
                             <div className="flex items-center gap-4">
                                 <span className="font-bold">Solde</span>
                                 <div className="border border-black w-52">
-                                    <input type="text" className="w-full h-full p-2 focus-within:outline-none bg-stone-50" />
+                                    <input type="text" value={(totalDepense + totalBrut) + " FCFA"} className="w-full h-full p-2 focus-within:outline-none bg-stone-50" />
                                 </div>
                             </div>
                         </div>

@@ -19,10 +19,11 @@ export default function FicheTechnique(props: { item: DataFicheTechnique }) {
                 <ComponentToPrint
                     marque={props.item.marque}
                     modele={props.item.modele}
+                    immatricule={props.item.immatricule}
                     typeBus={props.item.typeBus}
                     capacite={props.item.capacite}
                     panneVehicule={props.item.panneVehicule}
-                ref={(el) => (componentRef = el)} />
+                    ref={(el) => (componentRef = el)} />
             </div>
         </>
     );
@@ -30,6 +31,7 @@ export default function FicheTechnique(props: { item: DataFicheTechnique }) {
 
 export interface DataFicheTechnique {
     marque: string,
+    immatricule: string,
     modele: string,
     typeBus: string,
     capacite: number,
@@ -58,9 +60,13 @@ class ComponentToPrint extends React.Component<DataFicheTechnique> {
                         </ul>
 
                     </div>
-                    <h3 className="p-4 border uppercase  bg-stone-800 text-white border-black">Caracteristiques</h3>
+                    <h3 className="p-4 border uppercase  font-bold bg-stone-800 text-white border-black">Informations</h3>
                     <table className="w-full text-xs font-bold text-gray-900">
                         <tbody>
+                            <tr className="">
+                                <td className="border border-stone-700 uppercase p-2">COde d'immatriculation</td>
+                                <td className="border text-gray-600 border-stone-700 uppercase p-2">{this.props.immatricule}</td>
+                            </tr>
                             <tr className="">
                                 <td className="border border-stone-700 uppercase p-2">Type de véhicule</td>
                                 <td className="border text-gray-600 border-stone-700 uppercase p-2">Bus</td>

@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 // @ts-ignore
 import { DayPilot, DayPilotCalendar } from "@daypilot/daypilot-lite-react";
 import Image from "next/image";
 import loaderSvg from "@/public/images/loader.svg"
-const PlanningChauffeur = (props: { id: string | undefined }) => {
+const PlanningWeekBus = (props: { id: string | undefined }) => {
 
     const [vo, setVO] = useState<DayPilot.EventData[]>([]);
     const [dates, setDates] = useState<any>(new DayPilot.Date.today())
@@ -49,7 +49,7 @@ const PlanningChauffeur = (props: { id: string | undefined }) => {
         }
         const daym2 = (day) < 10 ? `0${day}` : `${day}`;
         const monthm2 = (month) < 10 ? `0${month}` : `${month}`;
-        setDates(`${year}-${daym2}-${monthm2}`);
+        setDates(`${year}-${monthm2}-${daym2}`);
     };
     const previous = () => {
         const dates1 = new Date(dates);
@@ -112,7 +112,6 @@ const PlanningChauffeur = (props: { id: string | undefined }) => {
     ];
 
     const [calendar, setCalendar] = useState<DayPilot.Calendar>();
-
     const editEvent = async (e: DayPilot.Event) => {
         const form = [
             { name: "Event text", id: "text", type: "text" },
@@ -158,7 +157,7 @@ const PlanningChauffeur = (props: { id: string | undefined }) => {
     const [config, setConfig] = useState(initialConfig);
 
     useEffect(() => {
-
+        
         const getTrajet = async () => {
             const res = await fetch("/api/trajets", { cache: "no-store" })
             if (!res.ok) {
@@ -177,7 +176,7 @@ const PlanningChauffeur = (props: { id: string | undefined }) => {
             return data
         };
         const getEmploye = async () => {
-            const res = await fetch("/api/employes/" + props.id, { cache: "no-store" })
+            const res = await fetch("/api/bus/" + props.id, { cache: "no-store" })
             if (!res.ok) {
                 throw new Error("Failed")
             }
@@ -189,9 +188,9 @@ const PlanningChauffeur = (props: { id: string | undefined }) => {
             const tabVoyages: any[] = await getData();
             const tab: DayPilot.EventData[] = [];
             const tabTrajets: any[] = await getTrajet();
-            const employeData: any = await getEmploye();
+            const busData: any = await getEmploye();
             tabVoyages.map((r, index: number) => {
-                if ((parseInt(r.chauffeurId) === employeData.id)) {
+                if ((parseInt(r.busId) === busData.id)) {
                     tabTrajets.map((i) => {
                         if (r.trajetId == i.id) {
                             const dates1 = new Date(r.dateDepart);
@@ -208,20 +207,20 @@ const PlanningChauffeur = (props: { id: string | undefined }) => {
                                 tab.push({
                                     id: index, 
                                     text: `Voyage N°${r.numVoyage} de ${r.heureDepart} à ${heureA}`,
-                                     start: `${year}-${monthm2}-${daym2}T${r.heureDepart}:00`, end: `${year}-${monthm2}-${daym2}T${heureA}:00`, backColor: "#3b82f6", fontColor: "#fff", tags: {
+                                     start: `${year}-${monthm2}-${daym2}T${r.heureDepart}:00`, end: `${year}-${monthm2}-${daym2}T${heureA}:00`, backColor: "#d5641d", fontColor: "#fff", tags: {
                                         participants: r.busId,
                                     }
                                 })
                             }else{
                                 tab.push({
                                     id: index, 
-                                    text: `Voyage N°${r.numVoyage} de ${r.heureDepart} à ${heureA}`,
+                                    text: `Voyage N°${r.numVoyage} de ${r.heureDepart} à ${heureA} `,
                                      start: `${year}-${monthm2}-${daym2}T${r.heureDepart}:00`, end: `${year}-${monthm2}-${daym2}T${heureA}:00`, backColor: "#747475", fontColor: "#fff", tags: {
                                         participants: r.busId,
                                     }
                                 })
                             }
-                        
+                           
                         }
                     })
                 }
@@ -239,9 +238,6 @@ const PlanningChauffeur = (props: { id: string | undefined }) => {
                 return;
             }
             const events: DayPilot.EventData[] = vo;
-
-            // console.log(events)
-
             const dates1 = new Date(dates);
             let year = dates1.getFullYear();
             let month = dates1.getMonth() + 1;
@@ -250,6 +246,7 @@ const PlanningChauffeur = (props: { id: string | undefined }) => {
             const monthm2 = (month) < 10 ? `0${month}` : `${month}`;
             const startDate = `${year}-${monthm2}-${daym2}T00:00:00`;
             calendar.update({ startDate, events });
+            calendar.timeFormat = "Clock12Hours";
         }
     }, [calendar, vo]);
 
@@ -257,7 +254,7 @@ const PlanningChauffeur = (props: { id: string | undefined }) => {
         if (!isNull) {
             return <Image src={loaderSvg} className='animate-spin mx-auto' width={25} height={25} alt='Loader image' />;
         } else {
-            return <p className='text-center p-4 bg-white text-blue-400 font-semibold'>Planning vide!</p>
+            return <p className='text-center p-4 bg-white text-orange-400 font-semibold'>Planning vide!</p>
         }
     }
 
@@ -276,23 +273,25 @@ const PlanningChauffeur = (props: { id: string | undefined }) => {
     };
 
     return (
-        <div className="relative bg-white">
+        <div className="relative">
             {
                 vo.length == 0 ?
                     emptyData() : (
                         <>
                             <div className="p-4 bg-white">
-                                <button className="bg-blue-500 rounded-sm  text-sm p-2 hover:bg-blue-600" onClick={ev => setDates(new DayPilot.Date.today())}>Date d'aujourd'hui</button>
-                                <button className="bg-blue-500 rounded-sm  mx-2 text-sm p-2 hover:bg-blue-600" onClick={next}>Semaine suivante</button>
+                           
+                                <button className="bg-orange-500 rounded-sm text-sm p-2 hover:bg-orange-600" onClick={ev => setDates(new DayPilot.Date.today())}>Date d'aujourd'hui</button>
+                                <button className="bg-orange-500 rounded-sm  mx-2 text-sm p-2 hover:bg-orange-600" onClick={next}>Semaine suivante</button>
                             </div>
 
-
+                            {/* <div className="p-2">
+                                <label htmlFor="" className=" mb-1 text-sm  text-gray-900 font-bold">Sélectionner le mois</label>
+                                <button className="" onClick={() => {setDates()}}>Semaine précédentes</button>
+                                <button>Semaine suivante</button>
+                            </div> */}
                             <DayPilotCalendar
                                 {...config}
-                            
                                 controlRef={setCalendar}
-           
-
                             />
                         </>
                     )
@@ -301,4 +300,4 @@ const PlanningChauffeur = (props: { id: string | undefined }) => {
     )
 }
 
-export default PlanningChauffeur
+export default PlanningWeekBus

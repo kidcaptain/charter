@@ -3,7 +3,7 @@ import { prisma } from "@/utils/connect";
 
 export const POST = async (req: Request) => {
   const body = await req.json();
-  const { nom, agenceId, typeService, typePaiement, montant, dateTransaction, note } = body;
+  const { nom, agenceId, typeService, typePaiement, montant, passagerId, dateTransaction, voyageId, note } = body;
   const recettes = await prisma.recette.create({
     data: {
         nom: nom,
@@ -12,7 +12,10 @@ export const POST = async (req: Request) => {
         montant: parseInt(montant),
         dateTransaction: dateTransaction,
         note: note,
-        agenceId: parseInt(agenceId)
+        agenceId: parseInt(agenceId),
+        voyageId: parseInt(voyageId),
+        passagerId: parseInt(passagerId),
+
     }
   });
   return NextResponse.json(recettes)

@@ -47,7 +47,7 @@ export const PUT = async (req: Request) => {
 
   const body = await req.json();
 
-  const { numeroSiege, prixTicket, typeTicket,employeId, statusTicket, dateCreation, voyageId, passagerId } = body;
+  const { numeroSiege, prixTicket, destination, typeTicket,employeId, statusTicket, dateCreation, voyageId, passagerId } = body;
   try {
     const tickets = await prisma.ticket.update({
       where: { id: parseInt(`${id}`) },
@@ -60,7 +60,7 @@ export const PUT = async (req: Request) => {
         dateCreation: `${dateCreation}:00.000Z`,
         passagerId: parseInt(passagerId),
         employeId: parseInt(employeId),
-        
+        destination: destination
       }
     });
     return NextResponse.json(tickets)

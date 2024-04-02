@@ -201,6 +201,7 @@ export default function Page({ params }: { params: IPrams }) {
                         </div>
                     </div>
             </div>
+
             <div className="p-4 w-full h-full min-h-full">
                 <RapportHebdo item={{  simple: fiche, date: date1, date2: date2, total: total, bus: bus }} />
             </div>

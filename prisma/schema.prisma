@@ -47,10 +47,8 @@ model Employe {
 model Voyage {
   id              Int      @id @default(autoincrement())
   dateDepart      DateTime
-  dateArrivee     DateTime @default(now())
   heureArrivee    String @default("")
   placeDisponible Int
-  typeVoyage      String @default("")
   prixVoyage      Int
   busId           String
   trajetId        Int
@@ -60,6 +58,7 @@ model Voyage {
   chauffeurId     Int    @default(0)
   heureDepart     String @default("")
   numVoyage       String @default("")
+  placesOccupees  Int    @default(0)
 }
 
 model Trajet {
@@ -91,7 +90,7 @@ model Bus {
   capacite         Int
   panneVehicule    String @default("")
   horsService      String @default("non")
-  
+  immatriculation  String @unique 
 }
 
 model Agence {
@@ -99,7 +98,6 @@ model Agence {
   nom             String
   adresse         String
   numeroTelephone String
-  chef            String @default("")
 }
 
 model Poste {
@@ -138,15 +136,15 @@ model TrackingVehicule {
 }
 
 model Depense {
-  id          Int      @id @default(autoincrement())
-  agenceId    Int
-  description String
-  montant     Decimal
-  date        DateTime
-  typeDepense String
-  idTypeDepense   String @default("")
-  motif     String @default("")
-  piece     String @default("")
+  id            Int      @id @default(autoincrement())
+  agenceId      Int
+  description   String @default("")
+  motif          String @default("")
+  piece           String @default("")
+  montant       Decimal
+  date          DateTime
+  typeDepense   String
+  idTypeDepense String @default("")
 }
 
 model Utilisateur {
@@ -219,6 +217,9 @@ model Recette {
     dateTransaction String
     note          String
     agenceId      Int
+    remboursement Int @default(0)
+    passagerId    Int
+    voyageId      Int
 }
 
 model LigneFicheRecette {
@@ -247,3 +248,4 @@ model Piece {
   busId       Int
   dateUpdate  DateTime
 }
+

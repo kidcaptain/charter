@@ -27,7 +27,6 @@ export default function ComponentTicketPrint(props: { item: DataTableProps }) {
           remboursement={props.item.remboursement}
           caisse={props.item.caisse}
           numticket={props.item.numticket}
-          type={props.item.type}
           trajet={props.item.trajet}
           siege={props.item.siege} ref={(el) => (componentRef = el)} />
       </div>
@@ -43,7 +42,6 @@ export interface DataTableProps {
   remboursement: number;
   caisse: string;
   numticket: string;
-  type: string;
   bus: string;
   trajet: string;
   siege: number
@@ -66,19 +64,18 @@ class ComponentToPrint extends React.Component<DataTableProps> {
           <div className="relative text-xl font-semibold">
             <div className="flex items-center justify-center">
               <Image src={svglogo} width={50} height={10} alt="" />
-              <h4 className="  text-2xl text-blue-600 italic font-bold text-center border-b ">Charter Express</h4>
+              <h4 className="  text-2xl text-blue-600 italic font-bold text-center border-b ">Charter Express Voyages</h4>
             </div>
             <hr className="border-yellow-400 border-2" />
             <hr className="border-red-500 border-2" />
             <h5 className="text-green-600 text-center font-serif italic text-sm underline">Réservation:</h5>
             <h6 className="text-green-600 text-center font-serif text-sm italic">Yaoundé: 6 74 66 20 88 - Douala: 6 74 66 20 88</h6>
-            <h2 className="text-center font-bold font-sans">TICKET {this.props.type}</h2>
-            <h2 className="text-center font-bold font-sans">N° 0{this.props.numticket}</h2>
+            <h2 className="text-center font-bold font-sans">TICKET N° {this.props.numticket}</h2>
             <h2 className="uppercase text-center"> <span className=" font-bold font-sans">CLT</span>: {this.props.client} </h2>
             <h2 className="uppercase text-center"> <span className=" font-bold font-sans">TEL</span>: {this.props.tel}</h2>
             <h2 className="uppercase text-center"> <span className=" font-bold font-sans">TRAJET</span>: {this.props.trajet}</h2>
             <h2 className="uppercase text-center"> <span className=" font-bold font-sans">DEPART</span>: {this.props.depart}</h2>
-            <h2 className="uppercase text-center"> <span className=" font-bold font-sans">SIEGE</span>: 0{this.props.siege}</h2>
+            <h2 className="uppercase text-center"> <span className=" font-bold font-sans">SIEGE</span>: {this.props.siege}</h2>
             <h2 className="uppercase text-center"> <span className=" font-bold font-sans">VOY</span>: {this.props.voyage} </h2>
             <h2 className="uppercase text-center"> <span className=" font-bold font-sans">MONTANT</span>: {this.props.montant} FCFA</h2>
             <h2 className="uppercase text-center"> <span className=" font-bold font-sans">REMBOURSEMENT</span>: {this.props.remboursement}</h2>
@@ -88,6 +85,17 @@ class ComponentToPrint extends React.Component<DataTableProps> {
             <h6 className="text-center text-xs">Fait le {day}/{month}/{year}</h6>
           </div>
         </div>
+        <ul className="p-4 uppercase text-center text-sm">
+          <li>client: {this.props.client}</li>
+          <li>téléphone client: {this.props.tel}</li>
+          <li>départ: {this.props.depart}</li>
+          <li>Numéro de bus: {this.props.bus}</li>
+          <li>trajet: {this.props.trajet}</li>
+          <li>voyage: {this.props.voyage}</li>
+          <li>numèro de siège: {this.props.siege}</li>
+          <li>numéro ticket: {this.props.numticket}</li>
+          <li>caisse: GUICHET {this.props.caisse}</li>
+        </ul>
       </div>
 
     )

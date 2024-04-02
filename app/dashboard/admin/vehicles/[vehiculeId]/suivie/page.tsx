@@ -35,52 +35,7 @@ export default function Page({ params }: { params: IPrams }) {
 
     const [data, setData] = useState<any>()
 
-    // const HandlerSubmit = async () => {
-    //     if (confirm("Voulez vous modifiez ces informations")) {
-    //         const date = new Date();
-    //         const year = date.getFullYear();
-    //         const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
-    //         const day = (date.getDate()) < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
 
-    //         const fiches = {
-    //             id: data.id,
-    //             busId: bus.id,
-    //             immatriculation: data.immatriculation ?? "",
-    //             typeVehicule: data.typeVehicule ?? "",
-    //             kilometrageInitial: data.kilometrageInitial ?? 0,
-    //             dateAchat: `${getDateFormat(data.dateAchat) != "NaN-NaN-NaN" ? getDateFormat(data.dateAchat) : year + '-' + month + '-' + day}T00:00:00.000Z`,
-    //             dateMiseService: `${getDateFormat(data.dateMiseService) != "NaN-NaN-NaN" ? getDateFormat(data.dateMiseService) : year + '-' + month + '-' + day}T00:00:00.000Z`,
-    //             dateRevision: `${getDateFormat(data.dateRevision) != "NaN-NaN-NaN" ? getDateFormat(data.dateRevision) : year + '-' + month + '-' + day}T00:00:00.000Z`,
-    //             detailRevision: data.detailRevision ?? "",
-    //             vidange: data.vidange ?? "",
-    //             reperationEffectuees: data.reperationEffectuees ?? "",
-    //             anomalies: data.anomalies ?? "",
-    //             carburant: data.carburant ?? "",
-    //             pannes: data.pannes ?? "",
-    //             vandalisme: data.vandalisme ?? "",
-    //             accident: data.accident ?? "",
-    //             assurance: data.assurance ?? "non",
-    //             contratEntretien: data.contratEntretien ?? "non",
-    //             garanties: data.garanties ?? "non",
-    //         }
-    //         try {
-    //             const response = await fetch(`/api/FicheSuivieVehicule`, {
-    //                 method: 'POST',
-    //                 cache: "no-store",
-    //                 body: JSON.stringify(fiches),
-    //             })
-    //             const d = await response.json()
-    //             console.log(d)
-    //             if (response.ok) {
-    //                 alert("Informations modifiées!")
-
-    //             }
-    //         } catch (err) {
-    //             console.log(err)
-
-    //         }
-    //     }
-    // }
     const getDepenseByDate = async (date: string) => {
         const res = await fetch(`/api/depenses?date=${date}&idTypeDepense=${params.vehiculeId}&typeDepense=bus`, { cache: "no-store" })
         if (!res.ok) {
@@ -90,14 +45,7 @@ export default function Page({ params }: { params: IPrams }) {
         console.table(data)
         return data
     };
-    // const getAgenceById = async (id: number) => {
-    //     const res = await fetch(`/api/agences/${id}`, { cache: "no-store" })
-    //     if (!res.ok) {
-    //         console.log("error")
-    //     }
-    //     const data = await res.json();
-    //     return data
-    // };
+
     const getRecetteByDate = async (date: string) => {
         const res = await fetch(`/api/lignerecette?date=${date}&busId=${params.vehiculeId}`, { cache: "no-store" })
         if (!res.ok) {
@@ -392,7 +340,7 @@ export default function Page({ params }: { params: IPrams }) {
     return (
         <div className="p-10 w-full">
             <div className=" py-4 flex lowercase text-sm justify-between items-start mb-2">
-                <h1 className=" text-gray-900"><Link className="hover:text-blue-600" href={"/dashboard/admin/vehicles"}>Vehicules</Link> / <Link className="hover:text-blue-600" href="">Fiche de suivie</Link></h1>
+                <h1 className=" text-gray-900"><Link className="hover:text-blue-600" href={"/dashboard/admin/vehicles"}>Vehicules</Link> / <Link className="hover:text-blue-600 font-semibold" href="">Fiche de suivie</Link></h1>
             </div>
 
             <div>
@@ -404,7 +352,7 @@ export default function Page({ params }: { params: IPrams }) {
                                 <label htmlFor="" className="text-sm font-bold text-gray-900 mr-2">Semaine du </label>
                                 <input type="date" name="" onChange={e => { setDate(e.target.value) }} className="inline-block p-2 text-xs text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " id="" />
                                 <button type="button" onClick={() => getDepense(date)} className=" hover:bg-green-600 inline-block text-xs border p-2 rounded-sm text-white bg-green-500">Génerer</button>
-                                {/* <HelpPopup message="Le document affchera la suivie d'un vehicule peut!" /> */}
+                                
                             </div>
                         </div>
                     </div>

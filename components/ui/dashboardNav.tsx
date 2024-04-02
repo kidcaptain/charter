@@ -15,7 +15,7 @@ export default function DashboardNav(props: { items: { label: string, selected: 
                 <div className="  flex bg-blue-500  items-center justify-starts gap-2 px-4 md:px-2">
                     <Image width={50} height={50} src={menuSvg} alt="logo.jpeg" />
                     <span className="block text-center text-2xl font-semibold my-3 text-white uppercase ">
-                        Charter Express
+                        Charter Express Voyages
                     </span>
                 </div>
                 <h4 className="text-white text-sm font-bold border-r-8 border-b-8 bg-blue-500 border-blue-500 border-t-8 uppercase px-6 py-2">{props.label}</h4>

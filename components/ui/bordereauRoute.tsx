@@ -55,7 +55,7 @@ class ComponentToPrint extends React.Component<DataBordereau> {
             <div className="bg-white text-sm font-sans py-10  px-8 border max-w-7xl m-auto">
                 <div className="grid grid-cols-3 mb-10 items-start">
                     <div className="text-left ">
-                        <h2 className="text-2xl font-bold">CHARTER EXPRESS</h2>
+                        <h2 className="text-2xl font-bold">CHARTER EXPRESS VOYAGES</h2>
                         <ul className=" font-semibold">
                             <li> ENTREPRISE DE TRANSPORT INTER-URBAIN</li>
                             <li> BP: 5029 YAOUNDE</li>
@@ -73,7 +73,7 @@ class ComponentToPrint extends React.Component<DataBordereau> {
                 <div className=" grid grid-cols-4 items-start  my-4 text-left">
                     <div className="border border-black p-2 uppercase"><span className="font-bold ">Date :</span> {year}-{month}-{day} </div>
                     <div className="border border-black p-2 uppercase"><span className="font-bold">Heure :</span> {hour}:{minute}</div>
-                    <div className="border border-black p-2 uppercase"><span className="font-bold">Bus N° :</span> BUS-0{this.props.bus?.id ?? ""}</div>
+                    <div className="border border-black p-2 uppercase"><span className="font-bold">Bus N° :</span> BUS-{this.props.bus?.immatriculation ?? ""}</div>
                     <div className="border border-black p-2 uppercase"><span className="font-bold">Voyage N° :</span> {this.props.voyage?.numVoyage ?? ""}</div>
                 </div>
                 <div className="overflow-hidden " style={{ maxHeight: 800 }}>
@@ -122,7 +122,7 @@ class ComponentToPrint extends React.Component<DataBordereau> {
                                         </td>
                                       
                                         <td className="p-2  border  border-black text-right ">
-                                            {i.ticket?.prixTicket ?? 0} FCFA
+                                            {i.ticket?.destination ?? ""}
                                         </td>
                                       
                                         <td className="p-2 border border-black text-right">

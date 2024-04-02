@@ -16,7 +16,7 @@ export default function FicheRecette(props: { item: DataFicheRecette }) {
                 />
 
                 {/* component to be printed */}
-                <ComponentToPrint simple={props.item.simple} totalDepense={props.item.totalDepense} total={props.item.total}  date={props.item.date} ref={(el) => (componentRef = el)} />
+                <ComponentToPrint simple={props.item.simple} caissiere={props.item.caissiere} totalDepense={props.item.totalDepense} total={props.item.total}  date={props.item.date} ref={(el) => (componentRef = el)} />
             </div>
         </>
     );
@@ -26,21 +26,13 @@ export interface DataFicheRecette {
     simple: any[],
     date: string,
     total: number,
-    totalDepense: number
+    totalDepense: number,
+    caissiere: string
 }
 
 class ComponentToPrint extends React.Component<DataFicheRecette> {
 
     render() {
-        const date = new Date();
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
-        const day = (date.getDate()) < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
-        const hours = (date.getHours()) < 10 ? `0${date.getHours()}` : `${date.getHours()}`;
-        const minutes = (date.getMinutes()) < 10 ? `0${date.getMinutes()}` : `${date.getMinutes()}`;
-        
-
-
 
         return (
             <div className="p-4 w-full h-full min-h-full" id="fichier">
@@ -67,9 +59,7 @@ class ComponentToPrint extends React.Component<DataFicheRecette> {
                                     <th scope="col" className=" py-4 px-2 border border-stone-800 ">
                                         N°BUS
                                     </th>
-                                    <th scope="col" className=" py-4 px-2 border border-stone-800">
-                                        ALLER
-                                    </th>
+                                   
                                     <th scope="col" className=" py-4 px-2 border border-stone-800 ">
                                         MONTANTS
                                     </th>
@@ -89,11 +79,9 @@ class ComponentToPrint extends React.Component<DataFicheRecette> {
                                         <th className="px-3 py-4 border border-stone-800">
                                             ({item.bus.id}) {item.bus.marque} {item.bus.modele}
                                         </th>
+                                      
                                         <th className=" border border-stone-800">
-                                            {item.voyage.typeVoyage}
-                                        </th>
-                                        <th className=" border border-stone-800">
-                                            {item.ligne.montant}
+                                            {item.ligne.montant} FCFA
                                         </th>
                                         <th className=" border border-stone-800">
                                             {item.chauffeur}
@@ -116,24 +104,24 @@ class ComponentToPrint extends React.Component<DataFicheRecette> {
                                 <div className="flex items-center gap-4">
                                     <span className="font-bold">1eme avance: </span>
                                     <div className="">
-                                        <input type="text" className="bg-gray-50 text-right p-1" /> Fcfa
+                                        <input type="text" className="bg-gray-200 text-right p-1" /> Fcfa
                                     </div>
                                 </div>
                                 <div className="flex my-4 items-center gap-4">
                                     <span className="font-bold">2eme avance: </span>
                                     <div className="">
-                                    <input type="text"  className="bg-gray-50 text-right p-1" />Fcfa
+                                    <input type="text"  className="bg-gray-200 text-right p-1" />Fcfa
                                     </div>
                                 </div>
                                 <div className="flex my-4 items-center justify-between gap-4">
                                     <span className="font-bold">3eme avance: </span>
                                     <div className="">
-                                    <input type="text"  className="bg-gray-50 text-right p-1" />Fcfa
+                                    <input type="text"  className="bg-gray-200 text-right p-1" />Fcfa
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-4 ">
                                     <span className="font-bold underline">Caissière :</span>
-                                    
+                                    <span className="uppercase">{this.props.caissiere}</span>
                                 </div>
                             </div>
                             <div>

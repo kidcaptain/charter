@@ -50,7 +50,7 @@ class ComponentToPrint extends React.Component<DataRapportJourn> {
                         Yaoundé, le <span > {this.props.date} </span>
                     </div>
                     <h2 className="underline text-2xl my-4 text-center uppercase font-bold">Rapport Journalière</h2>
-                    <span className=" font-bold">N°BUS:</span><span > BUS-0{this.props.bus?.id} </span>
+                    <span className=" font-bold">N°BUS:</span><span > BUS-0{this.props.bus?.immatriculation} </span>
                     {/* <h3 className="p-4 font-bold">CHAUFFEUR: {this.props.chauffeur?.nom} {this.props.chauffeur?.prenom}</h3> */}
                     <div className="p-4 mt-4">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-800 ">
@@ -58,7 +58,7 @@ class ComponentToPrint extends React.Component<DataRapportJourn> {
                                 <tr>
                                    
                                     <th scope="col" className=" py-4 px-2 border border-stone-800">
-                                        ALLER
+                                        DESTINATION
                                     </th>
                                     <th scope="col" className=" py-4 px-2 border border-stone-800">
                                         CHAUFFEURS
@@ -86,9 +86,9 @@ class ComponentToPrint extends React.Component<DataRapportJourn> {
                                         return (
                                             (
                                                 <tr key={index + 1} className=" uppercase" >
-                                              
+                                    
                                                     <th className=" border  px-3 py-4  border-stone-900">
-                                                        {i.voyage?.typeVoyage}
+                                                        {i.ticket}
                                                     </th>
                                                     <th className=" border px-3 py-4  border-stone-800">
                                                         {i.chauffeur}

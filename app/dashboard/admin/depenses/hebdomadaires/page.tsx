@@ -3,11 +3,15 @@ import PrintComponent from "@/components/ui/myPrintComponent";
 import { useEffect, useState } from "react";
 import svg from "@/public/images/loader.svg";
 import Image from "next/image";
+import Link from "next/link";
 export default function Page() {
     const [agences, setAgences] = useState<any[]>([])
     const [agence, setAgence] = useState<any>()
     const [agenceNom, setAgenceNom] = useState<any>()
     const [depenses, setDepenses] = useState<any[]>([])
+    const [caissiers, setCaissiere] = useState<any[]>([])
+    const [chef, setChef] = useState<string>("")
+    const [chefs, setChefs] = useState<any[]>([])
     const [recettes, setRecettes] = useState<any[]>([])
     const [date, setDate] = useState<string>("");
 
@@ -72,6 +76,7 @@ export default function Page() {
             const monthm = (month) < 10 ? `0${month}` : `${month}`;
             tab.push(`${year}-${monthm}-${daym}`)
         }
+
         tab = tab.reverse();
         day = date.getDate();
         month = date.getMonth() + 1;
@@ -119,6 +124,8 @@ export default function Page() {
                         day = day + 1;
                     }
                 }
+
+
                 const daym = (day) < 10 ? `0${day}` : `${day}`;
                 const monthm = (month) < 10 ? `0${month}` : `${month}`;
                 tab.push(`${year}-${monthm}-${daym}`)
@@ -132,7 +139,7 @@ export default function Page() {
             let sommeRec = 0;
             const de: any[] = await getDepenseByDate(element, agence);
             const re: any[] = await getRecetteByDate(element);
-            
+
             const g = await getAgenceById(agence);
             setAgenceNom(g)
             if (de.length > 0) {
@@ -140,14 +147,17 @@ export default function Page() {
                     somme = somme + parseInt(j.montant);
                 })
             }
+            console.log(re)
             if (re.length > 0) {
                 re.map((j) => {
                     if (agence == j.agenceId) {
                         sommeRec = sommeRec + parseInt(j.montant);
-                       
+
                     }
                 })
             }
+
+
             const k = new Date(element).getDay();
             switch (k) {
                 case 0:
@@ -187,44 +197,99 @@ export default function Page() {
     };
     useEffect(() => {
         const getAgences = async () => {
-            const res = await fetch("/api/agences/", { cache: "no-store" })
+            const res = await fetch("/api/agences", { cache: "no-store" })
             if (!res.ok) {
                 console.log("error")
             }
             const data = await res.json();
             setAgences(data)
         };
+        const getEmploye = async () => {
+            const resPoste = await fetch("/api/postes", { cache: "no-store" })
+            if (!resPoste.ok) {
+                console.log("error")
+            }
+            const dataPoste: any[] = await resPoste.json();
+            let index: any;
+            dataPoste.map((e) => {
+                if (e.titre == "caissier" || e.titre == "caisse" || e.titre == "caissiere" || e.titre == "caissièr" || e.titre == "caissière" || "caissières".search(e.titre)) {
+                    index = e.id;
+                }
+
+            })
+            const res = await fetch("/api/employes/", { cache: "no-store" })
+            if (!res.ok) {
+                console.log("error")
+            }
+            const data: any[] = await res.json();
+            const tab: any[] = [];
+            const tab2: any[] = [];
+            if (data.length > 0) {
+                data.map((r) => {
+                    if (r.posteId == index) {
+                        tab.push(r);
+                    }
+                    dataPoste.map((e) => {
+                        if (r.posteId == e.id) {
+                            tab2.push({ p: r, po: e })
+                        }
+                    })
+                })
+            }
+            setChefs(tab2)
+            setCaissiere(tab)
+        };
+        getEmploye()
         getAgences()
     }, [])
 
     return (
         <div className="p-10 ">
-            <div className="bg-white shadow-2xl rounded-md">
+             <div className=" flex  justify-between items-start">
+                <h1 className="lowercase text-sm  text-gray-900"><Link className="hover:text-blue-600" href={"/dashboard/admin/depenses"}>Dépenses</Link> / <Link className="hover:text-blue-600 font-semibold" href="#">FICHE HEBDOMADAIRES DES DPENSES</Link></h1>
+            </div>
+            <div className="bg-white mt-8 shadow-2xl rounded-md">
                 <h2 className="p-4  uppercase border-b">
                     Fiche hebdomadaires des depenses
                 </h2>
                 {
-                agences.length > 0 ? (
-                    <div className="p-4">
-                        <div>
-                            <label htmlFor="" className="text-sm font-bold text-gray-900 mr-2">Date</label>
-                            <input type="date" name="" onChange={e => { setDate(e.target.value) }} className="inline-block p-2 text-xs text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " id="" />
-                            <label className="ml-4 mr-2 text-sm font-bold text-gray-900" htmlFor="">Agence</label>
-                            <select name="" id="" className="border p-1.5 uppercase" onChange={e => setAgence(e.target.value)}>
-                                <option value="" ></option>
-                                {agences.map((item: any, index: number) => (
-                                    <option value={item.id} key={index}>{item.nom}</option>
-                                ))}
-                            </select>
-                            <button type="button" onClick={() => getDepense(date)} className=" hover:bg-green-600 inline-block text-xs border p-2 rounded-sm text-white bg-green-500">Génerer</button>
-                        </div>
-                    </div>
-                ) : (<Image src={svg} className='animate-spin mx-auto' width={25} height={25} alt='Loader image' />)
-            }
+                    agences.length > 0 ? (
+                        <>
+                            <div className="p-4 flex gap-2 items-end">
+                                <div>
+                                    <div>
+                                        <label htmlFor="" className="text-sm font-bold text-gray-900  block">Date</label>
+                                        <input type="date" name="" onChange={e => { setDate(e.target.value) }} className="inline-block p-2 text-xs text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " id="" />
+                                    </div>
+                                </div>
+                                <div>
+                                        <label className=" block text-sm font-bold text-gray-900" htmlFor="">Agence</label>
+                                        <select name="" id="" className="border p-1.5 uppercase" onChange={e => setAgence(e.target.value)}>
+                                            <option value="" ></option>
+                                            {agences.map((item: any, index: number) => (
+                                                <option value={item.id} key={index}>{item.nom}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                <div className="block">
+                                    <label className=" block text-sm font-bold text-gray-900" htmlFor="">Chef d'agence</label>
+                                    <select name="" id="" className="border p-1.5 uppercase" onChange={e => setChef(e.target.value)}>
+                                        <option value="" ></option>
+                                        {chefs.map((item: any, index: number) => (
+                                            <option value={`${item.p.nom} ${item.p.prenom}`} key={index}>{item.p.nom} {item.p.prenom} ({item.po.titre})</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <button type="button" onClick={() => getDepense(date)} className=" hover:bg-green-600 inline-block text-sm border p-2 rounded-sm text-white bg-green-500">Génerer</button>
+                            </div>
+                           
+                        </>
+                    ) : (<Image src={svg} className='animate-spin mx-auto' width={25} height={25} alt='Loader image' />)
+                }
             </div>
-          
 
-            <PrintComponent item={{ depenses: depenses, recettes: recettes, agence: agenceNom }} />
+
+            <PrintComponent item={{ depenses: depenses, caissier: caissiers, chef: chef, recettes: recettes, agence: agenceNom }} />
 
 
         </div>

@@ -3,13 +3,13 @@ import FicheTechnique from "@/components/ui/ficheTechnique"
 import Link from "next/link"
 import { FormEvent, useState, useEffect } from "react"
 
-interface Vehicules {
+export interface Vehicules {
     marque: string,
     modele: string,
+    immatriculation: string,
     typeBus: string,
     capacite: number,
     panneVehicule: string,
-    employeId: number
 }
 interface IPrams {
     vehiculeId?: string
@@ -20,9 +20,9 @@ export default function Page({ params }: { params: IPrams }) {
             marque: "",
             modele: "",
             typeBus: "",
+            immatriculation: "",
             capacite: 0,
             panneVehicule: "",
-            employeId: 0
         }
     )
     const [chauffeur, setChauffeur] = useState<any>(null)
@@ -52,15 +52,16 @@ export default function Page({ params }: { params: IPrams }) {
     return (
         <div className="p-10 w-full">
             <div className=" py-4 flex justify-between items-start mb-2">
-                <h1 className="lowercase text-sm  text-gray-900"><Link className="hover:text-blue-600" href={"/dashboard/admin/vehicles"}>Vehicules</Link> / <Link className="hover:text-blue-600" href="#">Fiche technique </Link></h1>
+                <h1 className="lowercase text-sm  text-gray-900"><Link className="hover:text-blue-600" href={"/dashboard/admin/vehicles"}>Vehicules</Link> / <Link className="hover:text-blue-600 font-semibold" href="#">Fiche technique </Link></h1>
             </div>
             <div className="">
-                <h2 className="p-4 rounded-md font-bold text-xl bg-white uppercase border-b shadow-2xl border">Fiche technique</h2>
+                <h2 className="p-4 rounded-md font-bold text-xl bg-white uppercase  ">Fiche technique</h2>
 
                 <div className="mt-4">
                     <FicheTechnique item={{
                         marque: bus.marque,
                         modele: bus.modele,
+                        immatricule: bus.immatriculation,
                         typeBus: bus.typeBus,
                         capacite: bus.capacite,
                         panneVehicule: bus.panneVehicule

@@ -21,12 +21,16 @@ export default function Voyages() {
             case "view":
                 router.push(`/dashboard/admin/voyages/${val.id}`)
                 break;
+            case "list":
+                router.push(`/dashboard/admin/voyages/${val.id}/passagers`)
+                break;
             default:
                 break;
         }
     }
     return (
         <div className="p-10">
+
             <div className=" w-full">
                 <div className=" py-4 flex justify-between items-start mb-2">
                     <h1 className="text-xl text-gray-900">Voyages</h1>

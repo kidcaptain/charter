@@ -22,7 +22,7 @@ const SearchFormVoyage = () => {
     const HandlerSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         try {
-            const response = await fetch(`/api/voyages?typeVoyage=${typeVoyage}&busId=${data?.busId}&trajetId=${data?.trajetId}`, {
+            const response = await fetch(`/api/voyages?busId=${data?.busId}&trajetId=${data?.trajetId}`, {
                 method: 'GET',
                 cache: "no-store",
             })
@@ -70,11 +70,6 @@ const SearchFormVoyage = () => {
                 <form onSubmit={HandlerSubmit}>
                     <div className="flex items-end gap-2">
                         <div>
-                            <label htmlFor="" className="text-sm font-bold">Type de voyage</label> <br />
-                            <ToggleInput onEmit={handlerEmit} secondLabel="aller-retour" firstLabel="aller simple" />
-                        </div>
-
-                        <div>
                             <label htmlFor="" className="text-sm font-bold">Trajets</label>
                             <select id="trajetId" name="trajetId" onChange={handleInputChange} className="block p-2 text-sm font-bold text-gray-900 border shadow  border-gray-300  focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-green-400 ">
                                 <option></option>
@@ -110,9 +105,7 @@ const SearchFormVoyage = () => {
                                             #Id
                                         </th>
                                         <th rowSpan={1} colSpan={1} scope="row" className="border-b-2 p-2  border ">
-
                                             Date de départ
-
                                         </th>
                                         <th rowSpan={1} colSpan={1} className="border-b-2 p-2 border ">
                                             Date d&apos;arrivée
@@ -121,45 +114,31 @@ const SearchFormVoyage = () => {
                                             Places Disponible
                                         </th>
                                         <th rowSpan={1} colSpan={1} className="border-b-2 p-2 border ">
-
-                                            Type de voyage
-
-                                        </th>
-                                        <th rowSpan={1} colSpan={1} className="border-b-2 p-2 border ">
-
                                             Prix du voyage
-
                                         </th>
                                         <th>
                                             Actions
                                         </th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {datas.map((item: any, i: number) => (
                                         <tr key={i} className="border-b hover:bg-gray-200  border-gray-200 text-sm bg-gray-50  dark:border-gray-700">
                                             <th className="p-2 border ">
-                                                {i + 1}
+                                            {item.numVoyage}
                                             </th>
                                             <th className="p-2 border ">
                                                 {getDateFormat(item.dateDepart)}
-
                                             </th>
                                             <td className="p-2 border">
                                                 {getDateFormat(item.dateArrivee)}
-
                                             </td>
                                             <td className="p-2 border">
                                                 {item.placeDisponible}
                                             </td>
-                                            <td className="p-2 border ">
-                                                {item.typeVoyage}
-                                            </td>
                                             <td className="p-2 border">
                                                 {item.prixVoyage}
                                             </td>
-
                                             <td>
                                                 <Link href={`/dashboard/admin/voyages/${item.id}`} className='bg-cyan-400 p-2 text-white '>Bordereau de route</Link>
                                                 <Link href={`/dashboard/admin/voyages/${item.id}/editer`} className='bg-yellow-400 p-2 '>Editer</Link>
