@@ -1,6 +1,5 @@
 "use client"
 
-
 import Popup from "@/components/ui/popup";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -486,12 +485,12 @@ export default function Page() {
                                     <label className={classNameLabel}>Trajet</label>
                                     {((data?.trajetId && data?.trajetId != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null}
                                 </div>
-                                <select id="trajetId" name="trajetId" required onChange={(e) => { handleInputChange(e); viewArret(e.target.value) }} className={`${classNameInput} uppercase ${((data?.trajetId && data?.trajetId != "")) ? "bg-green-50 ring-green-400/30 ring-4" : "bg-gray-50"}`} >
+                                {/* <select id="trajetId" name="trajetId" required onChange={(e) => { handleInputChange(e); viewArret(e.target.value) }} className={`${classNameInput} uppercase ${((data?.trajetId && data?.trajetId != "")) ? "bg-green-50 ring-green-400/30 ring-4" : "bg-gray-50"}`} >
                                     <option></option>
                                     {trajet.map((item: any, i: number) => (
                                         <option key={i} value={JSON.stringify({ id: item.id, prix: item.prix })}>N°0{item.id} ({item.lieuDepart} - {item.lieuArrivee} {JSON.parse(item.arrets).length == 0 ? "" : JSON.parse(item.arrets).map((i: any, k: number) => `- ${i.nom} `)}) {JSON.parse(item.arrets).length == 0 ? "Aucun arrêt" : ""}</option>
                                     ))}
-                                </select>
+                                </select> */}
                             </div>
                             <div className="mt-4">
                                 <div className="flex gap-1 mb-1 items-center">
