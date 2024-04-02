@@ -288,7 +288,7 @@ export default function Page({ params }: { params: IPrams }) {
                                 <select id="trajetId" value={JSON.stringify({ id: data?.trajetId, prix: data?.prix })} name="trajetId" onChange={handleInputChange} className="block w-full p-2 uppercase text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50  focus-visible:ring-blue-400 ">
                                     <option></option>
                                     {trajet.map((item: any, i: number) => (
-                                        <option key={i} value={JSON.stringify({ id: item.id, prix: item.prix })}>N°0{item.id} ({item.lieuDepart} - {item.lieuArrivee} {JSON.parse(item.arrets).length == 0 ? "" : JSON.parse(item.arrets).map((i: any, k: number) => `- ${i.nom} `)}) {JSON.parse(item.arrets).length == 0 ? "Aucun arrêt" : ""}</option>
+                                        <option key={i} value={JSON.stringify({ id: item.id, prix: item.prix })}>N°0{item.id} ({item.lieuDepart} - {item.lieuArrivee}</option>
                                     ))}
                                 </select>
                             </div>
