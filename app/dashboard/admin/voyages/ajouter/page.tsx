@@ -303,7 +303,7 @@ export default function Page() {
         }
 
 
-        if (messageError == "" && bol && bol3) {
+        if (messageError == "" && bol && bol3 && data.chauffeurId) {
             const voyage = {
                 agenceId: agence.id,
                 dateDepart: data.dateDepart,
@@ -312,7 +312,7 @@ export default function Page() {
                 trajetId: trajet.id,
                 prixVoyage: trajet.prix,
                 placeDisponible: array[1],
-                chauffeurId: data.chauffeurId ?? 0,
+                chauffeurId: data.chauffeurId,
                 heureDepart: data.heureDepart,
                 numVoyage: numVoyage,
                 placesOccupees: 0
