@@ -8,7 +8,7 @@ import Popup from "@/components/ui/popup";
 import svg from "@/public/images/valide.svg"
 import Image from "next/image";
 import { getDateFormat } from "@/functions/actionsClient";
-import ProgressBar from "@/components/ui/progressbar";
+
 import Link from "next/link";
 
 interface IPrams {
