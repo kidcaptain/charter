@@ -173,7 +173,7 @@ const EditFormVehicule = (props: { childToParent: Function, id?: string }) => {
 
     return (
         <div>
-            <h2 className="text-2xl my-4 uppercase">BUS N°{value?.id} CODE D'immatriculation {bus?.immatriculation}</h2>
+            <h2 className="text-2xl my-4 uppercase">BUS N°{value?.id} CODE D&apos;immatriculation {bus?.immatriculation}</h2>
             <div className="h-full flex justify-center gap-2">
                 <form onSubmit={HandlerSubmit} className="min-w-96 h-full bg-white rounded-md shadow-2xl overflow-hidden">
                     <h2 className="p-4 bg-blue-500 font-bold text-left text-white uppercase">
@@ -181,7 +181,7 @@ const EditFormVehicule = (props: { childToParent: Function, id?: string }) => {
                     </h2>
                     <div className="p-4">
                         <div className="mt-2">
-                            <label className="  text-sm font-bold text-gray-800 dark:text-white">Code d'immatriculation</label>
+                            <label className="  text-sm font-bold text-gray-800 dark:text-white">Code d&apos;immatriculation</label>
                             <input type="text" name="immatriculation" onChange={handleInputChange} value={value?.immatriculation ?? ""} id="immatriculation" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         </div>
                         <div className="mt-2">

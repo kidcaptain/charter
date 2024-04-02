@@ -64,7 +64,7 @@ class ComponentToPrint extends React.Component<DataFicheTechnique> {
                     <table className="w-full text-xs font-bold text-gray-900">
                         <tbody>
                             <tr className="">
-                                <td className="border border-stone-700 uppercase p-2">COde d'immatriculation</td>
+                                <td className="border border-stone-700 uppercase p-2">COde d&apos;immatriculation</td>
                                 <td className="border text-gray-600 border-stone-700 uppercase p-2">{this.props.immatricule}</td>
                             </tr>
                             <tr className="">

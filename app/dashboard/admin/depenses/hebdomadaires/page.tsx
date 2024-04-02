@@ -272,7 +272,7 @@ export default function Page() {
                                         </select>
                                     </div>
                                 <div className="block">
-                                    <label className=" block text-sm font-bold text-gray-900" htmlFor="">Chef d'agence</label>
+                                    <label className=" block text-sm font-bold text-gray-900" htmlFor="">Chef d&apos;agence</label>
                                     <select name="" id="" className="border p-1.5 uppercase" onChange={e => setChef(e.target.value)}>
                                         <option value="" ></option>
                                         {chefs.map((item: any, index: number) => (
