@@ -47,7 +47,7 @@ export default function Page() {
     const [validator, setValidator] = useState<boolean>(false);
     const [trajItem, setTrajItem] = useState<any>()
     const hours = new Date().getHours();
-    const minute = new Date().getMinutes();
+    const minutes = new Date().getMinutes();
 
     const [popupData, setPopupData] = useState<{ message: string, title?: string, color: string }>({ message: "", title: "", color: "" })
     const [value, setValue] = useState<{
@@ -97,7 +97,7 @@ export default function Page() {
         setMethod(val)
     }
     const validationTab = () => {
-        if(typePaiement != ""){
+        if (typePaiement != "") {
             setTab(false)
             setTab2(false)
             setTab3(true)
@@ -385,13 +385,22 @@ export default function Page() {
     const HandlerItem = (value: any) => {
         setItem(value)
     }
-    const compareDate = (value: string) => {
+    const compareDate = (value: string, hour: number, minute: number) => {
         const date = new Date(value);
         const date2 = new Date();
+    
         if (date.getFullYear() >= date2.getFullYear()) {
             if (date.getMonth() >= date2.getMonth()) {
                 if (date.getDate() >= date2.getDate()) {
-                    return true
+                    if (date.getDate() == date2.getDate()) {
+                        if (hour >= hours) {
+                            if (minute >= minutes) {
+                                return true
+                            }
+                        }
+                    }else{
+                        return true
+                    }
                 } else {
                     return false
                 }
@@ -764,9 +773,9 @@ export default function Page() {
                         {
                             !onSearched ? (
                                 <ul className=" grid grid-cols-3 items-start gap-2 relative h-full ">
-                                    {voyages.map((item: any, i: number) => ((item.voyages?.placeDisponible != item.voyages?.placesOccupees && parseInt(`${item.voyages?.heureDepart[0]}${item.voyages?.heureDepart[1]}`) > hours &&  parseInt(`${item.voyages?.heureDepart[3]}${item.voyages?.heureDepart[4]}`) > minute &&   compareDate(getDateFormat(item.voyages?.dateDepart)) && item.voyages?.ready != "oui" && item.trajet && item.bus && item.voyages.chauffeurId != 0) ?
+                                    {voyages.map((item: any, i: number) => ((item.voyages?.placeDisponible != item.voyages?.placesOccupees && compareDate(getDateFormat(item.voyages?.dateDepart), parseInt(`${item.voyages?.heureDepart[0]}${item.voyages?.heureDepart[1]}`), parseInt(`${item.voyages?.heureDepart[3]}${item.voyages?.heureDepart[4]}`)) && item.voyages?.ready != "oui" && item.trajet && item.bus && item.voyages.chauffeurId != 0) ?
                                         <li key={i} className="cursor-pointer rounded-xl shadow-xl border" >
-                                            <CardVoyage bus={item.bus.immatriculation} isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={""} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.voyages?.heureDepart} placeDisponible={parseInt(item.voyages?.placeDisponible) - parseInt(item.voyages?.placesOccupees) } />
+                                            <CardVoyage bus={item.bus.immatriculation} isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={""} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.voyages?.heureDepart} placeDisponible={parseInt(item.voyages?.placeDisponible) - parseInt(item.voyages?.placesOccupees)} />
                                             <hr className={`border-dashed border-2  border-spacing-4 ${item.bus.typeBus == "vip" ? 'border-yellow-400' : 'border-slate-700'} `} />
                                             <div className="p-4 text-sm">
                                                 <button className="text-blue-500 font-semibold" onClick={() => { setbolTrajet(true); setTrajItem(item.trajet); viewArret(JSON.stringify({ id: item.trajet.id, prix: item.trajet.prix })) }}>Afficher le trajet</button>
@@ -794,12 +803,12 @@ export default function Page() {
                                 </ul>
                             ) : (
                                 <ul className=" grid grid-cols-3 gap-8 relative h-full ">
-                                    {voyagesResult.map((item: any, i: number) => ((item.voyages?.placeDisponible != item.voyages?.placesOccupees && parseInt(`${item.voyages?.heureDepart[0]}${item.voyages?.heureDepart[1]}`) > hours &&  parseInt(`${item.voyages?.heureDepart[2]}${item.voyages?.heureDepart[3]}`) > minute &&   compareDate(getDateFormat(item.voyages?.dateDepart)) && item.voyages?.ready != "oui" && item.trajet && item.bus && item.voyages.chauffeurId != 0) ?
+                                    {voyagesResult.map((item: any, i: number) => (item.voyages?.placeDisponible != item.voyages?.placesOccupees && compareDate(getDateFormat(item.voyages?.dateDepart), parseInt(`${item.voyages?.heureDepart[0]}${item.voyages?.heureDepart[1]}`), parseInt(`${item.voyages?.heureDepart[3]}${item.voyages?.heureDepart[4]}`)) && item.voyages?.ready != "oui" && item.trajet && item.bus && item.voyages.chauffeurId != 0 ?
                                         <li key={i} className="cursor-pointer shadow-xl rounded-xl border" >
-                                            <CardVoyage bus={item.bus.immatriculation} isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={""} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.voyages?.heureDepart} placeDisponible={parseInt(item.voyages?.placeDisponible) - parseInt(item.voyages?.placesOccupees) }  />
+                                            <CardVoyage bus={item.bus.immatriculation} isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={""} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.voyages?.heureDepart} placeDisponible={parseInt(item.voyages?.placeDisponible) - parseInt(item.voyages?.placesOccupees)} />
                                             <hr className={`border-dashed border-2  border-spacing-4 ${item.bus.typeBus == "vip" ? 'border-yellow-400' : 'border-slate-700'} `} />
                                             <div className="p-4 text-sm">
-                                            <button className="text-blue-500 font-semibold" onClick={() => { setbolTrajet(true); setTrajItem(item.trajet); viewArret(JSON.stringify({ id: item.trajet.id, prix: item.trajet.prix })) }}>Afficher le trajet</button>
+                                                <button className="text-blue-500 font-semibold" onClick={() => { setbolTrajet(true); setTrajItem(item.trajet); viewArret(JSON.stringify({ id: item.trajet.id, prix: item.trajet.prix })) }}>Afficher le trajet</button>
                                                 <h4 className="my-2 text-xl text-stone-400">
                                                     Selectionner l&apos;arrêts
                                                 </h4>
