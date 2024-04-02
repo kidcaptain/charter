@@ -282,7 +282,7 @@ const PlanningChauffeur = (props: { id: string | undefined }) => {
                     emptyData() : (
                         <>
                             <div className="p-4 bg-white">
-                                <button className="bg-blue-500 rounded-sm  text-sm p-2 hover:bg-blue-600" onClick={ev => setDates(new DayPilot.Date.today())}>Date d&apos;aujourd'hui</button>
+                                <button className="bg-blue-500 rounded-sm  text-sm p-2 hover:bg-blue-600" onClick={ev => setDates(new DayPilot.Date.today())}>Date d&apos;aujourd&apos;hui</button>
                                 <button className="bg-blue-500 rounded-sm  mx-2 text-sm p-2 hover:bg-blue-600" onClick={next}>Semaine suivante</button>
                             </div>
 
