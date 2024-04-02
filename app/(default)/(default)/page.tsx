@@ -46,7 +46,7 @@ export default function Page() {
         </div>
       </div>
       <div className="mx-auto relative z-10 max-w-4xl ">
-        <h1 className='text-center text-5xl font-bold my-4 '><span className='text-white'>Charter</span> <span className='text-blue-500'>Express</span> <span className='text-white'>Voyages</span></h1>
+        <h1 className='text-center text-5xl font-bold my-4 '><span className='text-white'>Charter</span> <span className='text-white'>Express</span> <span className='text-white'>Voyages</span></h1>
         <div className='grid grid-cols-2 items-start justify-between m-auto bg-white shadow-2xl border-blue-500   border-2  rounded-md overflow-hidden'>
           <div className='col-span-1 '>
             <Image
