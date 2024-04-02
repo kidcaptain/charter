@@ -70,34 +70,39 @@ export default function Page({ params }: { params: IPrams }) {
                         const dates1 = new Date(i.dateDepart);
                         const dates2 = new Date(data.dateDepart);
 
-                        if (dates1.getDate() == dates2.getDate() && (dates1.getMonth() + 1) == (dates2.getMonth() + 1) && dates1.getFullYear() == dates2.getFullYear()) {
-                            if (i.heureArrivee != data?.heureDepart && parseInt(i.busId) == parseInt(data.busId)) {
-                                bols = false;
-                                let dateA = `${i.heureArrivee}`;
-                                let dateD = `${data?.heureDepart}`;
-                                if (parseInt(`${dateA[0]}${dateA[1]}`) <= parseInt(`${dateD[0]}${dateD[1]}`)) {
-                                    bols = true;
-                                } else {
+                        if (data.numVoyage == i.numVoyage) {
+                            bol3 = true;
+                            bols = true;
+                        }else{
+                            if (dates1.getDate() == dates2.getDate() && (dates1.getMonth() + 1) == (dates2.getMonth() + 1) && dates1.getFullYear() == dates2.getFullYear()) {
+                                if (i.heureArrivee != data?.heureDepart && parseInt(i.busId) == parseInt(data.busId)) {
                                     bols = false;
-                                }
-                            } else {
-                                bols = true;
-                            }
-                            if (i.heureArrivee != data?.heureDepart && parseInt(i.chauffeurId) == parseInt(data?.chauffeurId)) {
-                                bol3 = false;
-                                let dateA = `${i.heureArrivee}`;
-                                let dateD = `${data?.heureDepart}`;
-                                if (parseInt(`${dateA[0]}${dateA[1]}`) <= parseInt(`${dateD[0]}${dateD[1]}`)) {
-                                    bol3 = true;
+                                    let dateA = `${i.heureArrivee}`;
+                                    let dateD = `${data?.heureDepart}`;
+                                    if (parseInt(`${dateA[0]}${dateA[1]}`) <= parseInt(`${dateD[0]}${dateD[1]}`)) {
+                                        bols = true;
+                                    } else {
+                                        bols = false;
+                                    }
                                 } else {
+                                    bols = true;
+                                }
+                                if (i.heureArrivee != data?.heureDepart && parseInt(i.chauffeurId) == parseInt(data?.chauffeurId)) {
                                     bol3 = false;
+                                    let dateA = `${i.heureArrivee}`;
+                                    let dateD = `${data?.heureDepart}`;
+                                    if (parseInt(`${dateA[0]}${dateA[1]}`) <= parseInt(`${dateD[0]}${dateD[1]}`)) {
+                                        bol3 = true;
+                                    } else {
+                                        bol3 = false;
+                                    }
+                                } else {
+                                    bol3 = true;
                                 }
                             } else {
                                 bol3 = true;
+                                bols = true;
                             }
-                        } else {
-                            bol3 = true;
-                            bols = true;
                         }
                     }
                 })
@@ -288,7 +293,7 @@ export default function Page({ params }: { params: IPrams }) {
                                 <select id="trajetId" value={JSON.stringify({ id: data?.trajetId, prix: data?.prix })} name="trajetId" onChange={handleInputChange} className="block w-full p-2 uppercase text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50  focus-visible:ring-blue-400 ">
                                     <option></option>
                                     {trajet.map((item: any, i: number) => (
-                                        <option key={i} value={JSON.stringify({ id: item.id, prix: item.prix })}>N°0{item.id} ({item.lieuDepart} - {item.lieuArrivee}</option>
+                                        <option key={i} value={JSON.stringify({ id: item.id, prix: item.prix })}>N°0{item.id} ({item.lieuDepart} - {item.lieuArrivee} </option>
                                     ))}
                                 </select>
                             </div>
