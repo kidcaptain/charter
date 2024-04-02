@@ -5,6 +5,7 @@ import { getDateFormat } from "@/functions/actionsClient"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import HelpPopup from "@/components/ui/helpPopup"
+import Link from "next/link"
 
 interface IPrams {
     vehiculeId?: string
@@ -321,7 +322,9 @@ export default function Page() {
 
     return (
         <div className="p-10 w-full">
-
+  <div className=" py-4 flex lowercase text-sm justify-between items-start mb-2">
+                <h1 className=" text-gray-900"><Link className="hover:text-blue-600" href={"/dashboard/admin/depenses"}>Dépenses</Link> / <Link className="hover:text-blue-600 font-semibold" href="#">Journal</Link></h1>
+            </div>
 
             <div>
                 <div className="shadow-2xl border rounded-md ">

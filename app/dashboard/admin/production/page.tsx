@@ -1,6 +1,7 @@
 "use client"
 import FicheProduction from "@/components/ui/ficheProduction"
 import { getDateFormat } from "@/functions/actionsClient"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 
@@ -414,6 +415,9 @@ export default function Page() {
 
     return (
         <div className="p-10 w-full">
+                <div className=" py-4 flex lowercase text-sm justify-between items-start mb-2">
+                <h1 className=" text-gray-900"><Link className="hover:text-blue-600" href={"/dashboard/admin/depenses"}>Dépenses</Link> / <Link className="hover:text-blue-600 font-semibold" href="#">Fiche de production</Link></h1>
+            </div>
             <div>
                 <div className="shadow-2xl border rounded-md overflow-hidden">
                     <h2 className="p-4 bg-white uppercase border-b font-bold">Production</h2>
