@@ -23,22 +23,44 @@ export const DELETE = async (req: Request, { params }: { params: { id: string } 
 
 
 export const PUT = async (req: Request, { params }: { params: { id: string } }) => {
+    const { searchParams } = new URL(req.url);
+    const immatriculation = searchParams.get("immatriculation");
     const { id } = params;
     const body = await req.json();
     const { marque, modele, typeBus, capacite, panneVehicule, horsService } = body;
     try {
-        const bus = await prisma.bus.update({
-            where: { id: parseInt(id) },
-            data: {
-                marque: marque,
-                modele: modele,
-                typeBus: typeBus,
-                capacite: parseInt(capacite),
-                panneVehicule: panneVehicule,
-                horsService: horsService
+        if (immatriculation) {
+            const existingBus = await prisma.bus.findUnique({ where: { immatriculation: immatriculation } })
+            if (existingBus) {
+              return NextResponse.json({message: "Code d'immatriculation utilisé!"});
             }
-        });
-        return NextResponse.json({ message: bus })
+            const bus = await prisma.bus.update({
+                where: { id: parseInt(id) },
+                data: {
+                    immatriculation: immatriculation,
+                    marque: marque,
+                    modele: modele,
+                    typeBus: typeBus,
+                    capacite: parseInt(capacite),
+                    panneVehicule: panneVehicule,
+                    horsService: horsService
+                }
+            });
+            return NextResponse.json({ message: bus })
+        }else{
+            const bus = await prisma.bus.update({
+                where: { id: parseInt(id) },
+                data: {
+                    marque: marque,
+                    modele: modele,
+                    typeBus: typeBus,
+                    capacite: parseInt(capacite),
+                    panneVehicule: panneVehicule,
+                    horsService: horsService
+                }
+            });
+            return NextResponse.json({ message: bus })
+        }
     } catch (error) {
         console.log(error);
         return new NextResponse(

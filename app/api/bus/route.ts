@@ -16,16 +16,21 @@ export const GET = async (req: NextRequest) => {
 
 export const POST = async (req: Request) => {
   const body = await req.json();
-  const { marque, modele, typeBus, capacite, panneVehicule } = body;
+  const { marque, immatriculation, modele, typeBus, capacite, panneVehicule } = body;
+  const existingBus = await prisma.bus.findUnique({ where: { immatriculation: immatriculation } })
+  if (existingBus) {
+    return NextResponse.json({message: "Code d'immatriculation utilisé!"});
+  }
   try {
     const bus = await prisma.bus.create({
       data: {
+        immatriculation: immatriculation,
         marque: marque,
         modele: modele,
         typeBus: typeBus,
         capacite: parseInt(capacite),
         panneVehicule: panneVehicule,
-    }
+      }
     });
     return NextResponse.json(bus)
   } catch (error) {
