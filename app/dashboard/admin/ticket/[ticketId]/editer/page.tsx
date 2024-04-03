@@ -219,43 +219,46 @@ export default function Page({ params }: { params: { ticketId: string } }) {
     }
 
     const postTicket = async (id: number, voyageId: any) => {
-
-        const date = new Date()
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
-        const day = (date.getDate()) < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
-        const hours = (date.getHours()) < 10 ? `0${date.getHours()}` : `${date.getHours()}`;
-        const minutes = (date.getMinutes()) < 10 ? `0${date.getMinutes()}` : `${date.getMinutes()}`;
-        const data = {
-            numeroSiege: parseInt(voy.placesOccupees + 1) ?? parseInt(item.voyages.placesOccupees + 1),
-            prixTicket: parseInt(`${sup}`) + parseInt(`${prixF}`),
-            voyageId: voyageId,
-            typeTicket: item?.bus?.typeBus,
-            statusTicket: "valide",
-            dateCreation: `${year}-${month}-${day}T${hours}:${minutes}`,
-            passagerId: id,
-            employeId: tick.employeId,
-            destination: `${tr.lieuDepart ?? item?.trajet?.lieuDepart} / ${dest == "" ? (tr.lieuArrivee ?? item?.trajet.lieuArrivee) : (tr.lieuArrivee ?? dest)}`,
-        }
-        // console.log(data)
-        try {
-            const res = await fetch(`/api/ticket/${params.ticketId}`, {
-                method: 'PUT', cache: 'no-store', body: JSON.stringify(data)
-            })
-            if (res.ok) {
-                const t = await res.json();
-                setNumTicket(t.id)
-                setIsReady(true)
-                if (item) {
-                    editVoyage(item.voyages, id, t.id);
-                    editVoyage2(voy, id, t.id)
-                } else {
-                    editVoyage(voy, id, t.id);
-                }
-                configPopup("Ticket payé", "green", "Reservation")
+        if (voy.placesOccupees < voy.placeDisponible || item?.voyages?.placesOccupees < item?.voyages?.placeDisponible) {
+            const date = new Date()
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
+            const day = (date.getDate()) < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
+            const hours = (date.getHours()) < 10 ? `0${date.getHours()}` : `${date.getHours()}`;
+            const minutes = (date.getMinutes()) < 10 ? `0${date.getMinutes()}` : `${date.getMinutes()}`;
+            const data = {
+                numeroSiege: parseInt(voy.placesOccupees + 1) ?? parseInt(item.voyages.placesOccupees + 1),
+                prixTicket: parseInt(`${sup}`) + parseInt(`${prixF}`),
+                voyageId: voyageId,
+                typeTicket: item?.bus?.typeBus,
+                statusTicket: "valide",
+                dateCreation: `${year}-${month}-${day}T${hours}:${minutes}`,
+                passagerId: id,
+                employeId: tick.employeId,
+                destination: `${tr.lieuDepart ?? item?.trajet?.lieuDepart} / ${dest == "" ? (tr.lieuArrivee ?? item?.trajet.lieuArrivee) : (tr.lieuArrivee ?? dest)}`,
             }
-        } catch (err) {
-            console.log(err)
+            // console.log(data)
+            try {
+                const res = await fetch(`/api/ticket/${params.ticketId}`, {
+                    method: 'PUT', cache: 'no-store', body: JSON.stringify(data)
+                })
+                if (res.ok) {
+                    const t = await res.json();
+                    setNumTicket(t.id)
+                    setIsReady(true)
+                    if (item) {
+                        editVoyage(item.voyages, id, t.id);
+                        editVoyage2(voy, id, t.id)
+                    } else {
+                        editVoyage(voy, id, t.id);
+                    }
+                    configPopup("Ticket payé", "green", "Reservation")
+                }
+            } catch (err) {
+                console.log(err)
+            }
+        } else {
+            alert("Plus de places disponibles!")
         }
 
     }
@@ -355,43 +358,44 @@ export default function Page({ params }: { params: { ticketId: string } }) {
         const year = date.getFullYear();
         const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
         const day = (date.getDate()) < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
-        if (voy.placesOccupees < voy.placeDisponible || item?.voyages?.placesOccupees < item?.voyages?.placeDisponible) {
-            if (item != null || voy) {
-                try {
-                    let datel = getDateFormat(`${value?.dateNaissance}`);
-                    const e = {
-                        nom: value?.nom.trim().toLowerCase(),
-                        prenom: value?.prenom.trim().toLowerCase(),
-                        adresse: value?.adresse.toLowerCase(),
-                        dateNaissance: datel ?? `${year}-${month}-${day}`,
-                        genre: value?.genre ?? "",
-                        telephone: value?.telephone.trim(),
-                        numCNI: value?.numCNI,
-                    }
-                    const res = await fetch('/api/passagers/' + value?.id, {
-                        method: 'PUT',
-                        body: JSON.stringify(e),
-                    })
-                    const d = await res.json()
-                    if (res.ok && d) {
-                        setPassager(d)
-                        if (item) {
-                            postTicket(value.id, item.voyages?.id)
-                            setTicket(item)
-                        }
-                        setMethod("")
-                    }
-                } catch (err) {
-                    console.log(err)
-                    configPopup("Erreur d'enregistrement veillez reessayer!!", "red", "Error d'enregistrement")
-                }
-            } else {
-                configPopup("Renseignez tout les informations!", "red", "Error d'enregistrement")
-            }
 
+        if (item != null || voy) {
+            try {
+                let datel = getDateFormat(`${value?.dateNaissance}`);
+                const e = {
+                    nom: value?.nom.trim().toLowerCase(),
+                    prenom: value?.prenom.trim().toLowerCase(),
+                    adresse: value?.adresse.toLowerCase(),
+                    dateNaissance: datel ?? `${year}-${month}-${day}`,
+                    genre: value?.genre ?? "",
+                    telephone: value?.telephone.trim(),
+                    numCNI: value?.numCNI,
+                }
+                const res = await fetch('/api/passagers/' + value?.id, {
+                    method: 'PUT',
+                    body: JSON.stringify(e),
+                })
+                const d = await res.json()
+                if (res.ok && d) {
+                    setPassager(d)
+
+                    if (item) {
+                        postTicket(value.id, item.voyages?.id)
+                        setTicket(item)
+                    } else {
+                        postTicket(value.id, voy?.id)
+                      
+                    }
+                }
+            } catch (err) {
+                console.log(err)
+                configPopup("Erreur d'enregistrement veillez reessayer!!", "red", "Error d'enregistrement")
+            }
         } else {
-            alert("Plus de places disponibles!")
+            configPopup("Renseignez tout les informations!", "red", "Error d'enregistrement")
         }
+
+
     }
     const configPopup = (message: string, color: string, title: string) => {
         setPopupData({ message: message, color: color, title: title })
@@ -748,12 +752,12 @@ export default function Page({ params }: { params: { ticketId: string } }) {
                                                     client: `${passager?.nom} ${passager?.prenom}`,
                                                     tel: passager?.telephone,
                                                     depart: getDateFormat(ticket?.voyages?.dateDepart ?? tr.dateDepart),
-                                                    voyage: ticket?.voyages?.numVoyage ?? voy.numVoyage,
+                                                    voyage:  voy.numVoyage ?? ticket?.voyages?.numVoyage,
                                                     montant: parseInt(`${sup}`) + parseInt(`${prixF}`),
                                                     remboursement: remboursement,
                                                     caisse: `GUICHET ${session?.user?.name}`,
                                                     numticket: params.ticketId,
-                                                    bus: `${ticket?.bus?.immatriculation}`,
+                                                    bus: `${ bus?.immatriculation ?? ticket?.bus?.immatriculation}`,
                                                     trajet: `${ticket?.trajet?.lieuDepart ?? tr.lieuDepart} / ${dest == "" ? ticket?.trajet.lieuArrivee ?? tr.lieuArrivee : dest}`,
                                                     siege: voy?.placesOccupees ?? ticket?.voyages?.placesOccupees + 1
                                                 }} />
@@ -966,6 +970,24 @@ export default function Page({ params }: { params: { ticketId: string } }) {
                                         </li>
                                         <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
                                             <span>Bus:</span> <span>{bus?.immatriculation}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div className=" w-96 rounded-md border mb-4 bg-white mx-auto overflow-hidden">
+                                    <h6 className="p-4 uppercase border-b bg-blue-500  text-white font-bold">Ticket</h6>
+                                    <ul>
+                                     
+                                        <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                            <span>Numéro de Siege:</span> <span>{tick?.numeroSiege}</span>
+                                        </li>
+                                        <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                            <span>Classe:</span> <span>{tick?.typeTicket}</span>
+                                        </li>
+                                        <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                            <span>Date: </span> <span> {getDateFormat(tick?.dateCreation)}</span>
+                                        </li>
+                                        <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                            <span>Destination:</span> <span>{tick?.destination}</span>
                                         </li>
                                     </ul>
                                 </div>

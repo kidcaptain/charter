@@ -387,7 +387,6 @@ export default function Page() {
     const compareDate = (value: string, hour: number, minute: number) => {
         const date = new Date(value);
         const date2 = new Date();
-
         if (date.getFullYear() >= date2.getFullYear()) {
             if (date.getMonth() >= date2.getMonth()) {
                 if (date.getDate() >= date2.getDate()) {
