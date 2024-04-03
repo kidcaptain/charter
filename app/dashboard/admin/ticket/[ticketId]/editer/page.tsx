@@ -47,7 +47,7 @@ export default function Page({ params }: { params: { ticketId: string } }) {
     const [validator, setValidator] = useState<boolean>(false);
     const [trajItem, setTrajItem] = useState<any>()
     const hours = new Date().getHours();
-    const minute = new Date().getMinutes();
+    const minutes = new Date().getMinutes();
 
     const [popupData, setPopupData] = useState<{ message: string, title?: string, color: string }>({ message: "", title: "", color: "" })
     const [value, setValue] = useState<{
@@ -403,13 +403,29 @@ export default function Page({ params }: { params: { ticketId: string } }) {
     const HandlerItem = (value: any) => {
         setItem(value)
     }
-    const compareDate = (value: string) => {
+    const compareDate = (value: string, hour: number, minute: number) => {
         const date = new Date(value);
         const date2 = new Date();
         if (date.getFullYear() >= date2.getFullYear()) {
             if (date.getMonth() >= date2.getMonth()) {
                 if (date.getDate() >= date2.getDate()) {
-                    return true
+                    if (date.getDate() == date2.getDate()) {
+                        if (hour >= hours) {
+                            if (hour == hours) {
+                                if (minute >= minutes) {
+                                    return true
+                                } else {
+                                    return false
+                                }
+                            } else {
+                                return true
+                            }
+                        } else {
+                            return false
+                        }
+                    } else {
+                        return true
+                    }
                 } else {
                     return false
                 }
@@ -420,6 +436,7 @@ export default function Page({ params }: { params: { ticketId: string } }) {
             return false
         }
     }
+
     const HandlerChange = (value: any) => {
         // console.log(value)
         setIsOpenModal(value.val);
@@ -759,7 +776,7 @@ export default function Page({ params }: { params: { ticketId: string } }) {
                                 </div>
                                 <button type="button" onClick={() => { setTab(true); }} className="p-2 px-3 text-sm rounded-md hover:bg-blue-400 hover:text-white border border-blue-500 text-blue-500 font-semibold">Ne pas modifier le voyage</button>
                                 <ul className="mt-8 grid grid-cols-3 items-start gap-2 relative h-full ">
-                                    {voyages.map((item: any, i: number) => ((item.voyages?.placeDisponible > item.voyages?.placesOccupees && parseInt(`${item.voyages?.heureDepart[0]}${item.voyages?.heureDepart[1]}`) > hours && compareDate(getDateFormat(item.voyages?.dateDepart)) && item.voyages?.ready != "oui" && item.trajet && item.bus && item.voyages?.chauffeurId != 0) ?
+                                    {voyages.map((item: any, i: number) => ((item.voyages?.placeDisponible != item.voyages?.placesOccupees && compareDate(getDateFormat(item.voyages?.dateDepart), parseInt(`${item.voyages?.heureDepart[0]}${item.voyages?.heureDepart[1]}`), parseInt(`${item.voyages?.heureDepart[3]}${item.voyages?.heureDepart[4]}`)) && item.voyages?.ready != "oui" && item.trajet && item.bus && item.voyages.chauffeurId != 0) ?
                                         <li key={i} className="cursor-pointer rounded-xl shadow-xl border" >
                                             <CardVoyage bus={item.bus.immatriculation} isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={""} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.voyages?.heureDepart} placeDisponible={parseInt(item.voyages?.placeDisponible) - parseInt(item.voyages?.placesOccupees)} />
                                             <hr className={`border-dashed border-2  border-spacing-4 ${item.bus.typeBus == "vip" ? 'border-yellow-400' : 'border-slate-700'} `} />

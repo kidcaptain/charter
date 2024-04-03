@@ -40,13 +40,32 @@ const VoyageTable = (props: { childToParent: Function }) => {
         { action: "edit", text: "Editer" },
         { action: "delete", text: "Supprimer" },
     ]
-    const compareDate = (value: string) => {
+    const hours = new Date().getHours();
+    const minutes = new Date().getMinutes();
+
+    const compareDate = (value: string, hour: number, minute: number) => {
         const date = new Date(value);
         const date2 = new Date();
         if (date.getFullYear() >= date2.getFullYear()) {
             if (date.getMonth() >= date2.getMonth()) {
                 if (date.getDate() >= date2.getDate()) {
-                    return true
+                    if (date.getDate() == date2.getDate()) {
+                        if (hour >= hours) {
+                            if (hour == hours) {
+                                if (minute >= minutes) {
+                                    return true
+                                } else {
+                                    return false
+                                }
+                            } else {
+                                return true
+                            }
+                        } else {
+                            return false
+                        }
+                    } else {
+                        return true
+                    }
                 } else {
                     return false
                 }
@@ -57,6 +76,7 @@ const VoyageTable = (props: { childToParent: Function }) => {
             return false
         }
     }
+
     const viewArret = (val: string, prix: number) => {
         if (val != "") {
             setArrets(JSON.parse(val));
@@ -259,7 +279,7 @@ const VoyageTable = (props: { childToParent: Function }) => {
     const list = (str: string) => {
         props.childToParent({ id: str, action: "list" })
     }
-    const classVoyage = (numb: number, str: string, date: string) => {
+    const classVoyage = (numb: number, str: string, date: string, hour: number, minute: number, total: number) => {
         const dates = new Date();
         const year = dates.getFullYear();
         const month = (dates.getMonth() + 1) < 10 ? `0${dates.getMonth() + 1}` : `${dates.getMonth() + 1}`;
@@ -268,10 +288,10 @@ const VoyageTable = (props: { childToParent: Function }) => {
         const year2 = dates2.getFullYear();
         const month2 = (dates2.getMonth() + 1) < 10 ? `0${dates2.getMonth() + 1}` : `${dates2.getMonth() + 1}`;
         const day2 = (dates2.getDate()) < 10 ? `0${dates2.getDate()}` : `${dates2.getDate()}`;
-
-        if (numb == 0 && (str == "non" || str == "")) {
+  
+        if (numb == total && (str == "non" || str == "")) {
             return `border-b  text-sm  bg-cyan-100 border-cyan-300 border-b-2 hover:bg-cyan-200  `
-        } else if (numb == 0 && str == "oui") {
+        } else if (numb == total && str == "oui") {
             return "cursor-not-allowed border-b text-sm  bg-lime-200 border-lime-300 border-b-2 hover:bg-lime-300"
         } else if ((year >= year2 && month >= month2 && day > day2)) {
             return `bg-gray-50 border-b border-gray-200 text-sm   cursor-pointer hover:bg-gray-200 `
@@ -348,7 +368,7 @@ const VoyageTable = (props: { childToParent: Function }) => {
                     <tbody>
                         {voyages.map((item: any, i: number) => {
                             return (
-                                <tr key={i} title={`${item.voyages?.placeDisponible == 0 ? 'Plein' : ''}`} className={"relative" + classVoyage(item.voyages?.placeDisponible, item.voyages?.ready, getDateFormat(item.voyages?.dateDepart))}>
+                                <tr key={i} title={`${item.voyages?.placeDisponible == 0 ? 'Plein' : ''}`} className={"relative" + classVoyage(item.voyages?.placesOccupees, item.voyages?.ready, getDateFormat(item.voyages?.dateDepart), parseInt(`${item.voyages?.heureDepart[0]}${item.voyages?.heureDepart[1]}`), parseInt(`${item.voyages?.heureDepart[3]}${item.voyages?.heureDepart[4]}`), item.voyages?.placeDisponible)}>
 
                                     <th className="p-1 px-2 border ">
                                         {item.voyages?.numVoyage}
@@ -388,7 +408,7 @@ const VoyageTable = (props: { childToParent: Function }) => {
                                         <button type="button" onClick={() => } className='bg-cyan-400 text-xs hover:bg-cyan-500 p-1 px-2 text-white '>Bordereau de route</button>
                                         <button type="button" onClick={() => } className='bg-yellow-400 text-xs p-1 px-2 hover:bg-yellow-500'>Editer</button> */}
                                         {
-                                            item.voyages?.ready == "non" && compareDate(getDateFormat(item.voyages?.dateDepart)) ? (
+                                            item.voyages?.ready == "non" && compareDate(getDateFormat(item.voyages?.dateDepart), parseInt(`${item.voyages?.heureDepart[0]}${item.voyages?.heureDepart[1]}`), parseInt(`${item.voyages?.heureDepart[3]}${item.voyages?.heureDepart[4]}`)) ? (
                                                 <DropDown left='40' array={actionsVoyageConfirmer} onEmit={(action: string) => {
                                                     switch (action) {
                                                         case "delete":
@@ -416,7 +436,7 @@ const VoyageTable = (props: { childToParent: Function }) => {
                                                 }} />
                                             ) : null}
                                         {
-                                            item.voyages?.ready == "non" && !compareDate(getDateFormat(item.voyages?.dateDepart)) ? (
+                                            item.voyages?.ready == "non" && !compareDate(getDateFormat(item.voyages?.dateDepart), parseInt(`${item.voyages?.heureDepart[0]}${item.voyages?.heureDepart[1]}`), parseInt(`${item.voyages?.heureDepart[3]}${item.voyages?.heureDepart[4]}`)) ? (
                                                 <DropDown left='40' array={actionsVoyage} onEmit={(action: string) => {
                                                     switch (action) {
                                                         case "delete":
@@ -446,7 +466,7 @@ const VoyageTable = (props: { childToParent: Function }) => {
 
 
 
-                                        {item.voyages?.ready == "oui" && compareDate(getDateFormat(item.voyages?.dateDepart)) ? (
+                                        {item.voyages?.ready == "oui" && compareDate(getDateFormat(item.voyages?.dateDepart), parseInt(`${item.voyages?.heureDepart[0]}${item.voyages?.heureDepart[1]}`), parseInt(`${item.voyages?.heureDepart[3]}${item.voyages?.heureDepart[4]}`)) ? (
                                             <DropDown left='40' array={actionsVoyageAnnule} onEmit={(action: string) => {
                                                 switch (action) {
                                                     case "delete":
@@ -473,7 +493,7 @@ const VoyageTable = (props: { childToParent: Function }) => {
                                                 }
                                             }} />
                                         ) : null}
-                                        {item.voyages?.ready == "oui" && !compareDate(getDateFormat(item.voyages?.dateDepart)) ? (
+                                        {item.voyages?.ready == "oui" && !compareDate(getDateFormat(item.voyages?.dateDepart), parseInt(`${item.voyages?.heureDepart[0]}${item.voyages?.heureDepart[1]}`), parseInt(`${item.voyages?.heureDepart[3]}${item.voyages?.heureDepart[4]}`)) ? (
                                             <DropDown left='40' array={actionsVoyageAnnule} onEmit={(action: string) => {
                                                 switch (action) {
                                                     case "delete":
