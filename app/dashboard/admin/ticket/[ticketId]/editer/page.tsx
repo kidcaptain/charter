@@ -108,8 +108,34 @@ export default function Page({ params }: { params: { ticketId: string } }) {
             return { ...oldValue, [target.name]: value }
         })
     }
-    
-    const editVoyage = async (item: any, id: number) => {
+    const postReservation = async (id: number, voyageId: number, agenceId: number) => {
+        const date = new Date()
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
+        const day = (date.getDate()) < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
+        const data = {
+            passagerId: id,
+            voyageId: voyageId,
+            agenceId: agenceId,
+            dateReservation: `${year}-${month}-${day}`,
+            statutReservation: "en attente",
+            avance: avance,
+            dateConfirmation: dateConfirmation
+        }
+        try {
+            const res = await fetch(`/api/reservations`, {
+                method: 'POST', cache: 'no-store', body: JSON.stringify(data)
+            })
+            if (res.ok) {
+                // editVoyage(item.voyages);
+                setReste(0)
+                configPopup("Reservation effectuée", "blue", "Reservation")
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    const editVoyage = async (item: any, id: number, idT: number) => {
 
         const voyageData = {
             dateDepart: getDateFormat(item.dateDepart),
@@ -132,13 +158,13 @@ export default function Page({ params }: { params: { ticketId: string } }) {
             })
             if (res.ok) {
                 const d = await res.json();
-                postLigneRecette(d.message, id)
+                postLigneRecette(d.message, id, idT)
             }
         } catch (error) {
             console.log(error)
         }
     }
-    const editVoyage2 = async (item: any, id: number) => {
+    const editVoyage2 = async (item: any, id: number, idT: number) => {
 
         const voyageData = {
             dateDepart: getDateFormat(item.dateDepart),
@@ -161,7 +187,7 @@ export default function Page({ params }: { params: { ticketId: string } }) {
             })
             if (res.ok) {
                 const d = await res.json();
-                postLigneRecette(d.message, id)
+                postLigneRecette(d.message, id, idT)
             }
         } catch (error) {
             console.log(error)
@@ -209,7 +235,7 @@ export default function Page({ params }: { params: { ticketId: string } }) {
             dateCreation: `${year}-${month}-${day}T${hours}:${minutes}`,
             passagerId: id,
             employeId: tick.employeId,
-            destination: `${tr.lieuDepart ?? ticket?.trajet?.lieuDepart} / ${dest == "" ? tr.lieuArrivee ?? ticket?.trajet.lieuArrivee : tr.lieuArrivee ?? dest}`,
+            destination: `${tr.lieuDepart ?? item?.trajet?.lieuDepart} / ${dest == "" ? (tr.lieuArrivee ?? item?.trajet.lieuArrivee ): (tr.lieuArrivee ?? dest)}`,
         }
         // console.log(data)
         try {
@@ -221,10 +247,10 @@ export default function Page({ params }: { params: { ticketId: string } }) {
                 setNumTicket(t.id)
                 setIsReady(true)
                 if (item) {
-                    editVoyage(item.voyages, id);
-                    editVoyage2(voy, id)
+                    editVoyage(item.voyages, id, t.id);
+                    editVoyage2(voy, id, t.id)
                 } else {
-                    editVoyage(voy, id);
+                    editVoyage(voy, id, t.id);
                 }
                 configPopup("Ticket payé", "green", "Reservation")
             }
@@ -233,7 +259,7 @@ export default function Page({ params }: { params: { ticketId: string } }) {
         }
 
     }
-    const postLigneRecette = async (voyage: any, id: number) => {
+    const postLigneRecette = async (voyage: any, id: number, idT: number) => {
         const date = new Date()
         const year = date.getFullYear();
         const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
@@ -270,21 +296,21 @@ export default function Page({ params }: { params: { ticketId: string } }) {
                     method: 'PUT', cache: 'no-store', body: JSON.stringify(updateData)
                 })
                 if (resupdate.ok) {
-                    postRecette(voyage, id)
+                    postRecette(voyage, id, idT)
                 }
             } else {
                 const respost = await fetch(`/api/lignerecette`, {
                     method: 'POST', cache: 'no-store', body: JSON.stringify(data)
                 })
                 if (respost.ok) {
-                    postRecette(voyage, id)
+                    postRecette(voyage, id, idT)
                 }
             }
         } catch (err) {
             console.log(err)
         }
     }
-    const postRecette = async (voyage: any, id: number) => {
+    const postRecette = async (voyage: any, id: number, idT: number) => {
         const date = new Date()
         const year = date.getFullYear();
         const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
@@ -307,7 +333,8 @@ export default function Page({ params }: { params: { ticketId: string } }) {
             agenceId: voyage.agenceId,
             remboursement: remboursement,
             passagerId: id,
-            voyageId: voyage.id
+            voyageId: voyage.id,
+            ticketId: idT
         }
 
         try {
@@ -576,19 +603,19 @@ export default function Page({ params }: { params: { ticketId: string } }) {
     const reset = () => {
         setOnsearched(false);
     }
-    const [pas, setPas] = useState<any>();
 
     const checkPassager = (str: string) => {
-        if (passagers.length > 0) {
-            passagers.map((e) => {
-                if (e.numCNI == str.toUpperCase()) {
-                    alert(e.numCNI)
-                    setPas(e)
-                    setTab2(true)
-                    setTab(false)
+        passagers.map((e) => {
+            if (e.numCNI == str) {
+                if (item?.bus?.typeBus != "simple") {
+                    setVipP(5000)
                 }
-            })
-        }
+                getMethod("payer")
+                setValue({ ...e })
+                setTab2(true)
+                setTab(false)
+            }
+        })
     }
     return (
         <section className="w-full p-10 h-full relative  ">
@@ -730,12 +757,12 @@ export default function Page({ params }: { params: { ticketId: string } }) {
                                             depart: getDateFormat(ticket?.voyages?.dateDepart ?? tr.dateDepart),
                                             voyage: ticket?.voyages?.numVoyage ?? voy.numVoyage,
                                             montant: parseInt(`${sup}`) + parseInt(`${prixF}`),
-                                            remboursement: 0,
+                                            remboursement: remboursement,
                                             caisse: `GUICHET ${session?.user?.name}`,
                                             numticket: params.ticketId,
                                             bus: `${ticket?.bus?.immatriculation}`,
                                             trajet: `${ticket?.trajet?.lieuDepart ?? tr.lieuDepart} / ${dest == "" ? ticket?.trajet.lieuArrivee ?? tr.lieuArrivee : dest}`,
-                                            siege: voy?.placesOccupees ?? ticket?.voyages?.placesOccupees
+                                            siege: voy?.placesOccupees ?? ticket?.voyages?.placesOccupees + 1
                                         }} />
 
 

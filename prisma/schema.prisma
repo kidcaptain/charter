@@ -220,6 +220,7 @@ model Recette {
     remboursement Int @default(0)
     passagerId    Int
     voyageId      Int
+    TicketId      Int
 }
 
 model LigneFicheRecette {

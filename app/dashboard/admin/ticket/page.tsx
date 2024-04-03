@@ -9,21 +9,10 @@ import { getDateFormat } from "@/functions/actionsClient";
 import Link from "next/link";
 
 export default function Page() {
-    const [isOpenEditForm, setIsOpenEditForm] = useState<boolean>(false);
-    const [data, setData] = useState<any>();
+
     const [ticket, setTicket] = useState<any[]>([]);
     const [voyage, setVoyage] = useState<any>();
 
-    const handleButtonClickEditForm = (val: boolean) => {
-        setIsOpenEditForm(val);
-        console.log(val)
-    }
-
-    const getItem = (val: any) => {
-        setData(val)
-    }
-
-    const [isOpenAddForm, setIsOpenAddForm] = useState<boolean>(false);
 
     const deletePassager = async (id: number, voyageId: number, passagerId: number) => {
         const a: any[] = await getPassager();
@@ -114,7 +103,6 @@ export default function Page() {
                 numVoyage: item.numVoyage,
                 placesOccupees: parseInt(item.placesOccupees) - 1,
             }
-            console.log(voyageData)
             try {
                 const res = await fetch(`/api/voyages/${item.id}`, {
                     method: 'PUT', cache: 'no-store', body: JSON.stringify(voyageData)
@@ -144,7 +132,6 @@ export default function Page() {
     };
 
     useEffect(() => {
-
         const getTickets = async () => {
             const res = await fetch(`/api/ticket`, { cache: "no-store" })
             if (!res.ok) {
@@ -157,7 +144,6 @@ export default function Page() {
             const tickets: any[] = await getTickets();
             setTicket(tickets)
         };
-
         selectTicker()
     }, [])
 

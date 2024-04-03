@@ -138,7 +138,7 @@ export default function Page() {
             console.log(err)
         }
     }
-    const editVoyage = async (item: any, id: number) => {
+    const editVoyage = async (item: any, id: number, idT: number) => {
         if (parseInt(item.placeDisponible) > parseInt(item.placesOccupees)) {
             // alert(1)
             const voyageData = {
@@ -162,7 +162,7 @@ export default function Page() {
                 })
                 if (res.ok) {
                     const d = await res.json();
-                    postLigneRecette(d.message, id)
+                    postLigneRecette(d.message, id, idT)
                 }
             } catch (error) {
                 console.log(error)
@@ -204,7 +204,7 @@ export default function Page() {
         const hours = (date.getHours()) < 10 ? `0${date.getHours()}` : `${date.getHours()}`;
         const minutes = (date.getMinutes()) < 10 ? `0${date.getMinutes()}` : `${date.getMinutes()}`;
         const data = {
-            numeroSiege: parseInt(item?.bus?.capacite) - parseInt(item?.voyages?.placeDisponible) + 1,
+            numeroSiege: item?.voyages?.placesOccupees + 1,
             prixTicket: parseInt(`${sup}`) + parseInt(`${prixF}`),
             voyageId: voyageId,
             typeTicket: item?.bus?.typeBus,
@@ -214,7 +214,7 @@ export default function Page() {
             employeId: 0,
             destination: `${item?.trajet?.lieuDepart} / ${dest == "" ? item?.trajet.lieuArrivee : dest}`,
         }
-        // console.log(data)
+        console.log(data)
         try {
             const res = await fetch(`/api/ticket`, {
                 method: 'POST', cache: 'no-store', body: JSON.stringify(data)
@@ -223,7 +223,7 @@ export default function Page() {
                 const t = await res.json();
                 setNumTicket(t.id)
                 setIsReady(true)
-                editVoyage(item.voyages, id);
+                editVoyage(item.voyages, id, t.id);
                 configPopup("Ticket payé", "green", "Reservation")
             }
         } catch (err) {
@@ -231,7 +231,7 @@ export default function Page() {
         }
 
     }
-    const postLigneRecette = async (voyage: any, id: number) => {
+    const postLigneRecette = async (voyage: any, id: number, idT: number) => {
         const date = new Date()
         const year = date.getFullYear();
         const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
@@ -264,21 +264,21 @@ export default function Page() {
                     method: 'PUT', cache: 'no-store', body: JSON.stringify(updateData)
                 })
                 if (resupdate.ok) {
-                    postRecette(voyage, id)
+                    postRecette(voyage, id, idT)
                 }
             } else {
                 const respost = await fetch(`/api/lignerecette`, {
                     method: 'POST', cache: 'no-store', body: JSON.stringify(data)
                 })
                 if (respost.ok) {
-                    postRecette(voyage, id)
+                    postRecette(voyage, id, idT)
                 }
             }
         } catch (err) {
             console.log(err)
         }
     }
-    const postRecette = async (voyage: any, id: number) => {
+    const postRecette = async (voyage: any, id: number, idTicket: number) => {
         const date = new Date()
         const year = date.getFullYear();
         const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
@@ -308,7 +308,8 @@ export default function Page() {
             agenceId: voyage.agenceId,
             remboursement: remboursement,
             passagerId: id,
-            voyageId: voyage.id
+            voyageId: voyage.id,
+            ticketId: idTicket
         }
 
         try {
@@ -382,9 +383,7 @@ export default function Page() {
             setIsOpenPopup(false)
         }, 5000);
     }
-    const HandlerItem = (value: any) => {
-        setItem(value)
-    }
+
     const compareDate = (value: string, hour: number, minute: number) => {
         const date = new Date(value);
         const date2 = new Date();
@@ -400,7 +399,7 @@ export default function Page() {
                                 } else {
                                     return false
                                 }
-                            }else{
+                            } else {
                                 return true
                             }
                         } else {
@@ -419,15 +418,7 @@ export default function Page() {
             return false
         }
     }
-    const HandlerChange = (value: any) => {
-        // console.log(value)
-        setIsOpenModal(value.val);
-        if (value.val == false && value.item != null) {
-            setBol(true)
-        } else {
-            setBol(false)
-        }
-    }
+
     const showModal = (val: boolean) => {
         setIsOpenPopup(val)
     }
@@ -436,7 +427,7 @@ export default function Page() {
             setVipP(5000)
         }
         getMethod("payer")
-        if (value?.nom && value?.prenom && value?.adresse && value?.numCNI) {
+        if (value?.nom && value?.prenom && value?.adresse && value?.numCNI && value?.telephone) {
             setTab2(true)
             setTab(false)
         } else {
@@ -456,6 +447,7 @@ export default function Page() {
             const data = await res.json();
             setPassagers(data)
         };
+        getPassagers()
         const getTrajet2 = async () => {
             const res = await fetch("/api/trajets", { cache: "no-store" })
             if (!res.ok) {
@@ -505,15 +497,6 @@ export default function Page() {
             })
             setVoyage(tab)
         }
-
-        // const getLenghtTicket = async () => {
-        //     const res = await fetch("/api/ticket", { cache: "no-store" })
-        //     if (!res.ok) {
-        //         return null
-        //     }
-        //     const data: any[] = await res.json();
-        //     setNumTicket(data.length)
-        // }
         const getTrajet = async () => {
             const res = await fetch("/api/trajets", { cache: "no-store" })
             if (!res.ok) {
@@ -538,13 +521,14 @@ export default function Page() {
     const reset = () => {
         setOnsearched(false);
     }
-    const [pas, setPas] = useState<any>();
-
     const checkPassager = (str: string) => {
         passagers.map((e) => {
-            if (e.numCNI == str.toUpperCase()) {
-               
-                setPas(e)
+            if (e.numCNI == str) {
+                if (item?.bus?.typeBus != "simple") {
+                    setVipP(5000)
+                }
+                getMethod("payer")
+                setValue({ ...e })
                 setTab2(true)
                 setTab(false)
             }
@@ -616,23 +600,23 @@ export default function Page() {
 
                                 <div className="mt-2">
                                     <label className="block mb-1 text-sm font-bold text-gray-800">Numèro de CNI <span className="text-red-500">*</span></label>
-                                    <input type="text" id="numCNI" autoComplete="off" onBlur={e => checkPassager(e.target.value)} name="numCNI" onChange={handleInputChange} aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none focus-visible:ring-blue-400" required />
+                                    <input type="text" id="numCNI" autoComplete="off" onBlur={e => checkPassager(e.target.value)} name="numCNI" onChange={handleInputChange} aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none focus-visible:ring-blue-400" />
                                 </div>
                                 <div className="mt-2">
                                     <label className={`block mb-1 text-sm  font-bold text-gray-800 ${(validator && (value?.nom == undefined)) ? "ring-2 ring-red-500" : ""}`}>Nom  <span className="text-red-500">*</span> </label>
-                                    <input type="text" required autoComplete="off" onChange={handleInputChange} placeholder="Nom" name="nom" id="nom" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
+                                    <input type="text" autoComplete="off" onChange={handleInputChange} placeholder="Nom" name="nom" id="nom" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
                                 </div>
                                 <div className="mt-2">
                                     <label className="block mb-1 text-sm font-bold text-gray-800">Prénom <span className="text-red-500">*</span></label>
-                                    <input type="text" required autoComplete="off" id="prenom" name="prenom" placeholder="Prénom" onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
+                                    <input type="text" autoComplete="off" id="prenom" name="prenom" placeholder="Prénom" onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
                                 </div>
                                 <div className="mt-2">
                                     <label className="block mb-1 text-sm font-bold text-gray-800">Adresse <span className="text-red-500">*</span></label>
-                                    <input type="text" required autoComplete="off" id="adresse" name="adresse" placeholder="Adresse" onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
+                                    <input type="text" autoComplete="off" id="adresse" name="adresse" placeholder="Adresse" onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
                                 </div>
                                 <div className="mt-2">
                                     <label className="block mb-1 text-sm font-bold text-gray-800">Numèro de téléphone <span className="text-red-500">*</span></label>
-                                    <input type="tel" id="telephone" autoComplete="off" name="telephone" onChange={handleInputChange} aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none focus-visible:ring-blue-400" placeholder="620456789" required />
+                                    <input type="tel" id="telephone" autoComplete="off" name="telephone" onChange={handleInputChange} aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none focus-visible:ring-blue-400" placeholder="620456789" />
                                 </div>
                                 <div className="mt-2">
                                     <label className="block mb-1 text-sm font-bold text-gray-800">Date de naissance</label>
@@ -705,7 +689,7 @@ export default function Page() {
                                                 <label htmlFor="typePaiement" className="block mb-1 text-sm font-medium text-gray-900 ">Type De Paiement</label>
                                                 {/* {((data?.typePaiement && data?.typePaiement != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
                                             </div>
-                                            <select name="typePaiement" required onChange={(e) => setTypePaiement(e.target.value)} autoComplete="off" className={`block w-full p-2 uppercase text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400  `} id="typePaiement">
+                                            <select name="typePaiement" onChange={(e) => setTypePaiement(e.target.value)} autoComplete="off" className={`block w-full p-2 uppercase text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400  `} id="typePaiement">
                                                 <option value="" ></option>
                                                 <option value="cash" >Cash</option>
                                                 <option value="orange money" >Orange money</option>
@@ -733,30 +717,19 @@ export default function Page() {
                                             depart: getDateFormat(ticket?.voyages?.dateDepart),
                                             voyage: `${ticket?.voyages?.numVoyage.trim() == "" ? "VOY" + ticket?.voyages?.id : ticket?.voyages?.numVoyage.trim()}`,
                                             montant: parseInt(`${sup}`) + parseInt(`${prixF}`),
-                                            remboursement: 0,
+                                            remboursement: remboursement,
                                             caisse: `GUICHET ${session?.user?.name}`,
                                             numticket: numTicket.toString(),
                                             bus: `${ticket?.bus?.immatriculation}`,
                                             trajet: `${ticket?.trajet?.lieuDepart} / ${dest == "" ? ticket?.trajet.lieuArrivee : dest}`,
                                             siege: ticket?.voyages?.placesOccupees + 1
                                         }} />
-                                     
+
 
                                     </div>
                                 ) : null}
                             </div>
                         </div>
-
-                        {/* <div className="flex gap-4 p-4 justify-end">
-                            {
-                                bol || !((passager != null) && (ticket != null) && method === "payer") ? (
-                                    <button type="submit" className="text-white mt-4 flex py-2 items-center gap-2 justify-center hover:shadow-md transition ease-linear hover:from-blue-700 rounded-sm bg-blue-500 text-sm from-blue-600 bg-gradient-to-t p-2">
-                                        Enregistrer
-                                    </button>
-                                ) : null
-                            }                                                
-                          
-                        </div> */}
                         <button type="reset" id="resetbtn" className="text-white mt-4 hidden opacity-0 py-2 items-center gap-2 justify-center hover:shadow-md transition ease-linear hover:from-stone-700 rounded-sm bg-stone-500 text-sm from-stone-600 bg-gradient-to-t p-2">
                             Recommencer
                         </button>
@@ -766,7 +739,7 @@ export default function Page() {
                     <div className=" h-full py-5" >
                         <div className="my-2  font-bold text-blue-400 flex items-center gap-2">
                             <span className="uppercase">Voyages disponibles </span>
-                            {/* <HelpPopup message="Cliquez sur le voyage pour le selectionner." /> */}
+                        
                         </div>
                         {
                             !onSearched ? (
@@ -853,7 +826,7 @@ export default function Page() {
                                             <span>Adresse:</span> <span>{value?.adresse}</span>
                                         </li>
                                         <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
-                                            <span>Date de naissance:</span> <span>{value?.dateNaissance}</span>
+                                            <span>Date de naissance:</span> {value?.dateNaissance ? <span>{getDateFormat(`${value?.dateNaissance}`)}</span> : null}
                                         </li>
                                         <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
                                             <span>Genre:</span> <span>{value?.genre == "m" ? "Homme" : "Femme"}</span>
@@ -861,7 +834,7 @@ export default function Page() {
                                     </ul>
                                 </div>
                                 <div className=" w-96 rounded-md border mb-4 overflow-hidden">
-                                    <h6 className="p-4 uppercase border-b bg-blue-500 text-white font-bold">Voyage</h6>
+                                    <h6 className="p-4 uppercase border-b bg-blue-500 text-white font-bold">Voyage - {item.voyages?.numVoyage}</h6>
                                     <ul>
                                         <li className="py-2 font-semibold border-b px-4 flex text-gray-700 flex-row gap-4">
                                             <span>Trajet:</span> <span>{item.trajet?.lieuDepart} - {dest == "" ? item?.trajet.lieuArrivee : dest}</span>
@@ -873,7 +846,7 @@ export default function Page() {
                                             <span>Date et heure de départ:</span> <span>Le {getDateFormat(item.voyages?.dateDepart)} à {item.voyages?.heureDepart}</span>
                                         </li>
                                         <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
-                                            <span>Bus:</span> <span>BUS-0{item.bus?.id}</span>
+                                            <span>Bus:</span> <span>BUS-0{item.bus?.immatriculation}</span>
                                         </li>
 
                                     </ul>
@@ -937,15 +910,12 @@ export default function Page() {
                                                     </div>
                                                     <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{trajItem?.lieuArrivee}</h4>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-
                     ) : null
             }
             {isOpenPopup ? (<Popup color={popupData?.color} title={popupData.title} message={popupData?.message} onShow={showModal} />) : null}

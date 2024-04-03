@@ -51,13 +51,13 @@ export default function Page({ params }: { params: IPrams }) {
             return res
         }
 
-        const getTrajet = async (id: number) => {
-            const response = await fetch(`/api/trajets/${id}`, {
+        const getRecette = async (id: number) => {
+            const response = await fetch(`/api/recette?ticketId=${id}`, {
                 method: 'GET',
                 body: JSON.stringify(data),
             })
-            const res = await response.json()
-            return res
+            const res: any[] = await response.json()
+            return res[0]
         }
 
         const getBus = async (id: number) => {
@@ -76,14 +76,12 @@ export default function Page({ params }: { params: IPrams }) {
                     body: JSON.stringify(data),
                 })
                 const a = await response.json()
-                console.log(params.ticketId)
                 if (response.ok) {
                     const tabVoyage = await getVoyage(a.voyageId);
                     const tabPassager = await getPassager(a.passagerId);
-                    const tabTrajet = await getTrajet(tabVoyage.trajetId)
+                    const tabRecette = await getRecette(a.id);
                     const tabBus = await getBus(tabVoyage.busId)
-                    setTicket({ passager: tabPassager, voyage: tabVoyage, ticket: a, trajet: tabTrajet, bus: tabBus })
-                    console.log(a)
+                    setTicket({ passager: tabPassager, voyage: tabVoyage, ticket: a, bus: tabBus, recette: tabRecette })
                 }
             } catch (error) {
                 console.log(error)
@@ -103,39 +101,25 @@ export default function Page({ params }: { params: IPrams }) {
             </div>
             <div className="mt-4 gap-4 grid items-start grid-cols-4 mx-auto ">
                 <section className={`p-4  rounded-sm col-span-full`}>
-
                     {ticket ?
                         (
                             <>
-
                                 <ComponentTicketPrint item={{
-
                                     client: `${ticket?.passager?.nom ?? ""} ${ticket?.passager?.prenom ?? ""}`,
                                     tel: ticket?.passager?.telephone ?? "Pas disponible",
                                     depart: getDateFormat(ticket?.voyage?.dateDepart ?? "Pas disponible"),
                                     voyage: `${ticket?.voyage?.numVoyage.trim() == "" ? "VOY" + ticket?.voyage?.id : ticket?.voyage?.numVoyage.trim()}`,
                                     montant: ticket?.ticket?.prixTicket ?? 0,
-                                    remboursement: 0,
+                                    remboursement: ticket?.tabRecette?.remboursement ?? 0,
                                     caisse: `GUICHET ${session?.user?.name ?? "Pas disponible"}`,
                                     numticket: `${params.ticketId}`,
                                     bus: `${ticket?.bus?.immatriculation}`,
-                                    trajet: `${ticket?.trajet?.lieuDepart ?? "Pas disponible"} / ${ticket?.trajet.destination == "" ? ticket?.trajet.lieuArrivee : ticket?.trajet.destination}`,
+                                    trajet: ticket?.ticket.destination,
                                     siege: ticket?.ticket?.numeroSiege ?? 0
                                 }} />
-                                
                             </>
-
-
                         )
                         : null}
-                    <div>
-                        {/* <p className="p-4 uppercase text-center text-sm">
-                            client: {ticket?.passager?.nom} {ticket?.passager?.prenom}, téléphone client: {ticket?.passager?.telephone},départ: {getDateFormat(ticket?.voyage?.dateDepart)}, Numèro de bus:{ticket?.bus?.id},
-                            trajet: {ticket?.trajet?.lieuDepart}/{ticket?.trajet.lieuArrivee}, voyage N°: {ticket?.voyage?.id}, numèro de siège: 0{ticket?.ticket?.numeroSiege}, Numéro voyage: {ticket?.voyage?.numVoyage}
-                        </p> */}
-
-
-                    </div>
                 </section>
             </div>
         </div>
