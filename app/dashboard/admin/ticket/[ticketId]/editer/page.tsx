@@ -61,7 +61,7 @@ export default function Page({ params }: { params: { ticketId: string } }) {
         numCNI: string,
         agenceId: number,
         id: number
-    } >({
+    }>({
         nom: "",
         prenom: "",
         adresse: "",
@@ -235,7 +235,7 @@ export default function Page({ params }: { params: { ticketId: string } }) {
             dateCreation: `${year}-${month}-${day}T${hours}:${minutes}`,
             passagerId: id,
             employeId: tick.employeId,
-            destination: `${tr.lieuDepart ?? item?.trajet?.lieuDepart} / ${dest == "" ? (tr.lieuArrivee ?? item?.trajet.lieuArrivee ): (tr.lieuArrivee ?? dest)}`,
+            destination: `${tr.lieuDepart ?? item?.trajet?.lieuDepart} / ${dest == "" ? (tr.lieuArrivee ?? item?.trajet.lieuArrivee) : (tr.lieuArrivee ?? dest)}`,
         }
         // console.log(data)
         try {
@@ -355,57 +355,42 @@ export default function Page({ params }: { params: { ticketId: string } }) {
         const year = date.getFullYear();
         const month = (date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`;
         const day = (date.getDate()) < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
-            if (voy.placesOccupees < voy.placeDisponible || item?.voyages?.placesOccupees < item?.voyages?.placeDisponible) {
-                if (item != null || voy) {
-                    try {
-                        let datel = getDateFormat(`${value?.dateNaissance}`);
-                       
-                        const e = {
-                            nom: value?.nom.trim().toLowerCase(),
-                            prenom: value?.prenom.trim().toLowerCase(),
-                            adresse: value?.adresse.toLowerCase(),
-                            dateNaissance: datel ?? `${year}-${month}-${day}`,
-                            genre: value?.genre ?? "",
-                            telephone: value?.telephone.trim(),
-                            numCNI: value?.numCNI,
-                        }
-                        const res = await fetch('/api/passagers/' + value?.id, {
-                            method: 'PUT',
-                            body: JSON.stringify(e),
-                        })
-                        const d = await res.json()
-                        if (res.ok && d) {
-                            setPassager({ passager: d, prix: voy.prixVoyage ?? item.voyages?.prixVoyage })
-
-                            if (item) {
-                                postTicket(value.id, item.voyages?.id)
-                                setTicket(item)
-                            }
-                            setMethod("")
-                            setItem(null)
-                            setValue({
-                                nom: "",
-                                prenom: "",
-                                adresse: "",
-                                dateNaissance: "",
-                                genre: "",
-                                telephone: "",
-                                email: "",
-                                numCNI: "",
-                                agenceId: 0,
-                                id: 0
-                            })
-                        }
-                    } catch (err) {
-                        console.log(err)
-                        configPopup("Erreur d'enregistrement veillez reessayer!!", "red", "Error d'enregistrement")
+        if (voy.placesOccupees < voy.placeDisponible || item?.voyages?.placesOccupees < item?.voyages?.placeDisponible) {
+            if (item != null || voy) {
+                try {
+                    let datel = getDateFormat(`${value?.dateNaissance}`);
+                    const e = {
+                        nom: value?.nom.trim().toLowerCase(),
+                        prenom: value?.prenom.trim().toLowerCase(),
+                        adresse: value?.adresse.toLowerCase(),
+                        dateNaissance: datel ?? `${year}-${month}-${day}`,
+                        genre: value?.genre ?? "",
+                        telephone: value?.telephone.trim(),
+                        numCNI: value?.numCNI,
                     }
-                } else {
-                    configPopup("Renseignez tout les informations!", "red", "Error d'enregistrement")
+                    const res = await fetch('/api/passagers/' + value?.id, {
+                        method: 'PUT',
+                        body: JSON.stringify(e),
+                    })
+                    const d = await res.json()
+                    if (res.ok && d) {
+                        setPassager(d)
+                        if (item) {
+                            postTicket(value.id, item.voyages?.id)
+                            setTicket(item)
+                        }
+                        setMethod("")
+                    }
+                } catch (err) {
+                    console.log(err)
+                    configPopup("Erreur d'enregistrement veillez reessayer!!", "red", "Error d'enregistrement")
                 }
-
             } else {
-                alert("Plus de places disponibles!")
+                configPopup("Renseignez tout les informations!", "red", "Error d'enregistrement")
+            }
+
+        } else {
+            alert("Plus de places disponibles!")
         }
     }
     const configPopup = (message: string, color: string, title: string) => {
@@ -604,193 +589,182 @@ export default function Page({ params }: { params: { ticketId: string } }) {
         setOnsearched(false);
     }
 
-    const checkPassager = (str: string) => {
-        passagers.map((e) => {
-            if (e.numCNI == str) {
-                if (item?.bus?.typeBus != "simple") {
-                    setVipP(5000)
-                }
-                getMethod("payer")
-                setValue({ ...e })
-                setTab2(true)
-                setTab(false)
-            }
-        })
-    }
     return (
         <section className="w-full p-10 h-full relative  ">
-            <div className=" flex justify-between items-start">
-                <h1 className="lowercase text-sm  text-gray-900"><Link className="hover:text-blue-600" href={"/dashboard/admin/ticket"}>Ticket</Link> / <Link className="hover:text-blue-600 font-semibold" href="#">Editer</Link></h1>
-            </div>
-            <div className="   flex justify-between items-start mb-2">
-                <h1 className="text-xl my-2 text-gray-900">Modificaion du ticket</h1>
-            </div>
-            <section className={`relative p-5 flex gap-4 justify-start items-start ${(!tab && !tab2) ? 'flex-col ' : 'flex-row'}`}>
-                <div style={{ width: '100%', minHeight: "100%", backdropFilter: "blur(1px)" }} className={`shadow-2xl max-w-3xl border rounded-md h-full relative overflow-hidden z-10 ${(tab || tab2 || tab3) ? 'block' : 'hidden'}`}>
-                    <h4 className="border-b p-4 text-black font-bold uppercase text-xl">
-                        Formulaire de ventes
-                    </h4>
-                    <form onSubmit={HandlerSubmit} className="px-10 py-5">
-                        <div>
-                            <div className={`${(tab && !tab2) ? 'block' : 'hidden'}`}>
-                                <h4 className="text-blue-400 font-medium flex items-center gap-4 uppercase"> <div className="bg-blue-400 flex justify-center items-center w-4 h-4 text-black p-4 rounded-full">2</div> Information du client  <HelpPopup message="Remplir correctement tout les informations demandées." /></h4>
+            <div className="grid h-full grid-cols-4">
+                <div className="col-span-3 p-10">
+                    <div className=" flex justify-between items-start">
+                        <h1 className="lowercase text-sm  text-gray-900"><Link className="hover:text-blue-600" href={"/dashboard/admin/ticket"}>Ticket</Link> / <Link className="hover:text-blue-600 font-semibold" href="#">Editer</Link></h1>
+                    </div>
+                    <div className="   flex justify-between items-start mb-2">
+                        <h1 className="text-xl my-2 text-gray-900">Modificaion du ticket</h1>
+                    </div>
+                    <section className={`relative p-5 flex gap-4 justify-start items-start ${(!tab && !tab2) ? 'flex-col ' : 'flex-row'}`}>
+                        <div style={{ width: '100%', minHeight: "100%", backdropFilter: "blur(1px)" }} className={`shadow-2xl max-w-3xl border rounded-md h-full relative overflow-hidden z-10 ${(tab || tab2 || tab3) ? 'block' : 'hidden'}`}>
+                            <h4 className="border-b p-4 text-black font-bold uppercase text-xl">
+                                Formulaire de ventes
+                            </h4>
+                            <form onSubmit={HandlerSubmit} className="px-10 py-5">
+                                <div>
+                                    <div className={`${(tab && !tab2) ? 'block' : 'hidden'}`}>
+                                        <h4 className="text-blue-400 font-medium flex items-center gap-4 uppercase"> <div className="bg-blue-400 flex justify-center items-center w-4 h-4 text-black p-4 rounded-full">2</div> Information du client  <HelpPopup message="Remplir correctement tout les informations demandées." /></h4>
 
-                                <div className="mt-2">
-                                    <label className="block mb-1 text-sm font-bold text-gray-800">Numèro de CNI <span className="text-red-500">*</span></label>
-                                    <input type="text" id="numCNI" autoComplete="off" value={value?.numCNI ?? ""} onBlur={e => checkPassager(e.target.value)} name="numCNI" onChange={handleInputChange} aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none focus-visible:ring-blue-400" />
-                                </div>
-                                <div className="mt-2">
-                                    <label className={`block mb-1 text-sm  font-bold text-gray-800 ${(validator && (value?.nom == undefined)) ? "ring-2 ring-red-500" : ""}`}>Nom  <span className="text-red-500">*</span> </label>
-                                    <input type="text" autoComplete="off" value={value?.nom ?? ""} onChange={handleInputChange} placeholder="Nom" name="nom" id="nom" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
-                                </div>
-                                <div className="mt-2">
-                                    <label className="block mb-1 text-sm font-bold text-gray-800">Prénom <span className="text-red-500">*</span></label>
-                                    <input type="text" autoComplete="off" value={value?.prenom ?? ""} id="prenom" name="prenom" placeholder="Prénom" onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
-                                </div>
-                                <div className="mt-2">
-                                    <label className="block mb-1 text-sm font-bold text-gray-800">Adresse <span className="text-red-500">*</span></label>
-                                    <input type="text" autoComplete="off" value={value?.adresse ?? ""} id="adresse" name="adresse" placeholder="Adresse" onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
-                                </div>
-                                <div className="mt-2">
-                                    <label className="block mb-1 text-sm font-bold text-gray-800">Numèro de téléphone <span className="text-red-500">*</span></label>
-                                    <input type="tel" id="telephone" autoComplete="off" value={value?.telephone ?? ""} name="telephone" onChange={handleInputChange} aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none focus-visible:ring-blue-400" placeholder="620456789" />
-                                </div>
-                                <div className="mt-2">
-                                    <label className="block mb-1 text-sm font-bold text-gray-800">Date de naissance</label>
-                                    <input type="date" id="datenaissance" name="dateNaissance" value={getDateFormat(`${value?.dateNaissance}`) ?? ""} placeholder="Date de Naissance" onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
-                                </div>
-                                <div className="mt-2">
-                                    <label className="block mb-1 text-sm font-bold text-gray-800">Genre</label>
-                                    <div className="flex gap-4">
-                                        <input type="radio" onChange={handleInputChange} id="genrem" name="genre" value="m" checked={value?.genre === "m"} className="block p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
-                                        <label htmlFor="genrem" className="text-sm font-bold text-gray-800">Homme</label>
-                                        <input type="radio" onChange={handleInputChange} id="genref" value="f" name="genre" checked={value?.genre === "f"} className="block p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
-                                        <label htmlFor="genref" className="text-sm font-bold text-gray-800">Femme</label>
+                                        <div className="mt-2">
+                                            <label className="block mb-1 text-sm font-bold text-gray-800">Numèro de CNI <span className="text-red-500">*</span></label>
+                                            <input type="text" id="numCNI" autoComplete="off" value={value?.numCNI ?? ""} name="numCNI" onChange={handleInputChange} aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none focus-visible:ring-blue-400" />
+                                        </div>
+                                        <div className="mt-2">
+                                            <label className={`block mb-1 text-sm  font-bold text-gray-800 ${(validator && (value?.nom == undefined)) ? "ring-2 ring-red-500" : ""}`}>Nom  <span className="text-red-500">*</span> </label>
+                                            <input type="text" autoComplete="off" value={value?.nom ?? ""} onChange={handleInputChange} placeholder="Nom" name="nom" id="nom" className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
+                                        </div>
+                                        <div className="mt-2">
+                                            <label className="block mb-1 text-sm font-bold text-gray-800">Prénom <span className="text-red-500">*</span></label>
+                                            <input type="text" autoComplete="off" value={value?.prenom ?? ""} id="prenom" name="prenom" placeholder="Prénom" onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
+                                        </div>
+                                        <div className="mt-2">
+                                            <label className="block mb-1 text-sm font-bold text-gray-800">Adresse <span className="text-red-500">*</span></label>
+                                            <input type="text" autoComplete="off" value={value?.adresse ?? ""} id="adresse" name="adresse" placeholder="Adresse" onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
+                                        </div>
+                                        <div className="mt-2">
+                                            <label className="block mb-1 text-sm font-bold text-gray-800">Numèro de téléphone <span className="text-red-500">*</span></label>
+                                            <input type="tel" id="telephone" autoComplete="off" value={value?.telephone ?? ""} name="telephone" onChange={handleInputChange} aria-describedby="helper-text-explanation" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2 focus:ring-2  focus:outline-none focus-visible:ring-blue-400" placeholder="620456789" />
+                                        </div>
+                                        <div className="mt-2">
+                                            <label className="block mb-1 text-sm font-bold text-gray-800">Date de naissance</label>
+                                            <input type="date" id="datenaissance" name="dateNaissance" value={getDateFormat(`${value?.dateNaissance}`) ?? ""} placeholder="Date de Naissance" onChange={handleInputChange} className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
+                                        </div>
+                                        <div className="mt-2">
+                                            <label className="block mb-1 text-sm font-bold text-gray-800">Genre</label>
+                                            <div className="flex gap-4">
+                                                <input type="radio" onChange={handleInputChange} id="genrem" name="genre" value="m" checked={value?.genre === "m"} className="block p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
+                                                <label htmlFor="genrem" className="text-sm font-bold text-gray-800">Homme</label>
+                                                <input type="radio" onChange={handleInputChange} id="genref" value="f" name="genre" checked={value?.genre === "f"} className="block p-1 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 focus-visible:ring-blue-400 " />
+                                                <label htmlFor="genref" className="text-sm font-bold text-gray-800">Femme</label>
+                                            </div>
+                                        </div>
+
+                                        <h5 className="my-4 text-sm">Les champs avec le signe <span className="text-red-500">*</span> sont obligatoires</h5>
+                                        <div className="mt-4">
+                                            <button type="button" onClick={() => { setTab(false); setTab2(false) }} className=" p-2 px-3 rounded-md hover:bg-stone-400 hover:text-white border border-stone-500 text-stone-500 font-bold">Recommencer</button>
+                                            <button type="button" onClick={() => {
+                                                let idv; if (item) {
+                                                    idv = item?.voyages?.id
+
+                                                } else { idv = voy.id }; handleNextTab(); getRecette(parseInt(`${value?.id}`), idv)
+                                            }} className=" mx-2 p-2 px-3 rounded-md hover:bg-blue-400 hover:text-white border border-blue-500 text-blue-500 font-bold">Continuer</button>
+                                        </div>
                                     </div>
-                                </div>
-
-                                <h5 className="my-4 text-sm">Les champs avec le signe <span className="text-red-500">*</span> sont obligatoires</h5>
-                                <div className="mt-4">
-                                    <button type="button" onClick={() => { setTab(false); setTab2(false) }} className=" p-2 px-3 rounded-md hover:bg-stone-400 hover:text-white border border-stone-500 text-stone-500 font-bold">Recommencer</button>
-                                    <button type="button" onClick={() => { let idv; if (item) {
-                                        idv = item?.voyages?.id
-                                        
-                                    } else { idv = voy.id }; handleNextTab(); getRecette(parseInt(`${value?.id}`), idv  ) }} className=" mx-2 p-2 px-3 rounded-md hover:bg-blue-400 hover:text-white border border-blue-500 text-blue-500 font-bold">Continuer</button>
-                                </div>
-                            </div>
-                            <div className={`px-4 ${(!tab && tab2) ? 'block' : 'hidden'}`}>
-                                <div className="mt-2">
-                                    <h4 className="text-blue-400 font-medium flex items-center gap-4 "> <div className="bg-blue-400 flex justify-center items-center w-4 h-4 text-black p-4 rounded-full">3</div><span className="uppercase">Fiche de recette</span><HelpPopup message="Remplir correctement tout les informations demandées." /></h4>
-                                    <div>
-                                        <div className="mt-4">
-                                            <div className="flex gap-4 mb-1 items-start">
-                                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Service</label>
-                                                {/* {((data?.nom && data?.nom != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
-                                            </div>
-                                            <input value={"Achat de ticket de bus"} disabled type="text" id="nom" placeholder="Nom" name="nom" className={`block text-sm w-full p-2 text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200  sm:text-md focus-visible:ring-blue-400  `} />
-                                        </div>
-
-                                        <div className="mt-4">
-                                            <div className="flex gap-4 mb-1 items-start">
-                                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Prix du ticket</label>
-                                                {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
-                                            </div>
-                                            <input value={prixF} type="number" id="montant" disabled name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200 sm:text-md focus-visible:ring-blue-400 `} />
-                                        </div>
-
-                                        {
-                                            item?.bus?.typeBus != "simple" ? (
-                                                <>
-                                                    <div className="mt-4">
-                                                        <div className="flex gap-4 mb-1 items-start">
-                                                            <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Prix vip</label>
-                                                            {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
-                                                        </div>
-                                                        <input type="number" value={vipP} disabled onChange={(e) => setVipP(parseInt(e.target.value))} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 bg-gray-200 rounded-sm focus:ring-2  focus:outline-none  sm:text-md focus-visible:ring-blue-400 `} />
+                                    <div className={`px-4 ${(!tab && tab2) ? 'block' : 'hidden'}`}>
+                                        <div className="mt-2">
+                                            <h4 className="text-blue-400 font-medium flex items-center gap-4 "> <div className="bg-blue-400 flex justify-center items-center w-4 h-4 text-black p-4 rounded-full">3</div><span className="uppercase">Fiche de recette</span><HelpPopup message="Remplir correctement tout les informations demandées." /></h4>
+                                            <div>
+                                                <div className="mt-4">
+                                                    <div className="flex gap-4 mb-1 items-start">
+                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Service</label>
+                                                        {/* {((data?.nom && data?.nom != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
                                                     </div>
-                                                </>
-                                            ) : null
-                                        }
-                                        <div className="mt-4">
-                                            <div className="flex gap-4 mb-1 items-start">
-                                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Net à payer </label>
-                                                {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
-                                            </div>
-                                            <input value={sup + prixF + vipP} type="number" disabled onChange={(e) => setsup(parseInt(e.target.value))} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200 sm:text-md focus-visible:ring-blue-400 `} />
-                                        </div>
-                                        <div className="mt-4">
-                                            <div className="flex gap-4 mb-1 items-start">
-                                                <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Remboursement</label>
-                                            </div>
-                                            <input type="number" id="remboursement" value={remboursement} name="remboursement" onChange={e => setRemboursement(parseInt(e.target.value))} min={0} className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 `} />
-                                        </div>
-                                        <div className="mt-4">
-                                            <div className="flex gap-4 mb-1 items-start">
-                                                <label htmlFor="typePaiement" className="block mb-1 text-sm font-medium text-gray-900 ">Type De Paiement</label>
-                                                {/* {((data?.typePaiement && data?.typePaiement != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
-                                            </div>
-                                            <select name="typePaiement" value={typePaiement} onChange={(e) => setTypePaiement(e.target.value)} autoComplete="off" className={`block w-full p-2 uppercase text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400  `} id="typePaiement">
-                                                <option value="" ></option>
-                                                <option value="cash" >Cash</option>
-                                                <option value="orange money" >Orange money</option>
-                                                <option value="mobile money" >Mtn Mobile money</option>
-                                            </select>
-                                        </div>
+                                                    <input value={"Achat de ticket de bus"} disabled type="text" id="nom" placeholder="Nom" name="nom" className={`block text-sm w-full p-2 text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200  sm:text-md focus-visible:ring-blue-400  `} />
+                                                </div>
 
+                                                <div className="mt-4">
+                                                    <div className="flex gap-4 mb-1 items-start">
+                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Prix du ticket</label>
+                                                        {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                                    </div>
+                                                    <input value={prixF} type="number" id="montant" disabled name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200 sm:text-md focus-visible:ring-blue-400 `} />
+                                                </div>
+
+                                                {
+                                                    item?.bus?.typeBus != "simple" ? (
+                                                        <>
+                                                            <div className="mt-4">
+                                                                <div className="flex gap-4 mb-1 items-start">
+                                                                    <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Prix vip</label>
+                                                                    {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                                                </div>
+                                                                <input type="number" value={vipP} disabled onChange={(e) => setVipP(parseInt(e.target.value))} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 bg-gray-200 rounded-sm focus:ring-2  focus:outline-none  sm:text-md focus-visible:ring-blue-400 `} />
+                                                            </div>
+                                                        </>
+                                                    ) : null
+                                                }
+                                                <div className="mt-4">
+                                                    <div className="flex gap-4 mb-1 items-start">
+                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Net à payer </label>
+                                                        {/* {((data?.montant && data?.montant != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                                    </div>
+                                                    <input value={sup + prixF + vipP} type="number" disabled onChange={(e) => setsup(parseInt(e.target.value))} id="montant" name="montant" className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-200 sm:text-md focus-visible:ring-blue-400 `} />
+                                                </div>
+                                                <div className="mt-4">
+                                                    <div className="flex gap-4 mb-1 items-start">
+                                                        <label className="block mb-1 text-sm font-bold text-gray-900 dark:text-white">Remboursement</label>
+                                                    </div>
+                                                    <input type="number" id="remboursement" value={remboursement} name="remboursement" onChange={e => setRemboursement(parseInt(e.target.value))} min={0} className={`"block w-full p-2 text-sm text-black border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 `} />
+                                                </div>
+                                                <div className="mt-4">
+                                                    <div className="flex gap-4 mb-1 items-start">
+                                                        <label htmlFor="typePaiement" className="block mb-1 text-sm font-medium text-gray-900 ">Type De Paiement</label>
+                                                        {/* {((data?.typePaiement && data?.typePaiement != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null} */}
+                                                    </div>
+                                                    <select name="typePaiement" value={typePaiement} onChange={(e) => setTypePaiement(e.target.value)} autoComplete="off" className={`block w-full p-2 uppercase text-sm text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400  `} id="typePaiement">
+                                                        <option value="" ></option>
+                                                        <option value="cash" >Cash</option>
+                                                        <option value="orange money" >Orange money</option>
+                                                        <option value="mobile money" >Mtn Mobile money</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+
+                                            <div className="mt-4">
+                                                <button type="button" onClick={() => { setTab(true); setTab2(false); setMethod("") }} className=" p-2 px-3 rounded-md hover:bg-stone-400 text-sm hover:text-white border border-stone-500 text-stone-500 font-bold">Retour</button>
+                                                <button type="submit" onClick={validationTab} className=" mx-2 p-2 px-3 rounded-md hover:bg-blue-400 hover:text-white border border-blue-500 text-sm text-blue-500 font-bold">Valider</button>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <div className={`px-8 ${(!tab && !tab2 && tab3) ? 'block' : 'hidden'}`}>
+                                        <div className="my-4">
+                                            <button type="reset" onClick={() => { window.location.reload() }} className=" p-2 px-3 rounded-md hover:bg-stone-400 text-sm hover:text-white border border-stone-500 text-stone-500 font-bold">Nouvelle vente</button>
+                                        </div>
+                                        {(isReady) ? (
+                                            <div>
+                                                <ComponentTicketPrint item={{
+                                                    client: `${passager?.nom} ${passager?.prenom}`,
+                                                    tel: passager?.telephone,
+                                                    depart: getDateFormat(ticket?.voyages?.dateDepart ?? tr.dateDepart),
+                                                    voyage: ticket?.voyages?.numVoyage ?? voy.numVoyage,
+                                                    montant: parseInt(`${sup}`) + parseInt(`${prixF}`),
+                                                    remboursement: remboursement,
+                                                    caisse: `GUICHET ${session?.user?.name}`,
+                                                    numticket: params.ticketId,
+                                                    bus: `${ticket?.bus?.immatriculation}`,
+                                                    trajet: `${ticket?.trajet?.lieuDepart ?? tr.lieuDepart} / ${dest == "" ? ticket?.trajet.lieuArrivee ?? tr.lieuArrivee : dest}`,
+                                                    siege: voy?.placesOccupees ?? ticket?.voyages?.placesOccupees + 1
+                                                }} />
 
-                                    <div className="mt-4">
-                                        <button type="button" onClick={() => { setTab(true); setTab2(false); setMethod("") }} className=" p-2 px-3 rounded-md hover:bg-stone-400 text-sm hover:text-white border border-stone-500 text-stone-500 font-bold">Retour</button>
-                                        <button type="submit" onClick={validationTab} className=" mx-2 p-2 px-3 rounded-md hover:bg-blue-400 hover:text-white border border-blue-500 text-sm text-blue-500 font-bold">Valider</button>
+
+                                            </div>
+                                        ) : null}
                                     </div>
                                 </div>
-                            </div>
-                            <div className={`px-8 ${(!tab && !tab2 && tab3) ? 'block' : 'hidden'}`}>
-                                <div className="my-4">
-                                    <button type="reset" onClick={() => { window.location.reload() }} className=" p-2 px-3 rounded-md hover:bg-stone-400 text-sm hover:text-white border border-stone-500 text-stone-500 font-bold">Nouvelle vente</button>
+                                <button type="reset" id="resetbtn" className="text-white mt-4 hidden opacity-0 py-2 items-center gap-2 justify-center hover:shadow-md transition ease-linear hover:from-stone-700 rounded-sm bg-stone-500 text-sm from-stone-600 bg-gradient-to-t p-2">
+                                    Recommencer
+                                </button>
+                            </form>
+                        </div>
+                        {(!tab && !tab2 && !tab3) ? (
+                            <div className=" h-full py-5" >
+                                <div className="my-2  font-bold text-blue-400 flex items-center gap-2">
+                                    <span className="uppercase">Modifier le voyage</span>
+                                    {/* <HelpPopup message="Cliquez sur le voyage pour le selectionner." /> */}
                                 </div>
-                                {(isReady) ? (
-                                    <div>
-                                        <ComponentTicketPrint item={{
-                                            client: `${passager?.passager?.nom} ${passager?.passager?.prenom}`,
-                                            tel: passager?.passager?.telephone,
-                                            depart: getDateFormat(ticket?.voyages?.dateDepart ?? tr.dateDepart),
-                                            voyage: ticket?.voyages?.numVoyage ?? voy.numVoyage,
-                                            montant: parseInt(`${sup}`) + parseInt(`${prixF}`),
-                                            remboursement: remboursement,
-                                            caisse: `GUICHET ${session?.user?.name}`,
-                                            numticket: params.ticketId,
-                                            bus: `${ticket?.bus?.immatriculation}`,
-                                            trajet: `${ticket?.trajet?.lieuDepart ?? tr.lieuDepart} / ${dest == "" ? ticket?.trajet.lieuArrivee ?? tr.lieuArrivee : dest}`,
-                                            siege: voy?.placesOccupees ?? ticket?.voyages?.placesOccupees + 1
-                                        }} />
-
-
-                                    </div>
-                                ) : null}
-                            </div>
-                        </div>
-                        <button type="reset" id="resetbtn" className="text-white mt-4 hidden opacity-0 py-2 items-center gap-2 justify-center hover:shadow-md transition ease-linear hover:from-stone-700 rounded-sm bg-stone-500 text-sm from-stone-600 bg-gradient-to-t p-2">
-                            Recommencer
-                        </button>
-                    </form>
-                </div>
-                {(!tab && !tab2 && !tab3) ? (
-                    <div className=" h-full py-5" >
-                        <div className="my-2  font-bold text-blue-400 flex items-center gap-2">
-                            <span className="uppercase">Modifier le voyage</span>
-                            {/* <HelpPopup message="Cliquez sur le voyage pour le selectionner." /> */}
-                        </div>
-                        <button type="button" onClick={() => { setTab(true); }} className="p-2 px-3 text-sm rounded-md hover:bg-blue-400 hover:text-white border border-blue-500 text-blue-500 font-semibold">Ne pas modifier le voyage</button>
-                        {
-                            !onSearched ? (
+                                <button type="button" onClick={() => { setTab(true); }} className="p-2 px-3 text-sm rounded-md hover:bg-blue-400 hover:text-white border border-blue-500 text-blue-500 font-semibold">Ne pas modifier le voyage</button>
                                 <ul className="mt-8 grid grid-cols-3 items-start gap-2 relative h-full ">
                                     {
                                         tr && bus && voy ?
                                             <li className="cursor-pointer rounded-xl shadow-xl border bg-slate-800" >
-                                                <h2 className="text-center text-white p-2" >Voyage actuel</h2> 
+                                                <h2 className="text-center text-white p-2" >Voyage actuel</h2>
                                                 <CardVoyage bus={bus?.immatriculation} isHidden={true} id={voy?.id} isVip={bus?.typeBus == "vip"} agence={voy?.agenceId} date={getDateFormat(voy?.dateDepart)} prix={voy?.prixVoyage} lieuArrive={tr?.lieuArrivee} heureArrive={""} lieuDepart={tr?.lieuDepart} heureDepart={voy?.heureDepart} placeDisponible={parseInt(voy?.placeDisponible) - parseInt(voy?.placesOccupees)} />
-                                                
+
                                                 <hr className={`border-dashed border-2  border-spacing-4 ${bus?.typeBus == "vip" ? 'border-yellow-400' : 'border-slate-700'} `} />
                                                 <div className="p-4 text-sm bg-white">
                                                     <button className="text-blue-500 font-semibold" onClick={() => { setbolTrajet(true); setTrajItem(tr); viewArret(JSON.stringify({ id: tr.id, prix: tr.prix })) }}>Afficher le trajet</button>
@@ -844,16 +818,132 @@ export default function Page({ params }: { params: { ticketId: string } }) {
                                         </li> : null
                                     ))}
                                 </ul>
+                            </div>
+                        ) : null}
+                        {(!tab && tab2) ? (
+                            <div>
+                                {(item != null) ? (
+                                    <div className="bg-white shadow-2xl text-sm p-4">
+                                        <h4 className="text-gray-800 mb-4 font-medium flex items-center gap-4 "><span className="uppercase">Recapitulatif</span></h4>
+                                        <div className=" w-96 rounded-md border mb-4 overflow-hidden">
+                                            <h6 className="p-4 uppercase border-b bg-blue-500 text-white font-bold">Information du Client</h6>
+                                            <ul>
+                                                <li className="py-2 font-semibold border-b px-4 flex text-gray-700 flex-row gap-4">
+                                                    <span>Nom et prénom:</span> <span>{value?.nom} {value?.prenom}</span>
+                                                </li>
+                                                <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                                    <span>Téléphone:</span> <span>{value?.telephone}</span>
+                                                </li>
+                                                <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                                    <span>Numéro CNI:</span> <span>{value?.numCNI}</span>
+                                                </li>
+                                                <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                                    <span>Adresse:</span> <span>{value?.adresse}</span>
+                                                </li>
+                                                <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                                    <span>Date de naissance:</span> <span>{getDateFormat(`${value?.dateNaissance}`)}</span>
+                                                </li>
+                                                <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                                    <span>Genre:</span> <span>{value?.genre == "m" ? "Homme" : "Femme"}</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div className=" w-96 rounded-md border mb-4 overflow-hidden">
+                                            <h6 className="p-4 uppercase border-b bg-blue-500 text-white font-bold">Voyage</h6>
+                                            <ul>
+                                                <li className="py-2 font-semibold border-b px-4 flex text-gray-700 flex-row gap-4">
+                                                    <span>Trajet:</span> <span>{item.trajet?.lieuDepart} - {dest == "" ? item?.trajet.lieuArrivee : dest}</span>
+                                                </li>
+                                                <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                                    <span>Prix du ticket:</span> <span>{item.prixFinal ?? prixF}  FCFA</span>
+                                                </li>
+                                                <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                                    <span>Date et heure de départ:</span> <span>Le {getDateFormat(item.voyages?.dateDepart ?? voy.dateDepart)} à {item.voyages?.heureDepart ?? voy.heureDepart}</span>
+                                                </li>
+                                                <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
+                                                    <span>Bus:</span> <span>{item.bus?.immatriculation ?? bus?.immatriculation}</span>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+
+                                    </div>
+                                ) : null}
+                            </div>
+                        ) : null}
+                    </section>
+                    {
+                        bolTrajet ?
+                            (
+                                <div className="bg-black/50 fixed top-0 left-0 w-full h-full z-20">
+                                    <div className="flex justify-center items-center">
+                                        <div className="min-w-96 mt-4 overflow-hidden bg-white shadow-2xl rounded-md ">
+                                            <h2 className="p-4 bg-blue-500 items-center font-bold text-left flex justify-between  text-white uppercase">
+                                                Trajet et arrêts
+                                                <button onClick={() => { setbolTrajet(false); setTrajItem(null) }} className="bg-white rounded-full hover:opacity-100 opacity-70 p-2"><Image src={closeSvg} width={15} height={15} alt="Image" /></button>
+                                            </h2>
+                                            <div className=" m-auto relative " style={{ width: 600 }}>
+                                                <div className='flex p-4 py-8 items-center gap-4 overflow-x-auto'>
+                                                    <div className='flex items-center gap-4'>
+                                                        <div className='text-center'>
+                                                            <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
+                                                                <Image width={35} height={35} alt='' src={busSvg} />
+                                                            </div>
+                                                            <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{trajItem?.lieuDepart} </h4>
+                                                        </div>
+
+                                                    </div>
+                                                    {
+                                                        arrets.map((i: any, index: number) => (
+                                                            <div key={index} className='flex items-center gap-4'>
+                                                                <div>
+                                                                    <hr className=' border-dashed border-2 border-yellow-300' />
+                                                                    <span className='text-xs'>
+                                                                        {i.prix}Fcfa
+                                                                    </span>
+                                                                </div>
+                                                                <div className='text-center'>
+                                                                    <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
+                                                                        <Image width={35} height={35} alt='' src={positionSvg} />
+                                                                    </div>
+                                                                    <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{i.nom}</h4>
+                                                                </div>
+
+                                                            </div>
+                                                        ))
+                                                    }
+                                                    <div className='flex items-center gap-4'>
+                                                        <div>
+                                                            <hr className=' border-dashed border-2 border-yellow-300' />
+                                                            <span className='text-xs'>
+                                                                {parseInt(trajItem?.prix) - prixA} Fcfa
+                                                            </span>
+                                                        </div>
+                                                        <div className='text-center'>
+                                                            <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
+                                                                <Image width={35} height={35} alt='' src={busSvg} />
+                                                            </div>
+                                                            <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{trajItem?.lieuArrivee}</h4>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
                             ) : null
-                        }
-                    </div>
-                ) : null}
-                {(!tab && tab2) ? (
-                    <div>
-                        {(item != null) ? (
-                            <div className="bg-white shadow-2xl text-sm p-4">
+                    }
+                </div>
+                {
+                    tr && bus && voy ?
+                        <div className="col-span-1 shadow-2xl h-full min-h-screen bg-slate-800" >
+                            <h2 className="text-center text-white p-2" >Ticket actuel</h2>
+                            <div className=" shadow-2xl text-sm">
                                 <h4 className="text-gray-800 mb-4 font-medium flex items-center gap-4 "><span className="uppercase">Recapitulatif</span></h4>
-                                <div className=" w-96 rounded-md border mb-4 overflow-hidden">
+                                <div className=" w-96 rounded-md border mb-4 bg-white mx-auto overflow-hidden">
                                     <h6 className="p-4 uppercase border-b bg-blue-500 text-white font-bold">Information du Client</h6>
                                     <ul>
                                         <li className="py-2 font-semibold border-b px-4 flex text-gray-700 flex-row gap-4">
@@ -876,94 +966,50 @@ export default function Page({ params }: { params: { ticketId: string } }) {
                                         </li>
                                     </ul>
                                 </div>
-                                <div className=" w-96 rounded-md border mb-4 overflow-hidden">
-                                    <h6 className="p-4 uppercase border-b bg-blue-500 text-white font-bold">Voyage</h6>
+                                <div className=" w-96 rounded-md border mb-4 bg-white mx-auto overflow-hidden">
+                                    <h6 className="p-4 uppercase border-b bg-blue-500  text-white font-bold">Voyage</h6>
                                     <ul>
                                         <li className="py-2 font-semibold border-b px-4 flex text-gray-700 flex-row gap-4">
-                                            <span>Trajet:</span> <span>{item.trajet?.lieuDepart} - {dest == "" ? item?.trajet.lieuArrivee : dest}</span>
+                                            <span>Trajet:</span> <span>{tr?.lieuDepart} - {dest == "" ? tr.lieuArrivee : dest}</span>
                                         </li>
                                         <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
-                                            <span>Prix du ticket:</span> <span>{item.prixFinal ?? prixF}  FCFA</span>
+                                            <span>Prix du ticket:</span> <span>{tick?.prixTicket}  FCFA</span>
                                         </li>
                                         <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
-                                            <span>Date et heure de départ:</span> <span>Le {getDateFormat(item.voyages?.dateDepart ?? voy.dateDepart)} à {item.voyages?.heureDepart ?? voy.heureDepart}</span>
+                                            <span>Date et heure de départ:</span> <span>Le {getDateFormat(voy?.dateDepart ?? voy.dateDepart)} à {voy?.heureDepart ?? voy.heureDepart}</span>
                                         </li>
                                         <li className="py-2 px-4 font-semibold border-b  flex flex-row text-gray-700 gap-4">
-                                            <span>Bus:</span> <span>{item.bus?.immatriculation ?? bus?.immatriculation}</span>
+                                            <span>Bus:</span> <span>{bus?.immatriculation}</span>
                                         </li>
-
                                     </ul>
                                 </div>
 
                             </div>
-                        ) : null}
-                    </div>
-                ) : null}
-            </section>
-            {
-                bolTrajet ?
-                    (
-                        <div className="bg-black/50 fixed top-0 left-0 w-full h-full z-20">
-                            <div className="flex justify-center items-center">
-                                <div className="min-w-96 mt-4 overflow-hidden bg-white shadow-2xl rounded-md ">
-                                    <h2 className="p-4 bg-blue-500 items-center font-bold text-left flex justify-between  text-white uppercase">
-                                        Trajet et arrêts
-                                        <button onClick={() => { setbolTrajet(false); setTrajItem(null) }} className="bg-white rounded-full hover:opacity-100 opacity-70 p-2"><Image src={closeSvg} width={15} height={15} alt="Image" /></button>
-                                    </h2>
-                                    <div className=" m-auto relative " style={{ width: 600 }}>
-                                        <div className='flex p-4 py-8 items-center gap-4 overflow-x-auto'>
-                                            <div className='flex items-center gap-4'>
-                                                <div className='text-center'>
-                                                    <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
-                                                        <Image width={35} height={35} alt='' src={busSvg} />
-                                                    </div>
-                                                    <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{trajItem?.lieuDepart} </h4>
-                                                </div>
-
-                                            </div>
-                                            {
-                                                arrets.map((i: any, index: number) => (
-                                                    <div key={index} className='flex items-center gap-4'>
-                                                        <div>
-                                                            <hr className=' border-dashed border-2 border-yellow-300' />
-                                                            <span className='text-xs'>
-                                                                {i.prix}Fcfa
-                                                            </span>
-                                                        </div>
-                                                        <div className='text-center'>
-                                                            <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
-                                                                <Image width={35} height={35} alt='' src={positionSvg} />
-                                                            </div>
-                                                            <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{i.nom}</h4>
-                                                        </div>
-
-                                                    </div>
-                                                ))
-                                            }
-                                            <div className='flex items-center gap-4'>
-                                                <div>
-                                                    <hr className=' border-dashed border-2 border-yellow-300' />
-                                                    <span className='text-xs'>
-                                                        {parseInt(trajItem?.prix) - prixA} Fcfa
-                                                    </span>
-                                                </div>
-                                                <div className='text-center'>
-                                                    <div className='p-2 w-12 h-12 rounded-full border-black border-2 ring-4 ring-blue-500 text-white font-bold  justify-center flex item-center'>
-                                                        <Image width={35} height={35} alt='' src={busSvg} />
-                                                    </div>
-                                                    <h4 className=' mt-2 lowercase font-semibold text-gray-800 '>{trajItem?.lieuArrivee}</h4>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
+                            <hr className={`border-dashed border-2  border-spacing-4 ${bus?.typeBus == "vip" ? 'border-yellow-400' : 'border-slate-700'} `} />
+                            <div className="p-4 text-sm ">
+                                <button className="text-blue-500 font-semibold" onClick={() => { setbolTrajet(true); setTrajItem(tr); viewArret(JSON.stringify({ id: tr.id, prix: tr.prix })) }}>Afficher le trajet</button>
+                                <h4 className="my-2 text-xl text-stone-400">
+                                    Changer l&apos;arrêt de voyage
+                                </h4>
+                                <ul>
+                                    <li title="Trajet normale" onClick={() => { setItem({ ...{ bus: bus, voyages: voy, trajet: tr }, prixFinal: tr?.prix, dest: "" }); setDest(""); handleItemOnclick(); setprixF(tr.prix) }} className={`p-1 py-2 rounded-md my-1 border border-b-2 grid cursor-pointer grid-cols-2 bg-slate-600 text-white hover:bg-slate-800 `}>
+                                        <span >{tr?.lieuDepart} - {tr?.lieuArrivee}</span> <span className="text-right uppercase">{tr?.prix} fcfa</span>
+                                    </li>
+                                    <hr className={`border-dashed border my-2 border-spacing-4 ${bus?.typeBus == "vip" ? 'border-yellow-400' : 'border-slate-700'} `} />
+                                    {
+                                        tr?.arrets != "" ?
+                                            JSON.parse(`${tr?.arrets}`).map((i: any, index: number) => (
+                                                <li onClick={() => { setItem({ ...{ bus: bus, voyages: voy, trajet: tr }, prixFinal: i.prix, dest: i.nom }); setDest(i.nom); handleItemOnclick(); setprixF(i.prix) }} key={index} className={`p-1 py-2 border rounded-md my-1 cursor-pointer border-b-2 grid grid-cols-2 ${index % 2 == 0 ? 'bg-blue-600 hover:bg-blue-700 text-white border-b-blue-400' : 'text-white bg-slate-600 hover:bg-slate-800'}`}>
+                                                    <span>{tr?.lieuDepart} - {i.nom}</span> <span className="text-right uppercase ">{parseInt(JSON.parse(tr?.arrets)[index - 1]?.prix ?? 0) + parseInt(JSON.parse(tr?.arrets)[index]?.prix)} fcfa</span>
+                                                </li>
+                                            ))
+                                            : null
+                                    }
+                                </ul>
                             </div>
-                        </div>
-
-                    ) : null
-            }
+                        </div> : null
+                }
+            </div>
             {isOpenPopup ? (<Popup color={popupData?.color} title={popupData.title} message={popupData?.message} onShow={showModal} />) : null}
         </section>
     )

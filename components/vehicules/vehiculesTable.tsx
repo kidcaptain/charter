@@ -77,7 +77,7 @@ const VehiculeTable = (props: { childToParent: Function, setData: Function, isAd
                             </th>
 
                             <th scope="col" className="p-2 border-2 border-stone-800">
-                                Capacité
+                            Nombre de places assises
                             </th>
 
                             <th scope="col" className="p-2 border-2 border-stone-800">

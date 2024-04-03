@@ -116,7 +116,7 @@ const AddFormVehicule = (props: { childToParent: Function }) => {
                     </div>
                     <div className="mt-4">
                         <div className="flex gap-4 mb-1 items-start">
-                            <label className={className}>Capacité(<span className="text-red-500">*</span>)</label>
+                            <label className={className}>Nombre de places assises(<span className="text-red-500">*</span>)</label>
                             {((value?.capacite && value?.capacite != "")) ? (<Image src={svg} width={15} height={15} alt="Image" />) : null}
                         </div>
                         <input type="number" min={1} required onChange={handleInputChange} id="capacite" name="capacite" className={`block text-sm w-full p-2  ${((value?.capacite && value?.capacite > 0)) ? "bg-green-50 ring-green-400/50 ring-4" : null} text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 `} />

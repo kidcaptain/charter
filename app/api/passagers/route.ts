@@ -29,11 +29,18 @@ export const POST = async (req: Request) => {
   const body = await req.json();
   const { numCNI, agenceId, nom, prenom, adresse, dateNaissance, genre, telephone } = body;
 
-  const existingPassager = await prisma.passager.findUnique({ where: { numCNI: numCNI, nom: nom, prenom: prenom } })
+  const existingPassager = await prisma.passager.findUnique({ where: { numCNI: numCNI } })
 
   if (existingPassager) {
     return NextResponse.json(existingPassager);
   }
+
+  const existingPassager2 = await prisma.passager.findMany({ where: { telephone: telephone } })
+
+  if (existingPassager2[0]) {
+    return NextResponse.json(existingPassager2[0]);
+  }
+
 
   const passager = await prisma.passager.create({
     data: {

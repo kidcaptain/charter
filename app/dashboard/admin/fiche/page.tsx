@@ -16,6 +16,46 @@ export default function Page() {
     const [total, setTotal] = useState<number>(0)
     const [totalDepense, setTotalDepense] = useState<number>(0)
     useEffect(() => {
+        const getLigneRecette = async (dates: string) => {
+            const res = await fetch("/api/lignerecette?date=" + dates, { cache: "no-store" })
+            if (!res.ok) {
+                console.log("error")
+            }
+            const data = await res.json();
+            return data
+        };
+        const getBus = async () => {
+            const res = await fetch("/api/bus", { cache: "no-store" })
+            if (!res.ok) {
+                console.log("error")
+            }
+            const data = await res.json();
+            return data
+        };
+        const getVoyage = async () => {
+            const res = await fetch("/api/voyages", { cache: "no-store" })
+            if (!res.ok) {
+                console.log("error")
+            }
+            const data = await res.json();
+            return data
+        };
+        const getTrajet = async (id: number) => {
+            const res = await fetch("/api/trajets/" + id, { cache: "no-store" })
+            if (!res.ok) {
+                console.log("error")
+            }
+            const data = await res.json();
+            return data
+        };
+        const getDepenses = async (dates: string) => {
+            const res = await fetch("/api/depenses?date=" + dates, { cache: "no-store" })
+            if (!res.ok) {
+                console.log("error")
+            }
+            const data = await res.json();
+            return data
+        };
         const getPoste = async () => {
             const res = await fetch("/api/postes?titre=caissier", { cache: "no-store" })
             if (!res.ok) {
@@ -43,6 +83,58 @@ export default function Page() {
             })
             setCaissieres(tab2);
         }
+        const selecteFicheRecette = async () => {
+            setFicheRetour([])
+            setFiche([])
+            const tabBus: any[] = await getBus();
+            const tabVoyage: any[] = await getVoyage();
+            const tabEmploye: any[] = await getEmploye();
+            const tab: any[] = [];
+            const dates = new Date(new Date());
+            const year = dates.getFullYear();
+            const month = (dates.getMonth() + 1) < 10 ? `0${dates.getMonth() + 1}` : `${dates.getMonth() + 1}`;
+            const day = (dates.getDate()) < 10 ? `0${dates.getDate()}` : `${dates.getDate()}`;
+            const tabLigne: any[] = await getLigneRecette(`${year}-${month}-${day}T00:00:00.000Z`);
+            const tabDepense: any[] = await getDepenses(`${year}-${month}-${day}`);
+
+            let totalDepense = 0;
+            let total = 0;
+            tabLigne.map((e) => {
+                let voyage: any = null;
+                let bus: any = null;
+                let destination: string = "";
+                let chauffeur: string = "aucun";
+                tabVoyage.map(async (j) => {
+                    if (e.voyageId == j.id) {
+                        voyage = e;
+                        let f = await getTrajet(j.id)
+                        destination = `${f?.lieuDepart} / ${f?.lieuArrivee}`
+                        tabEmploye.map((k) => {
+                            if (k.id == j.chauffeurId) {
+                                chauffeur = `${k.nom} ${k.prenom} `
+                            }
+                        })
+                    }
+                })
+                tabBus.map((i) => {
+                    if (i.id == e.busId) {
+                        bus = i;
+                    }
+                })
+                total = total + parseInt(e.montant);
+                tab.push({ ligne: e, voyage: voyage, bus: bus, destination: destination, chauffeur: chauffeur })
+            })
+
+            tabDepense.map((e: any) => {
+                totalDepense += parseInt(e.montant)
+            })
+            setDate(`${year}-${month}-${day}`)
+            setFiche(tab);
+            setTotal(total)
+            setTotalDepense(totalDepense)
+
+        }
+        selecteFicheRecette()
         getData()
     }, [])
     const getLigneRecette = async (dates: string) => {
@@ -88,6 +180,7 @@ export default function Page() {
         const data = await res.json();
         return data
     };
+
 
     const selecteFicheRecette = async (e: any) => {
         setFicheRetour([])

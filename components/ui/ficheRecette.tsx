@@ -59,15 +59,17 @@ class ComponentToPrint extends React.Component<DataFicheRecette> {
                                     <th scope="col" className=" py-4 px-2 border border-stone-800 ">
                                         N°BUS
                                     </th>
-                                   
+                                    <th scope="col" className=" py-4 px-2 border border-stone-800 ">
+                                        DESTINATIONS
+                                    </th>
                                     <th scope="col" className=" py-4 px-2 border border-stone-800 ">
                                         MONTANTS
                                     </th>
                                     <th scope="col" className=" py-4 px-2 border border-stone-800">
-                                        NOMS CHAUFFEURS
+                                        NOMS DES CHAUFFEURS
                                     </th>
                                     <th scope="col" className=" py-4 px-2 border border-stone-800">
-                                        SIGNATURE
+                                        SIGNATURES
                                     </th>
 
                                 </tr>
@@ -77,12 +79,15 @@ class ComponentToPrint extends React.Component<DataFicheRecette> {
                                 {this.props.simple.map((item: any, i: number) => (
                                     <tr key={i + 1} className="font-normal" >
                                         <th className="px-3 py-4 border border-stone-800">
-                                            ({item.bus.id}) {item.bus.marque} {item.bus.modele}
+                                            {item.bus.immatriculation}
                                         </th>
-                                      
+                                        <th className=" border border-stone-800">
+                                            {item.destination}
+                                        </th>
                                         <th className=" border border-stone-800">
                                             {item.ligne.montant} FCFA
                                         </th>
+                    
                                         <th className=" border border-stone-800">
                                             {item.chauffeur}
                                         </th>

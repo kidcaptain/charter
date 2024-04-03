@@ -200,7 +200,7 @@ const EditFormVehicule = (props: { childToParent: Function, id?: string }) => {
                             </select>
                         </div>
                         <div className="mt-2">
-                            <label className="  text-sm font-bold text-gray-800 dark:text-white">Capacité</label>
+                            <label className="  text-sm font-bold text-gray-800 dark:text-white">Nombre de places assises</label>
                             <input type="number" onChange={handleInputChange} id="capacite" value={value?.capacite ?? 0} name="capacite" className="block text-sm w-full p-2 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400 " />
                         </div>
                     </div>
