@@ -250,7 +250,7 @@ export default function Page({ params }: { params: { ticketId: string } }) {
                     const t = await res.json();
                     setNumTicket(t.id)
                     setIsReady(true)
-                    if (item) {
+                    if (item?.voyages?.id != voy?.id) {
                         editVoyage(item.voyages, id, t.id);
                         editVoyage2(voy, id, t.id)
                     } else {

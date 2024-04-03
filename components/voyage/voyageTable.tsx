@@ -411,7 +411,7 @@ const VoyageTable = (props: { childToParent: Function }) => {
                                         {parseInt(item.voyages?.placeDisponible ?? 0) - parseInt(item.voyages?.placesOccupees ?? 0)}
                                     </td>
                                     <td className="p-1 px-2 border">
-                                        {item.voyages?.placesOccupees ?? 0}
+                                        {Math.abs(item.voyages?.placesOccupees) ?? 0}
                                     </td>
 
                                     <td className="p-1 px-2 border">
