@@ -26,9 +26,9 @@ const PassagerTable = (props: { childToParent: Function, setData: Function, agen
 
     return (
         <div className="bg-white shadow-xl rounded-sm">
-            <h1 className=" p-4 text-gray-900 uppercase border-b">Les Passagers et utilisateurs</h1>
+            <h1 className=" p-4 text-gray-900 uppercase border-b">Les Passagers</h1>
             <div className="relative overflow-x-auto">
-                <table className="w-full text-left text-sm rtl:text-right text-gray-900 dark:text-gray-400">
+                <table className="w-full text-left text-sm uppercase rtl:text-right text-gray-900 dark:text-gray-400">
                     <thead className="text-sm text-gray-900  dark:text-gray-400">
                         <tr>
                             <th scope="col" className="p-4 py-3 border-b-2">
@@ -60,7 +60,7 @@ const PassagerTable = (props: { childToParent: Function, setData: Function, agen
                             </th> */}
                         </tr>
                     </thead>
-                    <tbody className='text-xs'>
+                    <tbody>
                         {passagers.map((item: any) => (
                             <tr key={item.id} className="border-b border-gray-200 bg-stone-100 dark:border-gray-700">
                                 <th scope="row" className="p-4 py-2  ">

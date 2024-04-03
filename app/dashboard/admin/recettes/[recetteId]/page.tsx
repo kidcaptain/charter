@@ -17,7 +17,8 @@ export default function Page({ params }: { params: IPrams }) {
         dateTransaction: "",
         note: "",
         passagerId: 0,
-        voyageId: 0
+        voyageId: 0,
+        ticketId: 0,
     })
     const [trajet, setTrajet] = useState<any>()
     const router = useRouter();

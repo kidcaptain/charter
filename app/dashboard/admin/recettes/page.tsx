@@ -33,9 +33,15 @@ export default function Page() {
 
             const datas = {
                 dateTransaction: `${year}-${month}-${day}`,
-                passagerId: 0,
+                nom: data.nom,
+                typeService: data.typeService,
+                typePaiement: data.typePaiement,
+                montant: parseInt(data.montant),
+                note: data.note,
+                agenceId: parseInt(data.agenceId),
                 voyageId: 0,
-                ...data
+                passagerId: 0,
+                ticketId: 0
             }
             const response = await fetch('/api/recette', {
                 method: 'POST',
@@ -183,7 +189,7 @@ export default function Page() {
                         </h2>
                         <div className="p-4">
                             <div className="relative overflow-x-auto">
-                                <table className="w-full text-sm text-left rtl:text-right text-gray-800 dark:text-gray-400">
+                                <table className="w-full text-sm uppercase text-left rtl:text-right text-gray-800 dark:text-gray-400">
                                     <thead className="text-sm text-gray-900 border font-bold  dark:text-gray-400">
                                         <tr>
                                             <th scope="col" className=" py-3 px-1 border ">
@@ -228,7 +234,7 @@ export default function Page() {
                                                     {item.typePaiement}
                                                 </td>
                                                 <td className=" py-1 px-1 border">
-                                                    {item.montant}
+                                                    {item.montant} FCFA
                                                 </td>
                                                 <td className=" py-1 px-1 border">
                                                     {getDateFormat(item.dateTransaction)}
@@ -238,8 +244,8 @@ export default function Page() {
                                                 </td>
 
                                                 <td className=" py-1 px-1 border flex flex-row items-start">
-                                                    <button type='button' onClick={() => deleteRecette(item.id)} className="text-white rounded-sm hover:bg-red-500 bg-red-400 text-xs flex items-center gap-2 justify-center p-2">Retirer</button>
-                                                    <button onClick={() => handleOnEmitTable(item.id)} className="bg-yellow-500  text-xs flex hover:bg-yellow-600 hover:text-white items-center gap-2 justify-center p-2">Editer</button>
+                                                    <button type='button' onClick={() => deleteRecette(item.id)} className="text-white rounded-sm hover:bg-red-500 bg-red-400 text-sm flex items-center gap-2 justify-center p-2">Retirer</button>
+                                                    <button onClick={() => handleOnEmitTable(item.id)} className="bg-yellow-500  text-sm flex hover:bg-yellow-600 hover:text-white items-center gap-2 justify-center p-2">Editer</button>
                                                 </td>
                                             </tr>
                                         ))}

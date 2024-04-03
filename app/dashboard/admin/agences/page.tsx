@@ -11,7 +11,7 @@ export default function Agences() {
     const [popupData, setPopupData] = useState<{ message: string, title?: string, color: string }>({ message: "", title: "", color: "" })
     const [isOpenPopup, setIsOpenPopup] = useState<boolean>(false);
     const [value, setValue] = useState<any>()
-    const [agences, setAgences] = useState([])
+    const [agences, setAgences] = useState<any[]>([])
     const [itemEdit, setItemEdit] = useState<any>(null)
     const [isOpenFormEdit, setIsOpenFormEdit] = useState<boolean>(false);
 
@@ -73,8 +73,8 @@ export default function Agences() {
             if (!res.ok) {
                 configPopup("Impossible d'afficher les données. Veuillez actualiser la page!", "red", "Reservation");
             }
-            const data = await res.json();
-            setAgences(data)
+            const data: any[] = await res.json();
+            setAgences(data.reverse())
         };
         getData();
     }, [agences])
@@ -188,7 +188,7 @@ export default function Agences() {
             <div className="flex gap-2 items-end my-2">
                 <button onClick={handleButtonClick} className="text-white bg-blue-600 hover:bg-blue-700 text-xs flex p-2 rounded-sm">Ajouter une agences</button>
             </div>
-            <div className=" w-full bg-white rounded-sm shadow-2xl border">
+            <div className=" w-full bg-white uppercase rounded-sm shadow-2xl border">
                 <h2 className="p-4 border-b bg-white uppercase">Liste de Agence</h2>
                 <table className="w-full text-sm text-left rtl:text-right text-gray-900 ">
                     <thead className="text-sm text-gray-700 uppercase ">

@@ -48,7 +48,8 @@ const TrajetAddForm = (props: { childToParent: Function }) => {
         } else {
             prix = data.prix;
         }
-        const datas = { ...data, distance: 0, prix: parseInt(`${prix}`) + parseInt(`${prixD}`), arrets: JSON.stringify(data.tabArret) }
+        const datas = { ...data, distance: 0, prix: parseInt(`${prix}`) + parseInt(`${prixD}`), arrets: JSON.stringify(arrets) }
+
         try {
             const response = await fetch('/api/trajets', {
                 method: 'POST',
@@ -121,7 +122,7 @@ const TrajetAddForm = (props: { childToParent: Function }) => {
                             ))
                         }
                         <div className="my-2">
-                            <label className="block text-sm font-bold text-gray-900 dark:text-white">Prix du dernier arrêt au lieu d&apos;arrivée</label>
+                            <label className="block text-sm font-bold text-gray-900 dark:text-white">Prix du dernier arrêt au lieu d'arrivée</label>
                             <input onChange={(e) => setprixD(parseInt(e.target.value))} required type="number" min={0} placeholder="prix" name="prixD" className={`block my-1 text-sm w-full p-1.5 text-gray-900 border border-gray-300 rounded-sm focus:ring-2  focus:outline-none bg-gray-50 sm:text-md focus-visible:ring-blue-400`} />
                         </div>
                         
@@ -139,7 +140,6 @@ const TrajetAddForm = (props: { childToParent: Function }) => {
                         arrets.length > 0 ?
                             <button type="button" onClick={allDeleteArret} className="border-stone-400 border mt-2 text-stone-400  text-sm p-1" >Tout annuler</button> : null}
                 </div>
-       
                 <div className="mt-4 flex gap-4">
                     <button type="submit" className="text-white text-sm flex px-4  hover:shadow-md  hover:bg-blue-700 rounded-sm bg-blue-500   p-2">
                         Enregistrer

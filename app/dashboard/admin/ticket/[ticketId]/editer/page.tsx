@@ -590,7 +590,7 @@ export default function Page({ params }: { params: { ticketId: string } }) {
     }
 
     return (
-        <section className="w-full p-10 h-full relative  ">
+        <section className="w-full h-full relative  ">
             <div className="grid h-full grid-cols-4">
                 <div className="col-span-3 p-10">
                     <div className=" flex justify-between items-start">
@@ -759,37 +759,6 @@ export default function Page({ params }: { params: { ticketId: string } }) {
                                 </div>
                                 <button type="button" onClick={() => { setTab(true); }} className="p-2 px-3 text-sm rounded-md hover:bg-blue-400 hover:text-white border border-blue-500 text-blue-500 font-semibold">Ne pas modifier le voyage</button>
                                 <ul className="mt-8 grid grid-cols-3 items-start gap-2 relative h-full ">
-                                    {
-                                        tr && bus && voy ?
-                                            <li className="cursor-pointer rounded-xl shadow-xl border bg-slate-800" >
-                                                <h2 className="text-center text-white p-2" >Voyage actuel</h2>
-                                                <CardVoyage bus={bus?.immatriculation} isHidden={true} id={voy?.id} isVip={bus?.typeBus == "vip"} agence={voy?.agenceId} date={getDateFormat(voy?.dateDepart)} prix={voy?.prixVoyage} lieuArrive={tr?.lieuArrivee} heureArrive={""} lieuDepart={tr?.lieuDepart} heureDepart={voy?.heureDepart} placeDisponible={parseInt(voy?.placeDisponible) - parseInt(voy?.placesOccupees)} />
-
-                                                <hr className={`border-dashed border-2  border-spacing-4 ${bus?.typeBus == "vip" ? 'border-yellow-400' : 'border-slate-700'} `} />
-                                                <div className="p-4 text-sm bg-white">
-                                                    <button className="text-blue-500 font-semibold" onClick={() => { setbolTrajet(true); setTrajItem(tr); viewArret(JSON.stringify({ id: tr.id, prix: tr.prix })) }}>Afficher le trajet</button>
-                                                    <h4 className="my-2 text-xl text-stone-400">
-                                                        Selectionner l&apos;arrêts
-                                                    </h4>
-                                                    <ul>
-                                                        <li title="Trajet normale" onClick={() => { setItem({ ...{ bus: bus, voyages: voy, trajet: tr }, prixFinal: tr?.prix, dest: "" }); setDest(""); handleItemOnclick(); setprixF(tr.prix) }} className={`p-1 py-2 rounded-md my-1 border border-b-2 grid cursor-pointer grid-cols-2 bg-slate-600 text-white hover:bg-slate-800 `}>
-                                                            <span >{tr?.lieuDepart} - {tr?.lieuArrivee}</span> <span className="text-right uppercase">{tr?.prix} fcfa</span>
-                                                        </li>
-
-                                                        <hr className={`border-dashed border my-2 border-spacing-4 ${bus?.typeBus == "vip" ? 'border-yellow-400' : 'border-slate-700'} `} />
-                                                        {
-                                                            tr?.arrets != "" ?
-                                                                JSON.parse(`${tr?.arrets}`).map((i: any, index: number) => (
-                                                                    <li onClick={() => { setItem({ ...{ bus: bus, voyages: voy, trajet: tr }, prixFinal: i.prix, dest: i.nom }); setDest(i.nom); handleItemOnclick(); setprixF(i.prix) }} key={index} className={`p-1 py-2 border rounded-md my-1 cursor-pointer border-b-2 grid grid-cols-2 ${index % 2 == 0 ? 'bg-blue-600 hover:bg-blue-700 text-white border-b-blue-400' : 'text-white bg-slate-600 hover:bg-slate-800'}`}>
-                                                                        <span>{tr?.lieuDepart} - {i.nom}</span> <span className="text-right uppercase ">{parseInt(JSON.parse(tr?.arrets)[index - 1]?.prix ?? 0) + parseInt(JSON.parse(tr?.arrets)[index]?.prix)} fcfa</span>
-                                                                    </li>
-                                                                ))
-                                                                : null
-                                                        }
-                                                    </ul>
-                                                </div>
-                                            </li> : null
-                                    }
                                     {voyages.map((item: any, i: number) => ((item.voyages?.placeDisponible > item.voyages?.placesOccupees && parseInt(`${item.voyages?.heureDepart[0]}${item.voyages?.heureDepart[1]}`) > hours && compareDate(getDateFormat(item.voyages?.dateDepart)) && item.voyages?.ready != "oui" && item.trajet && item.bus && item.voyages?.chauffeurId != 0) ?
                                         <li key={i} className="cursor-pointer rounded-xl shadow-xl border" >
                                             <CardVoyage bus={item.bus.immatriculation} isHidden={true} id={item.voyages?.id} isVip={item.bus.typeBus == "vip"} agence={item.voyages?.agenceId} date={getDateFormat(item.voyages?.dateDepart)} prix={item.voyages?.prixVoyage} lieuArrive={item.trajet?.lieuArrivee} heureArrive={""} lieuDepart={item.trajet?.lieuDepart} heureDepart={item.voyages?.heureDepart} placeDisponible={parseInt(item.voyages?.placeDisponible) - parseInt(item.voyages?.placesOccupees)} />
