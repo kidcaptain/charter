@@ -212,7 +212,7 @@ export default function Page() {
             dateCreation: `${year}-${month}-${day}T${hours}:${minutes}`,
             passagerId: id,
             employeId: 0,
-            destination: `${ticket?.trajet?.lieuDepart} / ${dest == "" ? ticket?.trajet.lieuArrivee : dest}`,
+            destination: `${item?.trajet?.lieuDepart} / ${dest == "" ? item?.trajet.lieuArrivee : dest}`,
         }
         // console.log(data)
         try {
@@ -543,7 +543,7 @@ export default function Page() {
     const checkPassager = (str: string) => {
         passagers.map((e) => {
             if (e.numCNI == str.toUpperCase()) {
-                alert(e.numCNI)
+               
                 setPas(e)
                 setTab2(true)
                 setTab(false)
@@ -740,17 +740,7 @@ export default function Page() {
                                             trajet: `${ticket?.trajet?.lieuDepart} / ${dest == "" ? ticket?.trajet.lieuArrivee : dest}`,
                                             siege: ticket?.voyages?.placesOccupees + 1
                                         }} />
-                                        <ul className="p-4 uppercase text-center text-sm">
-                                            <li>client: {passager?.passager?.nom} {passager?.passager?.prenom}</li>
-                                            <li>téléphone client:{passager?.passager?.telephone}</li>
-                                            <li>départ:{getDateFormat(ticket?.voyages?.dateDepart)}</li>
-                                            <li>Numéro de bus: {ticket?.bus?.immatriculation}</li>
-                                            <li>trajet: {ticket?.trajet?.lieuDepart}/{dest == "" ? ticket?.trajet.lieuArrivee : dest}</li>
-                                            <li>voyage: {ticket?.voyages?.numVoyage.trim() == "" ? "VOY" + ticket?.voyages?.id : ticket?.voyages?.numVoyage.trim()}</li>
-                                            <li>numèro de siège:{ticket?.voyages?.placesOccupees + 1}</li>
-                                            <li>numéro ticket: {numTicket.toString()}</li>
-                                            <li>caisse: GUICHET {session?.user?.name}</li>
-                                        </ul>
+                                     
 
                                     </div>
                                 ) : null}
