@@ -44,8 +44,7 @@ export default function TableUserOnline() {
                 const tabPoste: any[] = await getPoste();
                 const tabUser: any[] = await getUtilisateur();
                 tabUser.map((r) => {
-                    let em: any = null;
-                    let pos: any = null;
+
                     tabEmploye.map((i) => {
                         tabPoste.map((j) => {
                             if ((r.employeId == i.id) && (i.posteId == j.id) && r.isConnected === "yes") {

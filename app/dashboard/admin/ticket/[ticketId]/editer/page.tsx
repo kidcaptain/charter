@@ -226,8 +226,12 @@ export default function Page({ params }: { params: { ticketId: string } }) {
             const day = (date.getDate()) < 10 ? `0${date.getDate()}` : `${date.getDate()}`;
             const hours = (date.getHours()) < 10 ? `0${date.getHours()}` : `${date.getHours()}`;
             const minutes = (date.getMinutes()) < 10 ? `0${date.getMinutes()}` : `${date.getMinutes()}`;
+            let num = tick.numeroSiege
+            if (item.voyages.numVoyage != voy.numVoyage) {
+                num = parseInt(voy.placesOccupees + 1) ?? parseInt(item.voyages.placesOccupees + 1)
+            }
             const data = {
-                numeroSiege: parseInt(voy.placesOccupees + 1) ?? parseInt(item.voyages.placesOccupees + 1),
+                numeroSiege: num,
                 prixTicket: parseInt(`${sup}`) + parseInt(`${prixF}`),
                 voyageId: voyageId,
                 typeTicket: item?.bus?.typeBus,
@@ -235,7 +239,7 @@ export default function Page({ params }: { params: { ticketId: string } }) {
                 dateCreation: `${year}-${month}-${day}T${hours}:${minutes}`,
                 passagerId: id,
                 employeId: tick.employeId,
-                destination: `${tr.lieuDepart ?? item?.trajet?.lieuDepart} / ${dest == "" ? (tr.lieuArrivee ?? item?.trajet.lieuArrivee) : (tr.lieuArrivee ?? dest)}`,
+                destination: `${tr.lieuDepart ?? item?.trajet?.lieuDepart} / ${dest == "" ? (tr.lieuArrivee ?? item?.trajet.lieuArrivee) : (dest ?? tr.lieuArrivee)}`,
             }
             // console.log(data)
             try {
@@ -750,7 +754,7 @@ export default function Page({ params }: { params: { ticketId: string } }) {
                                                 <ComponentTicketPrint item={{
                                                     client: `${passager?.nom} ${passager?.prenom}`,
                                                     tel: passager?.telephone,
-                                                    depart: getDateFormat(ticket?.voyages?.dateDepart ?? tr.dateDepart),
+                                                    depart: getDateFormat(ticket?.voyages?.dateDepart ?? voy.dateDepart),
                                                     voyage:  voy.numVoyage ?? ticket?.voyages?.numVoyage,
                                                     montant: parseInt(`${sup}`) + parseInt(`${prixF}`),
                                                     remboursement: remboursement,
