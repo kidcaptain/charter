@@ -377,8 +377,7 @@ export default function Page({ params }: { params: { ticketId: string } }) {
                 })
                 const d = await res.json()
                 if (res.ok && d) {
-                    setPassager(d)
-
+                    setPassager(value)
                     if (item) {
                         postTicket(value.id, item.voyages?.id)
                         setTicket(item)
