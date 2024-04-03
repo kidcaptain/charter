@@ -263,6 +263,27 @@ const VoyageTable = (props: { childToParent: Function }) => {
         if (confirm("Confimer la suppression")) {
             const res = await fetch(`/api/voyages/${id}`, { method: "DELETE", cache: "no-store" })
             if (!res.ok) {
+                const reTickets = await fetch(`/api/ticket`, { method: "GET", cache: "no-store" })
+                const tickets: any[] = await reTickets.json();
+                tickets.map(async (r) => {
+                    if (id == r.voyageId) {
+                        const resDelete = await fetch(`/api/ticket/${id}`, { method: "DELETE", cache: "no-store" })
+                    }
+                })
+                const resR = await fetch(`/api/recette`, { method: "GET", cache: "no-store" })
+                const recettes: any[] = await resR.json();
+                recettes.map(async (r) => {
+                    if (id == r.voyageId) {
+                        const Recette = await fetch(`/api/recette/${id}`, { method: "DELETE", cache: "no-store" })
+                    }
+                })
+                const resL = await fetch(`/api/lignerecette`, { method: "GET", cache: "no-store" })
+                const Lignerecettes: any[] = await resL.json();
+                Lignerecettes.map(async (r) => {
+                    if (id == r.voyageId) {
+                        const data = await fetch(`/api/lignerecette/${id}`, { method: "DELETE", cache: "no-store" })
+                    }
+                })
                 props.childToParent(false)
             } else {
                 props.childToParent(true)
@@ -288,7 +309,7 @@ const VoyageTable = (props: { childToParent: Function }) => {
         const year2 = dates2.getFullYear();
         const month2 = (dates2.getMonth() + 1) < 10 ? `0${dates2.getMonth() + 1}` : `${dates2.getMonth() + 1}`;
         const day2 = (dates2.getDate()) < 10 ? `0${dates2.getDate()}` : `${dates2.getDate()}`;
-  
+
         if (numb == total && (str == "non" || str == "")) {
             return `border-b  text-sm  bg-cyan-100 border-cyan-300 border-b-2 hover:bg-cyan-200  `
         } else if (numb == total && str == "oui") {
