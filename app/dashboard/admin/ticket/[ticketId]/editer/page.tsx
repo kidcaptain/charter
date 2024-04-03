@@ -628,7 +628,7 @@ export default function Page({ params }: { params: { ticketId: string } }) {
             <section className={`relative p-5 flex gap-4 justify-start items-start ${(!tab && !tab2) ? 'flex-col ' : 'flex-row'}`}>
                 <div style={{ width: '100%', minHeight: "100%", backdropFilter: "blur(1px)" }} className={`shadow-2xl max-w-3xl border rounded-md h-full relative overflow-hidden z-10 ${(tab || tab2 || tab3) ? 'block' : 'hidden'}`}>
                     <h4 className="border-b p-4 text-black font-bold uppercase text-xl">
-                        Formulaire de ventes et reservation
+                        Formulaire de ventes
                     </h4>
                     <form onSubmit={HandlerSubmit} className="px-10 py-5">
                         <div>
