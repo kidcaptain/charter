@@ -227,8 +227,8 @@ export default function Page({ params }: { params: { ticketId: string } }) {
             const hours = (date.getHours()) < 10 ? `0${date.getHours()}` : `${date.getHours()}`;
             const minutes = (date.getMinutes()) < 10 ? `0${date.getMinutes()}` : `${date.getMinutes()}`;
             let num = tick.numeroSiege
-            if (item.voyages.numVoyage != voy.numVoyage) {
-                num = parseInt(voy.placesOccupees + 1) ?? parseInt(item.voyages.placesOccupees + 1)
+            if (item?.voyages?.numVoyage != voy?.numVoyage && item) {
+                num = parseInt(voy?.placesOccupees + 1) ?? parseInt(item?.voyages?.placesOccupees + 1)
             }
             const data = {
                 numeroSiege: num,
