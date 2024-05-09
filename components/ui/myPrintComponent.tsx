@@ -50,7 +50,7 @@ class ComponentToPrint extends React.Component<DataPrintComponent> {
             <div className="p-4 w-full h-full min-h-full" id="fichier">
                 <div className="max-w-5xl m-auto p-4 bg-white h-full w-full" id="document">
                     <div className="text-center font-bold my-8">
-                        <h2 className="underline">CHARTER EXPRESS VOYAGES</h2>
+                        <h2 className="underline">Agence de voyages</h2>
                         <h4>Fiche Hebdomadaire des dépenses</h4>
                         <h4>Agence de {this.props.agence?.nom}</h4>
                     </div>

@@ -39,7 +39,7 @@ class ComponentToPrint extends React.Component<DataRapportJourn> {
                 <div className="max-w-5xl m-auto p-4 bg-white h-full w-full" id="document">
                     <div className="text-center font-medium my-8">
                         <Image src={logo} width={100} height={100} alt="" className="m-auto" />
-                        <h2 className=" text-4xl">CHARTER EXPRESS VOYAGES</h2>
+                        <h2 className=" text-4xl">Agence de voyages</h2>
                         <h3>ENTREPRISE DE TRANSPORT INTER-URBAIN</h3>
                         <h3>BP: 5029 YAOUNDE-TEL: 699 91 76 12</h3>
                         <h3>N° contribuable: M09020001474P - RCCM N° 202 U 04 du 15/10/2002</h3>

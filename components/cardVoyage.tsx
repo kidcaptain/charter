@@ -50,7 +50,7 @@ export default function CardVoyage(props: {
                         <Image src={trajetSvg} height={24} width={24} alt="trajet svg" />
                     </div>
                     <div>
-                        <span className="font-bold text-sm uppercase ">Charter Express Voyages</span> <br />
+                        <span className="font-bold text-sm uppercase ">Agence de voyages</span> <br />
                         <span className="font-semibold text-sm">{agence}</span> <br />
                     </div>
                 </div>

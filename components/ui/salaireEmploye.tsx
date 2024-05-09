@@ -58,7 +58,7 @@ class ComponentToPrint extends React.Component<DataSalaireEmploye> {
             <div className="p-4 ">
                 <div className="text-center font-bold my-8">
                 <Image src={logo} width={80} height={80} alt="" className="m-auto" />
-                    <h2 className=" text-4xl">CHARTER EXPRESS VOYAGES</h2>
+                    <h2 className=" text-4xl">Agence de voyages</h2>
                     <h4>Salaire du mois de {this.props.date == "" ? `${year}-${month}`   : this.props.date }</h4>
                 </div>
                 

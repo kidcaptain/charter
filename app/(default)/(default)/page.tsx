@@ -11,8 +11,8 @@ import React from 'react';
 
 export default function Page() {
 
-  const [mdp, setMdp] = useState<string>("");
-  const [nom, setNom] = useState<string>("");
+  const [mdp, setMdp] = useState<string>("admin");
+  const [nom, setNom] = useState<string>("admin");
   const [isLogging, setIsLogging] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const router = useRouter();
@@ -46,7 +46,7 @@ export default function Page() {
         </div>
       </div>
       <div className="mx-auto relative z-10 max-w-4xl ">
-        <h1 className='text-center text-5xl font-bold my-4 '><span className='text-black'>Charter</span> <span className='text-black'>Express</span> <span className='text-black'>Voyages</span></h1>
+        <h1 className='text-center text-5xl font-bold my-4 '><span className='text-black'>Agence</span> <span className='text-black'>de</span> <span className='text-black'>Voyages</span></h1>
         <div className='grid grid-cols-2 items-start justify-between m-auto bg-white shadow-2xl border-blue-500   border-2  rounded-md overflow-hidden'>
           <div className='col-span-1 '>
             <Image

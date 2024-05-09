@@ -43,7 +43,7 @@ class ComponentToPrint extends React.Component<DateFicheDepense> {
         return (
             <div className="max-w-5xl m-auto p-4 bg-white h-full w-full">
                 <div className="text-center font-bold my-8">
-                    <h2>CHARTER EXPRESS VOYAGES</h2>
+                    <h2>Agence de voyages</h2>
                     <ul className="text-xs">
                         <li>  ENTREPRISE DE TRANSPORT INTER-URBAIN</li>
                         <li> BP: 5029 YAOUNDE</li>

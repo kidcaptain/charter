@@ -55,7 +55,7 @@ class ComponentToPrint extends React.Component<DataBordereau> {
             <div className="bg-white text-sm font-sans py-10  px-8 border max-w-7xl m-auto">
                 <div className="grid grid-cols-3 mb-10 items-start">
                     <div className="text-left ">
-                        <h2 className="text-2xl font-bold">CHARTER EXPRESS VOYAGES</h2>
+                        <h2 className="text-2xl font-bold">Agence de voyages</h2>
                         <ul className=" font-semibold">
                             <li> ENTREPRISE DE TRANSPORT INTER-URBAIN</li>
                             <li> BP: 5029 YAOUNDE</li>

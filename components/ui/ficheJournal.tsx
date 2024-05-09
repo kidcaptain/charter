@@ -119,7 +119,7 @@ class ComponentToPrint extends React.Component<DataFicheJournal> {
             <div className="p-4 w-full h-full min-h-full" id="fichier">
                 <div className=" m-auto p-4 bg-white h-full w-full" id="document">
                     <div className="text-center font-bold my-8">
-                        <h2 className="underline">CHARTER EXPRESS VOYAGES</h2>
+                        <h2 className="underline">Agence de voyages</h2>
                         <h4>Journal</h4>
                     </div>
                     <div className="text-xl p-4 text-center">

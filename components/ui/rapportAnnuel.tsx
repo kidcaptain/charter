@@ -58,7 +58,7 @@ class ComponentToPrint extends React.Component<DataRapportAnnuel> {
                 <div className="max-w-7xl m-auto p-4 bg-white h-full w-full" id="document">
                     <Image src={logoSvg} className="m-auto" width={75} height={75} alt="" />
                     <div className="text-center font-medium my-2">
-                        <h2 className=" text-3xl font-bold">CHARTER EXPRESS VOYAGES</h2>
+                        <h2 className=" text-3xl font-bold">Agence de voyages</h2>
                         <h3>ENTREPRISE DE TRANSPORT INTER-URBAIN</h3>
                         <h3>BP: 5029 YAOUNDE-TEL: 699 91 76 12</h3>
                         <h3>N° contribuable: M09020001474P - RCCM N° 202 U 04 du 15/10/2002</h3>

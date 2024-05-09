@@ -64,7 +64,7 @@ class ComponentToPrint extends React.Component<DataTableProps> {
           <div className="relative text-xl font-semibold">
             <div className="flex items-center justify-center">
               <Image src={svglogo} width={50} height={10} alt="" />
-              <h4 className="  text-2xl text-blue-600 italic font-bold text-center border-b ">Charter Express Voyages</h4>
+              <h4 className="  text-2xl text-blue-600 italic font-bold text-center border-b ">Agence de voyages</h4>
             </div>
             <hr className="border-yellow-400 border-2" />
             <hr className="border-red-500 border-2" />

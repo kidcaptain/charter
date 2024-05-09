@@ -3,7 +3,7 @@ import Header from "@/components/ui/header"
 import DashboardNav from "@/components/ui/dashboardNav";
 import { LinksAdmin } from "@/datas/links";
 import { metadata } from "@/app/layout";
-metadata.title = "Administration Charter Express Voyages / Ventes"
+metadata.title = "Administration Agence de voyages / Ventes"
 
 export default function AdminLayout({
   children,

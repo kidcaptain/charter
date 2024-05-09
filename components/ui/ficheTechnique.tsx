@@ -52,7 +52,7 @@ class ComponentToPrint extends React.Component<DataFicheTechnique> {
                 <div>
                     <div className="text-center font-bold my-8">
                         <Image src={logo} width={100} height={100} alt="Logo" className="m-auto" />
-                        <h2 className="text-3xl">CHARTER EXPRESS VOYAGES</h2>
+                        <h2 className="text-3xl">Agence de voyages</h2>
                         <ul>
                             <li>  ENTREPRISE DE TRANSPORT INTER-URBAIN</li>
                             <li> BP: 5029 YAOUNDE</li>
